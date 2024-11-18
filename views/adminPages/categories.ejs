@@ -1,0 +1,48 @@
+<%-include('../adminPages/partialHead.ejs')%>
+
+<style>
+    
+.main-content {
+    margin-left: 250px;
+    padding: 30px;
+    width: calc(100% - 250px);
+}
+
+
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.metric-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.metric-title {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+
+</style>
+
+
+    <div class="main-content">
+       
+        
+        <div class="metrics-grid">
+            <a href="/admin/categorieBrand" class="metric-card" style="text-decoration: none;">
+                <div class="metric-title">BRANDS</div>
+            </a>
+            <a href="/admin/categorieType" class="metric-card" style="text-decoration: none;">
+                <div class="metric-title">TYPES</div>
+            </a>
+        </div>
+

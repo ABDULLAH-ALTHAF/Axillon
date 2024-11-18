@@ -1,0 +1,111 @@
+<div class="sidebar">
+    <div class="profile-header">
+        <img src="/images/user-icon.jpg" alt="Profile" class="profile-pic">
+        <div class="profile-name">
+            <h2>
+                <%= user.username %>
+            </h2>
+        </div>
+    </div>
+
+    <nav class="sidebar-menu">
+        <a href="/myProfile" class="menu-item <%= url === '/myProfile' ? 'active' : '' %>">
+            <i class="fa-solid fa-user"></i>
+            <span>My Profile</span>
+        </a>
+        <a href="/myAddress" class="menu-item <%= url === '/myAddress' ? 'active' : '' %>">
+            <i class="fa-solid fa-map-location-dot"></i>
+            <span>Addresses</span>
+        </a>
+        <a href="/orders" class="menu-item <%= url === '/orders' ? 'active' : '' %>">
+            <i class="fa-solid fa-box"></i>
+            <span>Orders</span>
+        </a>
+        <a href="/coupons" class="menu-item <%= url === '/coupons' ? 'active' : '' %>">
+            <i class="fa-solid fa-ticket"></i>
+            <span>Coupons</span>
+        </a>
+        <a href="/wishlist" class="menu-item <%= url === '/wishlist' ? 'active' : '' %>">
+            <i class="fa-solid fa-heart"></i>
+            <span>Wishlist</span>
+        </a>
+        <a href="/wallet" class="menu-item <%= url === '/wallet' ? 'active' : '' %>">
+            <i class="fa-solid fa-wallet"></i>
+            <span>Wallet</span>
+        </a>
+        <a href="/reviews" class="menu-item <%= url === '/reviews' ? 'active' : '' %>">
+            <i class="fa-solid fa-comment"></i>
+            <span>Reviews</span>
+        </a>
+        <a href="/reset-password" class="menu-item <%= url === '/reset-password' ? 'active' : '' %>">
+            <i class="fa-solid fa-lock"></i>
+            <span>Reset Password</span>
+        </a>
+        <a href="/logout" class="menu-item logout <%= url === '/logout' ? 'active' : '' %>">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span>Log out</span>
+        </a>
+        
+    </nav>
+</div>
+
+<style>
+    .profile-container {
+            display: flex;
+            gap: 2rem;
+            padding: 1rem;
+            max-width: 90%;
+            margin: 0 auto;
+        }
+    .sidebar {
+            width: 250px;
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            text-decoration: none;
+            color: #666;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .menu-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .menu-item.active {
+            color: #e94f37;
+        }
+
+        .menu-item.logout {
+            margin-top: auto;
+            color: #e94f37;
+        }
+</style>

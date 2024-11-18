@@ -1,0 +1,299 @@
+
+<%-include('../adminPages/partialHead.ejs')%>
+
+
+<style>
+
+.main-content {
+    margin-left: 250px;
+    padding: 30px;
+    width: calc(100% - 250px);
+}
+
+
+
+
+.products-table {
+    width: 100%;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-collapse: collapse;
+    overflow: hidden;
+}
+
+.products-table th {
+    text-align: left;
+    padding: 15px;
+    background: #f8f9fa;
+    font-weight: bold;
+    color: #333;
+}
+
+.products-table td {
+    padding: 15px;
+    border-top: 1px solid #eee;
+}
+
+.status {
+    color: #2ecc71;
+    font-weight: 500;
+}
+
+.btn {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 5px;
+    color: white;
+}
+
+.btn-change-status {
+    background: #e74c3c;
+}
+
+.btn-edit {
+    background: #000;
+}
+
+.btn-variants {
+    background: #3498db;
+}
+
+.add-new {
+    display: inline-block;
+    background: #e74c3c;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.product-id {
+    color: #666;
+    font-family: monospace;
+}
+
+
+
+
+</style>
+
+
+    <div class="main-content">
+
+
+        <div class="add-product-container">
+            <h2>Edit The Product</h2>
+            <form action="/admin/postEditImages/<%=product._id%>" method="POST" enctype="multipart/form-data">
+                <div class="product-info-fields">
+                    
+                </div>
+
+
+                
+                    <div class="imageContainer">
+                        <h2 style="text-align: center;">Current Images</h2>
+                        <div class="imageContent">
+                            <div class="imagesBoxs">
+                                <img class="imagesBox" src="<%= product.images[0].replace('public', '') %>" alt="">
+                            </div>
+                           
+                            <div class="imagesBoxs">
+                                <img class="imagesBox" src="<%= product.images[1].replace('public', '') %>" alt="">
+                            </div>
+                          
+                            <div class="imagesBoxs">
+                                <img class="imagesBox" src="<%= product.images[2].replace('public', '') %>" alt="">
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+                
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editImageModal">
+                        Edit Images
+                    </button>
+
+
+
+
+<!-- Image Fields for Cropping -->
+<div class="modal fade" id="editImageModal" tabindex="-1" role="dialog" aria-labelledby="editImageModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editImageModalLabel">Change Product Images</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="image-fields">
+                    <div class="form-group">
+                        <label for="productImage1">Change Image 1</label>
+                        <input type="file" class="form-control" id="productImage1" name="images" required
+                            onchange="openCropper(this, 1)">
+                    </div>
+                    <div class="form-group">
+                        <label for="productImage2">Change Image 2</label>
+                        <input type="file" class="form-control" id="productImage2" name="images" required
+                            onchange="openCropper(this, 2)">
+                    </div>
+                    <div class="form-group">
+                        <label for="productImage3">Change Image 3</label>
+                        <input type="file" class="form-control" id="productImage3" name="images" required
+                            onchange="openCropper(this, 3)">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+                <style>
+                    .imageContent {
+                        display: flex;
+                        justify-content: center;
+                    }
+
+                    .imagesBox {
+                        object-fit: cover;
+                        width: 200px;
+                        height: 200px;
+                        margin-right: 10px;
+                        border: solid rgb(79, 54, 54) 1px;
+                        border-radius: 15px;
+
+                    }
+                </style>
+
+
+                
+
+                <!-- Additional Product Fields -->
+               
+        </div>
+
+        <!-- Image Cropping Modal -->
+        <div class="modal fade" id="cropperModal" tabindex="-1" aria-labelledby="cropperModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="max-width: 90vw;"> <!-- Changed from 1200px to 90vw -->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cropperModalLabel">Crop Image</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body p-0"> <!-- Added p-0 to remove padding -->
+                        <div style="height: 70vh; background-color: #306294;"> <!-- Changed fixed height to 70vh -->
+                            <img id="cropperImage" style="max-width: 100%; display: block;" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" onclick="cropAndSave()">Crop & Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <style>
+            .modal-body {
+                padding: 1 !important;
+            }
+
+            .cropper-container {
+                width: 100%;
+                background-color: #f8f9fa;
+            }
+
+            .cropper-view-box,
+            .cropper-canvas {
+                border-radius: 0;
+            }
+
+            .cropper-modal {
+                background-color: rgba(0, 0, 0, 0.8);
+            }
+        </style>
+
+
+
+        <!-- JavaScript to Handle Cropping -->
+        <script>
+            let cropper;
+            let currentImageFieldId;
+
+            function openCropper(input, imageFieldId) {
+                const file = input.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const cropperImage = document.getElementById('cropperImage');
+                        cropperImage.src = e.target.result;
+
+                        currentImageFieldId = imageFieldId;
+                        $('#cropperModal').modal('show');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            $('#cropperModal').on('shown.bs.modal', function () {
+                if (cropper) cropper.destroy(); // Destroy any existing cropper instance
+                const cropperImage = document.getElementById('cropperImage');
+                cropper = new Cropper(cropperImage, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    autoCropArea: 0.9,
+                    dragMode: 'move',
+                    cropBoxMovable: true,
+                    cropBoxResizable: true,
+                });
+            });
+
+            $('#cropperModal').on('hidden.bs.modal', function () {
+                if (cropper) cropper.destroy(); // Ensure cropper is destroyed when modal closes
+            });
+
+            function cropAndSave() {
+                if (cropper) {
+                    const canvas = cropper.getCroppedCanvas();
+                    canvas.toBlob(blob => {
+                        const fileInput = document.getElementById(`productImage${currentImageFieldId}`);
+                        const dataTransfer = new DataTransfer();
+                        const croppedFile = new File([blob], `cropped-image-${Date.now()}.jpg`, { type: 'image/jpeg' });
+                        dataTransfer.items.add(croppedFile);
+                        fileInput.files = dataTransfer.files; // Set cropped image as file input
+
+                        // Optional: update the preview image if needed
+                        const previewImage = document.getElementById(`previewImage${currentImageFieldId}`);
+                        if (previewImage) {
+                            previewImage.src = URL.createObjectURL(croppedFile);
+                        }
+
+                        $('#cropperModal').modal('hide');
+                    });
+                }
+            }
+
+        </script>
+
+
+    </div>
+
+</body>
+
+</html>

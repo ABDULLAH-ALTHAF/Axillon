@@ -1,0 +1,238 @@
+
+   
+   <style>
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .payment-title {
+            text-align: center;
+            color: #1a0f5f;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 120px;
+            z-index: 1;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-circle.active {
+            background: #1a0f5f;
+            border-color: #1a0f5f;
+            color: white;
+        }
+
+        .step-circle.completed {
+            background: #1a0f5f;
+            border-color: #1a0f5f;
+            color: white;
+        }
+
+        .step-circle.completed::after {
+            content: '✓';
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .step-label.active {
+            color: #1a0f5f;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 360px;
+            height: 2px;
+            background: #ddd;
+        }
+
+        .payment-form {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .payment-section-title {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-option {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .payment-option.selected {
+            border-color: #1a0f5f;
+            background-color: #f8f8ff;
+        }
+
+        .payment-option-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .payment-option-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .payment-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+
+        .back-btn, .next-btn {
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn {
+            background: #fff;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+
+        .next-btn {
+            background: #1a0f5f;
+            border: none;
+            color: #fff;
+        }
+
+        .payment-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .security-note {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            justify-content: center;
+        } 
+
+   </style>
+   
+   <div class="container">
+        <h1 class="payment-title">How would you like to pay?</h1>
+
+        <div class="progress-bar">
+            <div class="progress-step">
+                <div class="step-circle completed">✓</div>
+                <span class="step-label">Welcome</span>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle active">2</div>
+                <span class="step-label active">Payment</span>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">3</div>
+                <span class="step-label">Order</span>
+            </div>
+        </div>
+
+        <form class="payment-form" action="/checkout/complete" method="POST">
+            <div class="payment-option">
+                <div class="payment-option-header">
+                    <div class="payment-option-title">
+                        <input type="radio" name="payment-method" value="apple-pay" checked>
+                        <span>Apple Pay</span>
+                    </div>
+                    <img src="/images/apple-pay.png" alt="Apple Pay">
+                </div>
+                <div class="payment-description">
+                    Unlimited users and unlimited individual data.
+                </div>
+            </div>
+
+            <div class="payment-option">
+                <div class="payment-option-header">
+                    <div class="payment-option-title">
+                        <input type="radio" name="payment-method" value="paypal">
+                        <span>PayPal</span>
+                    </div>
+                    <img src="/images/paypal.png" alt="PayPal">
+                </div>
+                <div class="payment-description">
+                    You will be redirected to the PayPal website after submitting your order
+                </div>
+            </div>
+
+            <div class="security-note">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 0L2 2V7C2 11.5 4.5 15.5 8 16C11.5 15.5 14 11.5 14 7V2L8 0Z" fill="#666"/>
+                </svg>
+                We protect your payment information using encryption to provide bank-level security.
+            </div>
+
+            <div class="button-group">
+                <a href="/checkout/address" class="back-btn">← Back</a>
+                <button type="submit" class="next-btn">Next →</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

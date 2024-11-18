@@ -1,0 +1,116 @@
+<!-- login.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axillon - Sign Up</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="userPages/signup.css">
+</head>
+<body>
+    <img src="/images/axillon white cropped.png" alt="Axillon Logo" class="logo">
+    
+
+    <div class="login-container">
+        <div class="welcome-text">
+            <h1>Welcome to <span>AXILLON</span></h1>
+            <h2>Sign up</h2>
+            <a href="/signin" class="signup-link">Have Account? <span>Sign in</span></a>
+        </div>
+        <div class="social-buttons">
+            <a style="text-decoration: none;" href="/auth/google">
+                <button class="social-button google-signin ">
+                    <i class="bi bi-google"></i>
+                    &nbsp;
+                    Sign up with Google
+                </button>
+            </a>
+        </div>
+        <form id="signupForm" action="/postSignup" method="POST" novalidate>
+            <div class="input-group">
+                <label for="email">Enter your email address</label>
+                <input type="email" id="email" name="email" placeholder="email address" required>
+                <small class="error-message" id="emailError"></small>
+            </div>
+    
+            <div class="input-group">
+                <label for="username">User name</label>
+                <input type="text" id="username" name="username" placeholder="User name" required>
+                <small class="error-message" id="usernameError"></small>
+            </div>
+    
+            <div class="input-group">
+                <label for="password">Enter your Password</label>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <small class="error-message" id="passwordError"></small>
+            </div>
+    
+            <div class="input-group">
+                <label for="confirmPassword">Confirm your Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="confirm password" required>
+                <small class="error-message" id="confirmPasswordError"></small>
+            </div>
+    
+            <div class="input-group">
+                <label for="referralCode">Referral Code (optional)</label>
+                <input type="text" id="referralCode" name="referralCode" placeholder="Referral Code">
+                <small class="error-message" id="referralCodeError"></small>
+            </div>
+    
+            <button type="submit" class="signin-button">Sign up</button>
+            
+        </form>
+    </div>
+    
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function (event) {
+            let formIsValid = true;
+    
+            
+            document.querySelectorAll('.error-message').forEach(msg => msg.innerText = '');
+    
+            
+            const email = document.getElementById('email').value;
+            if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+                document.getElementById('emailError').innerText = 'Please enter a valid email address.';
+                formIsValid = false;
+            }
+    
+            
+            const username = document.getElementById('username').value;
+            if (!username || username.length < 3) {
+                document.getElementById('usernameError').innerText = 'Username must be at least 3 characters long.';
+                formIsValid = false;
+            }
+    
+            
+            const password = document.getElementById('password').value;
+            if (!password || password.length < 6) {
+                document.getElementById('passwordError').innerText = 'Password must be at least 6 characters long.';
+                formIsValid = false;
+            }
+    
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (confirmPassword !== password) {
+                document.getElementById('confirmPasswordError').innerText = 'Passwords do not match.';
+                formIsValid = false;
+            }
+    
+            if (!formIsValid) {
+                event.preventDefault();
+            }
+        });
+    </script>
+    
+    <style>
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: block;
+        }
+    </style>
+    
+</body>
+</html>

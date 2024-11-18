@@ -1,0 +1,56 @@
+<!-- login.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axillon - Sign In</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="userPages/signin.css">
+</head>
+<body>
+    <img src="/images/axillon white cropped.png" alt="Axillon Logo" class="logo">
+    
+
+    <div class="login-container">
+        <div class="welcome-text">
+            
+            <h1>Welcome to <span>AXILLON</span></h1>
+            <h2>Sign in</h2>
+            <a href="/signup" class="signup-link">No Account? <span>Sign up</span></a>
+
+        </div>
+
+        <div class="social-buttons">
+            <a style="text-decoration: none;" href="/auth/google">
+                <button class="social-button google-signin ">
+                    <i class="bi bi-google"></i>
+                    &nbsp;
+                    Sign in with Google
+                </button>
+            </a>
+        </div>
+        
+        
+        <form action="/postSignin" method="POST">
+        <p style="color: red; text-align: center;"><%= invalid %></p>
+            <div class="input-group">
+                <label for="email">Enter your email address</label>
+                <input type="email" id="email" name="email" placeholder="email address" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Enter your Password</label>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+            </div>
+
+            <div class="forgot-password">
+                <a href="/forgot-password">Forgot Password</a>
+            </div>
+
+            <button type="submit" class="signin-button">Sign in</button>
+        </form>
+    </div>
+</body>
+</html>
+

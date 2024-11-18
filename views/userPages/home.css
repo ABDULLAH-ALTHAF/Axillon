@@ -1,0 +1,143 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+}
+
+/* Navbar styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #f8f8f8;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    z-index: 5;
+    width: 95.5vw;
+}
+
+.navbar img {
+    height: 50px;
+    width: 100px;
+    margin-left: 3rem;
+}
+
+.nav-links {
+    flex: 1;
+    text-align: center;
+}
+
+.nav-links a {
+    margin: 0 1rem;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.icon {
+    width: 2rem;
+    height: 2rem;
+    background-color: #333;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+/* Image section styles */
+.image-section {
+    position: relative;
+    text-align: center;
+}
+
+.image-section img {
+    width: 100%;
+    height: 85vh;
+    object-fit: cover;
+}
+
+.welcome-text {
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    font-size: 30px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.welcome-description {
+    max-width: 50rem;
+    margin: 1rem 0;
+    text-align: left;
+}
+
+.shop-now-button {
+    border: 1px solid white; 
+    color: black; 
+    background-color: white; 
+    border-radius: 10px; 
+    padding: 0.5rem 1rem; 
+    font-size: 1rem; 
+    font-weight: bold;
+    width: 12rem;
+    height: 3.3rem;
+}
+
+/* Best-selling brands section styles */
+.brands-section {
+    margin: 4rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.brands-section h2 {
+    text-align: center;
+}
+
+.card {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 1rem;
+    margin: 3rem 0;
+    height: 10rem;
+    overflow: hidden;
+    width: 60%;
+}
+
+.card img {
+    height: auto;
+    object-fit: cover;
+}
+
+.card-description {
+    padding: 1rem;
+    flex-grow: 1;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .navbar img {
+        height: 3rem;
+        width: 8rem;
+    }
+
+    .card {
+        flex-direction: column;
+    }
+
+    .card img {
+        width: 100%;
+    }
+}

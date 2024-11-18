@@ -1,0 +1,456 @@
+<%-include('../userPages/partialHeadUser.ejs')%>
+
+
+
+    <style>
+        .product-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-images {
+            display: flex;
+            gap: 20px;
+        }
+
+        .thumbnail-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .thumbnail {
+            width: 60px;
+            height: 60px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+
+        .main-image {
+            flex-grow: 1;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .main-image img {
+            width: 100%;
+            height: auto;
+        }
+
+        .product-info h1 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .rating {
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .stock {
+            color: #28a745;
+            font-size: 14px;
+        }
+
+        .price {
+            margin: 20px 0;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 18px;
+        }
+
+        .discount {
+            color: #dc3545;
+            font-size: 14px;
+        }
+
+        .shipping-note {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .size-selection {
+            margin: 20px 0;
+        }
+
+        .size-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .size-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .size-button {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            background: white;
+        }
+
+        .size-button.active {
+            background: #000;
+            color: white;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 20px 0;
+        }
+
+        .product-details {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .details-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid #eee;
+        }
+
+        .details-text {
+            line-height: 1.6;
+        }
+
+
+
+        .reviews-container {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .reviews-header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .reviews-header button {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        .review-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .review-card {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .review-stars {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .reviewer {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .verified-badge {
+            width: 15px;
+            height: 15px;
+            background: #28a745;
+            border-radius: 50%;
+        }
+
+        .review-date {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .review-text {
+            line-height: 1.5;
+        }
+
+        .review-more {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .related-products {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .related-title {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .product-card {
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .product-image {
+            width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .product-rating {
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .price-new {
+            font-weight: bold;
+        }
+
+        .price-old {
+            text-decoration: line-through;
+            color: #666;
+        }
+
+        .price-discount {
+            color: #dc3545;
+            font-size: 14px;
+        }
+
+        .add-cart-btn {
+            background: #f5f5f5;
+            border: none;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+
+
+
+    <div class="breadcrumbs">
+        <a href="/home">Home</a> / <a href="/shop">Shop</a> / <span>Product</span>
+    </div>
+
+    <div class="product-container">
+        <div class="product-images">
+            <div class="thumbnail-list">
+                <img src="<%=variantDetails.product_id.images[0].replace('public', '')%>" alt="Wheel thumbnail"
+                    class="thumbnail">
+                <img src="<%=variantDetails.product_id.images[1].replace('public', '')%>" alt="Wheel thumbnail"
+                    class="thumbnail">
+                <img src="<%=variantDetails.product_id.images[2].replace('public', '')%>" alt="Wheel thumbnail"
+                    class="thumbnail">
+            </div>
+            <div class="main-image">
+                <img src="<%=variantDetails.product_id.images[0].replace('public', '')%>" alt="Wheel">
+            </div>
+            <style>
+                .main-image {
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                .main-image img {
+                    width: 100%;
+                    height: 100%;
+                    transition: transform 0.3s ease;
+                }
+
+                .main-image:hover img {
+                    transform: scale(2);
+                    cursor: zoom-in;
+                }
+            </style>
+
+            <script>
+                const mainImageContainer = document.querySelector('.main-image');
+                const zoomedImage = mainImageContainer.querySelector('img');
+
+                mainImageContainer.addEventListener('mousemove', (e) => {
+                    const rect = mainImageContainer.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+
+
+                    zoomedImage.style.transformOrigin = `${(x / rect.width) * 100}% ${(y / rect.height) * 100}%`;
+                });
+
+                mainImageContainer.addEventListener('mouseleave', () => {
+                    zoomedImage.style.transformOrigin = 'center center';
+                });
+
+            </script>
+
+            <script>
+                function updateMainImage(thumbnail) {
+                    const mainImage = document.querySelector('.main-image img');
+                    mainImage.src = thumbnail.src;
+                }
+
+                document.querySelectorAll('.thumbnail').forEach(thumbnail => {
+                    thumbnail.addEventListener('click', function () {
+                        updateMainImage(this);
+                    });
+                });
+            </script>
+        </div>
+
+        <div class="product-info">
+            <h1>
+                <%=variantDetails.product_id.productName%>
+            </h1>
+
+            <div class="rating">
+                <span>★</span>
+                <span>★</span>
+                <span>★</span>
+                <span></span>
+                <span></span>
+                <span class="stock">(In Stock)</span>
+            </div>
+            <div class="price">
+                <span id="curr">₹<%=variantDetails.price%></span>
+                <span id="old" class="original-price">₹<%=variantDetails.price*1+5000%></span>
+                <span id="disc" class="discount">
+                    <%= Math.round(((5000 / (variantDetails.price)) * 100)) %> %
+                </span>
+            </div>
+            <p class="shipping-note">Price includes Import Duties and Taxes. Free shipping available.</p>
+
+            <div class="size-selection">
+                <div class="size-title">Brand: <%=variantDetails.product_id.brand_id.brandName%>
+                </div>
+                <div class="size-title">Choose Size</div>
+                <div class="size-buttons">
+
+
+
+                    <% for(let i=0; i < sizes.length; i++) { %>
+
+                        <button class="size-button" value="<%= sizes[i]._id %>">
+                            <a class="text-decoration-none" href="/product/<%= sizes[i]._id %>">
+                                <%= sizes[i].size %>
+                            </a>
+                        </button>
+
+                        <% } %>
+
+                </div>
+            </div>
+
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="product-details">
+        <h2 class="details-title">Product Details</h2>
+        <div class="details-grid">
+            <div class="details-text">
+                <%=variantDetails.product_id.description%>
+            </div>
+            <div class="details-specs">
+                <p><strong>Size:</strong>
+                    <%=variantDetails.size%>
+                </p>
+                <p><strong>Bolt Pattern:</strong>
+                    <%=variantDetails.product_id.boltPattern%>
+                </p>
+                <p><strong>Finish:</strong>
+                    <%=variantDetails.product_id.colour%>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- review box -->
+
+    <div class="related-products">
+        <h2 class="related-title">RELATED PRODUCTS</h2>
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="<%=variantDetails.product_id.images[0].replace('public', '')%>" alt="Wheel"
+                    class="product-image">
+                <div class="product-name">Motegi Racing Mr139 Rf11 Wheel, 15x7.0 +15 Offset 5x100, Satin Black -
+                    MR13957051715</div>
+                <div class="product-rating">
+                    ★★★★★
+                    (4)
+                </div>
+                <div class="product-price">
+                    <span class="price-new">₹12,999</span>
+                </div>
+                <button class="add-cart-btn">🛒</button>
+            </div>
+        </div>
+    </div>
+
+    <%-include('../userPages/partialFooterUser.ejs')%>

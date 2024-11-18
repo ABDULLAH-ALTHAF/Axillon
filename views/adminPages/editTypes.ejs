@@ -1,0 +1,116 @@
+
+<%-include('../adminPages/partialHead.ejs')%>
+
+
+<style>
+  
+.main-content {
+    margin-left: 250px;
+    padding: 30px;
+    width: calc(100% - 250px);
+}
+
+.title {
+    color: #ff4444;
+    font-size: 24px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ff4444;
+    margin-bottom: 20px;
+}
+
+.variants-table {
+    width: 100%;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-collapse: collapse;
+    overflow: hidden;
+}
+
+.variants-table th {
+    text-align: left;
+    padding: 15px;
+    background: #f8f9fa;
+    font-weight: bold;
+}
+
+.variants-table td {
+    padding: 15px;
+    border-top: 1px solid #eee;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.status-active {
+    color: #2ecc71;
+}
+
+.status-inactive {
+    color: #ff4444;
+}
+
+.btn {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 5px;
+    color: white;
+}
+
+.btn-view {
+    background: #3498db;
+}
+
+.btn-block {
+    background: #ff4444;
+}
+
+.btn-allow {
+    background: #2ecc71;
+}
+
+
+</style>
+
+    <div class="main-content">
+    
+    
+    
+   
+
+
+
+                <form id="addVariantForm" action="/admin/postEditTypes/<%=type[0]._id%>" method="POST">
+                    <div class="form-group">
+                        <label for="typeName">Type Name</label>
+                        <input type="text" class="form-control" id="typeName" name="typeName" value="<%=type[0].typeName%>" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Save Edits</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+    
+    
+    
+
+
+    
+    
+    
+
+    </div>
+
+    
+</body>
+</html>

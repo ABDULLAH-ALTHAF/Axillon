@@ -20,7 +20,10 @@ const {
   userLogout,
   postmyAddress,
   deleteAddress,
-  editProfile
+  editProfile,
+  editAddress,
+  postEditAddress,
+  addToCart
 } = require("../controllers/user-controller");
 
 router.get("/home", home);
@@ -42,6 +45,9 @@ router.get('/myAddress',myAddress)
 router.post('/postmyAddress',postmyAddress)
 router.get('/deleteAddress/:addressId',deleteAddress)
 router.post('/editProfile',editProfile)
+router.get('/editAddress/:addressId',editAddress)
+router.post('/postEditAddress/:addressId',postEditAddress)
+router.get('/addToCart/:productVariantId',addToCart)
 
 router.get('/auth/google', passport.authenticate('google',{scope:['profile','email']}))
 router.get('/google/callback',passport.authenticate('google',{failureRedirect:'/signup'}),(req,res)=>{

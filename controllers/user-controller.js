@@ -3,6 +3,7 @@ const User = require("../models/user-model");
 const Product = require("../models/product-model");
 const Variants = require("../models/variants-model");
 const Addresses = require("../models/addresses-model");
+const Cart = require("../models/cart-model");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
@@ -103,6 +104,37 @@ const cart = (req, res) => {
     res.render("userPages/cart");
   } else {
     res.redirect("/signup");
+  }
+};
+
+const addToCart = async (req, res) => {
+  if (req.session.user) {
+    let userId = req.session.userDetails;
+    console.log(userId._id, "form addToCart userId");
+    const productVariantId = req.params.productVariantId;
+    console.log(productVariantId, "form addToCart");
+    const product = await Variants.findOne({ _id: productVariantId });
+    const isCart = await Cart.findOne({ user_id: userId });
+    if (!isCart) {
+      await Cart.create({
+        user_id: userId._id,
+        product_id: productVariantId,
+        quantity: 1,
+      });
+    } else {
+      await Cart.updateOne(
+        { user_id: userId._id },
+        {
+          $push: { product_id: productVariantId },
+          $set: { updatedAt: Date.now() }, // Update the timestamp
+        }
+      );
+    }
+
+    console.log(product, "from addToCart");
+    res.redirect("/shop");
+  } else {
+    res.redirect("/signin");
   }
 };
 
@@ -238,47 +270,51 @@ const postSignupOtp = async (req, res) => {
 const myProfile = async (req, res) => {
   if (req.session.user) {
     console.log(req.session.userDetails, "form myprofile route");
-    const user = await User.findOne({_id:req.session.userDetails._id});
-    console.log(user,"myProfile for sadh");
-    res.render("userPages/myProfile", { user ,url:req.originalUrl});
+    const user = await User.findOne({ _id: req.session.userDetails._id });
+    console.log(user, "myProfile for sadh");
+    res.render("userPages/myProfile", { user, url: req.originalUrl });
   } else {
     res.redirect("/signup");
   }
 };
 
-const editProfile = async (req,res)=>{
+const editProfile = async (req, res) => {
   console.log("from edit profile");
-  if(req.session.user){
-    const {username,phone} = req.body
-    console.log(username,phone);
+  if (req.session.user) {
+    const { username, phone } = req.body;
+    console.log(username, phone);
     const userId = req.session.userDetails._id;
-    console.log(userId,"from editprofile");
-     await User.updateOne({_id:userId},{
-      username:username,
-      phone:phone
-    })
-    res.redirect('/myProfile')
-  }else{
-    res.redirect('/signin')
+    console.log(userId, "from editprofile");
+    await User.updateOne(
+      { _id: userId },
+      {
+        username: username,
+        phone: phone,
+      }
+    );
+    res.redirect("/myProfile");
+  } else {
+    res.redirect("/signin");
   }
-  
-
-    
-}
+};
 
 const myAddress = async (req, res) => {
-  if(req.session.user){
+  if (req.session.user) {
     const userId = req.session.userDetails;
     console.log(userId, "user id from my address page ");
-    const addresses = await Addresses.find({ user_id: userId._id });
+    const addresses = await Addresses.findOne({ user_id: userId._id });
+    const docAddresses = addresses.addresses
+    console.log(docAddresses,"docAddresses");
     console.log(addresses, "new address");
     const user = req.session.userDetails;
-    res.render("userPages/myAddress", { user, addresses ,url:req.originalUrl});
-  }else{
+    res.render("userPages/myAddress", {
+      user,
+      docAddresses,
+      url: req.originalUrl,
+    });
+  } else {
     res.redirect("/signup");
-
   }
- 
 };
 
 const postmyAddress = async (req, res) => {
@@ -287,30 +323,96 @@ const postmyAddress = async (req, res) => {
     console.log(userId._id, "form post");
     const { street, country, zip, phone, city, state, label } = req.body;
     console.log(street, country, zip, phone, city, state, label);
-    await Addresses.create({
-      street,
-      user_id: userId._id,
-      country,
-      zip,
-      phone,
-      city,
-      state,
-      label,
-    });
-    return res.redirect("/myAddress");
+    const isAddress = await Addresses.findOne({ user_id: userId._id });
+    if (!isAddress) {
+      await Addresses.create({
+        user_id: userId._id,
+        addresses: [
+          {
+            street,
+            country,
+            zip,
+            phone,
+            city,
+            state,
+            label,
+          },
+        ],
+      });
+      
+      return res.redirect("/myAddress");
+    } else {
+      await Addresses.updateOne(
+        { user_id: userId._id },
+        {
+          $push: {
+            addresses: {
+              street,
+              country,
+              zip,
+              phone,
+              city,
+              state,
+              label,
+            },
+          },
+        }
+      );
+      return res.redirect("/myAddress");
+    }
   } catch (error) {
     console.log(error);
   }
 };
 
-const deleteAddress = async (req,res)=>{
-  console.log("hello from delete address");
-  const addressId = req.params.addressId
-  await Addresses.deleteOne({_id:addressId})
-  console.log(addressId,"haaaapppyy fromdeleteAddress");
-  res.redirect('/myAddress')
+const deleteAddress = async (req, res) => {
+  if (req.session.user) {
+    console.log("hello from delete address");
+    const addressId = req.params.addressId;
+    await Addresses.deleteOne({ _id: addressId });
+    console.log(addressId, "haaaapppyy fromdeleteAddress");
+    res.redirect("/myAddress");
+  } else [res.redirect("/signin")];
+};
 
-}
+const editAddress = async (req, res) => {
+  if (req.session.user) {
+    const addressId = req.params.addressId;
+    const user = req.session.userDetails;
+    console.log(addressId, "edit address");
+    const address = await Addresses.findOne({ _id: addressId });
+    res.render("userPages/editAddress", {
+      user,
+      address,
+      url: req.originalUrl,
+    });
+  } else {
+    res.redirect("/signin");
+  }
+};
+
+const postEditAddress = async (req, res) => {
+  if (req.session.user) {
+    const addressId = req.params.addressId;
+    console.log(addressId, "from post edit address");
+    const { street, country, zip, phone, city, state, label } = req.body;
+    await Addresses.updateOne(
+      { _id: addressId },
+      {
+        street,
+        country,
+        zip,
+        phone,
+        city,
+        state,
+        label,
+      }
+    );
+    res.redirect("/myAddress");
+  } else {
+    res.redirect("/signin");
+  }
+};
 
 const userLogout = (req, res) => {
   req.session.user = null;
@@ -336,5 +438,8 @@ module.exports = {
   myAddress,
   postmyAddress,
   deleteAddress,
-  editProfile
+  editProfile,
+  editAddress,
+  postEditAddress,
+  addToCart,
 };

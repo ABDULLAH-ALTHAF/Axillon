@@ -1,212 +1,302 @@
-
 <%-include('../userPages/partialHeadUser.ejs')%>
 
-<div class="profile-container">
+  <div class="profile-container">
 
-<%-include('../userPages/profilePartial.ejs')%>
+    <%-include('../userPages/profilePartial.ejs')%>
 
-<div class="addresses-container">
-  <h3 class="section-title">Addresses</h3>
-  <div class="addresses-grid">
-    <% addresses.forEach (address => { %>
-      <div class="address-card">
-        <div class="address-info">
-          <div class="info-row">
-            <i class="fa-solid fa-location-dot"></i>
-            <span><%=address.street%></span>
-          </div>
-          <div class="info-row">
-            <i class="fa-solid fa-building"></i>
-            <span><%=address.city%>, <%=address.state%> - <%=address.zip%></span>
-          </div>
-          <div class="info-row">
-            <i class="fa-solid fa-flag"></i>
-            <span><%=address.country%></span>
+      <div class="addresses-container">
+        <h3 class="section-title">Addresses</h3>
+        <div class="addresses-grid">
+          <% docAddresses.forEach (address=> { %>
+            <div class="address-card">
+              <div class="address-info">
+                <div class="info-row">
+                  <i class="fa-solid fa-landmark"></i>
+                  <span>
+                    <%=address.label%>
+                  </span>
+                </div>
+                <div class="info-row">
+                  <i class="fa-solid fa-location-dot"></i>
+                  <span>
+                    <%=address.street%>
+                  </span>
+                </div>
+                <div class="info-row">
+                  <i class="fa-solid fa-building"></i>
+                  <span>
+                    <%=address.city%>, <%=address.state%> - <%=address.zip%>
+                  </span>
+                </div>
+                <div class="info-row">
+                  <i class="fa-solid fa-flag"></i>
+                  <span>
+                    <%=address.country%>
+                  </span>
+                </div>
+              </div>
+              <div class="address-actions">
+                <a class="action-btn delete" href="javascript:void(0);"
+                  onclick="if(confirm('Are you sure to delete this address?')) { window.location.href='/deleteAddress/<%=address._id%>'; }"
+                  style="text-decoration: none;">
+                  <i class="fa-solid fa-trash-can"></i>
+                </a>
+
+                <a class="action-btn edit" href="/editAddress/<%=address._id%>" style="text-decoration: none;">
+                  Edit
+                </a>
+              </div>
+            </div>
+            <%})%>
+        </div>
+
+        <button class="add-address-btn" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+          Add New+
+        </button>
+
+        <!--Add Modal -->
+        <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="addAddressModalLabel">Add New Address</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form action="/postmyAddress" method="POST">
+                  <div class="mb-3">
+                    <label for="street" class="form-label">street</label>
+                    <input type="text" class="form-control" id="street" name="street" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="city" class="form-label">City</label>
+                    <input type="text" class="form-control" id="city" name="city" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="state" class="form-label">State</label>
+                    <input type="text" class="form-control" id="state" name="state" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="zip" class="form-label">Zip</label>
+                    <input type="text" class="form-control" id="zip" name="zip" required>
+                  </div>
+                  <div class="mb-3">
+                    <div class="form-group" style="margin-bottom: 0.5rem;">
+                      <label for="phone" style="display: block; margin-bottom: 0.25rem;">Phone</label>
+                      <input type="text" class="form-control" id="phone" name="phone" 
+                          style="padding: 0.25rem; border: 1px solid #ccc; border-radius: 5px;">
+                      <small id="phoneError" style="color: red; display: none;">Phone must contain exactly 10 digits.</small>
+                  </div>
+                  
+                  <script>
+                      const phoneInput = document.getElementById('phone');
+                      const phoneError = document.getElementById('phoneError');
+                      const form = document.querySelector('form'); 
+                  
+                      form.addEventListener('submit', (e) => {
+                          const phoneValue = phoneInput.value.trim();
+                          const isValid = phoneValue === '' || /^\d{10}$/.test(phoneValue);
+                  
+                          if (!isValid) {
+                              e.preventDefault(); 
+                              phoneError.style.display = 'block'; 
+                              phoneInput.style.borderColor = 'red'; 
+                          } else {
+                              phoneError.style.display = 'none'; 
+                              phoneInput.style.borderColor = '#ccc'; 
+                          }
+                      });
+                  </script>
+                  
+                  </div>
+                  <div class="mb-3">
+                    <label for="country" class="form-label">country</label>
+                    <input type="text" class="form-control" id="country" name="country" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="label" class="form-label">Label</label>
+                    <input type="text" class="form-control" id="label" name="label">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="address-actions">
-          <a class="action-btn delete" href="javascript:void(0);" onclick="if(confirm('Are you sure to delete this address?')) { window.location.href='/deleteAddress/<%=address._id%>'; }" style="text-decoration: none;">
-            <i class="fa-solid fa-trash-can"></i>
-          </a>
-          
-          <a class="action-btn edit" href="/editAddress/<%=address._id%>" style="text-decoration: none;">
-            Edit
-          </a>
+
+
+
+
+<!-- Edit Modal -->
+
+        <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="addAddressModalLabel">Add New Address</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form action="/postmyAddress" method="POST">
+                  <div class="mb-3">
+                    <label for="street" class="form-label">street</label>
+                    <input type="text" class="form-control" id="street" name="street" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="city" class="form-label">City</label>
+                    <input type="text" class="form-control" id="city" name="city" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="state" class="form-label">State</label>
+                    <input type="text" class="form-control" id="state" name="state" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="zip" class="form-label">Zip</label>
+                    <input type="text" class="form-control" id="zip" name="zip" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="text" class="form-control" id="phone" name="phone" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="country" class="form-label">country</label>
+                    <input type="text" class="form-control" id="country" name="country" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="label" class="form-label">Label</label>
+                    <input type="text" class="form-control" id="label" name="label">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
+
+
+
       </div>
-      <%})%>
   </div>
 
-  <button class="add-address-btn" data-bs-toggle="modal" data-bs-target="#addAddressModal">
-    Add New+
-  </button>
 
-  <!-- Modal -->
-  <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addAddressModalLabel">Add New Address</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form action="/postmyAddress" method="POST">
-            <div class="mb-3">
-              <label for="street" class="form-label">street</label>
-              <input type="text" class="form-control" id="street" name="street" required>
-            </div>
-            <div class="mb-3">
-              <label for="city" class="form-label">City</label>
-              <input type="text" class="form-control" id="city" name="city" required>
-            </div>
-            <div class="mb-3">
-              <label for="state" class="form-label">State</label>
-              <input type="text" class="form-control" id="state" name="state" required>
-            </div>
-            <div class="mb-3">
-              <label for="zip" class="form-label">Zip</label>
-              <input type="text" class="form-control" id="zip" name="zip" required>
-            </div>  
-            <div class="mb-3">
-              <label for="phone" class="form-label">Phone</label>
-              <input type="text" class="form-control" id="phone" name="phone" required>
-            </div>
-            <div class="mb-3">
-              <label for="country" class="form-label">country</label>
-              <input type="text" class="form-control" id="country" name="country" required>
-            </div>
-            <div class="mb-3">
-              <label for="label" class="form-label">Label</label>
-              <input type="text" class="form-control" id="label" name="label">
-            </div>
-            <button type="submit" class="btn btn-primary">Add</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-</div>
-</div>
+  <!-- CSS Styles -->
+  <style>
+    .addresses-container {
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
 
+    .section-title {
+      color: #e94f37;
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
 
-<!-- CSS Styles -->
-<style>
+    .addresses-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+      width: 100%;
+    }
 
-.addresses-container {
-  background: white;
-  border-radius: 8px;
-  padding: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
+    .address-card {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
 
-.section-title {
-  color: #e94f37;
-  font-size: 1.2rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #eee;
-}
+    .address-info {
+      margin-bottom: 1rem;
+    }
 
-.addresses-grid {
-  display: grid;
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 3rem;
-    width: 100%;
-}
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
 
-.address-card {
-  background: white;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
+    .info-row i {
+      color: #666;
+      font-size: 1.1rem;
+      min-width: 20px;
+    }
 
-.address-info {
-  margin-bottom: 1rem;
-}
+    .info-row:last-child {
+      margin-bottom: 0;
+    }
 
-.info-row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
-  color: #333;
-}
+    .address-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eee;
+    }
 
-.info-row i {
-  color: #666;
-  font-size: 1.1rem;
-  min-width: 20px;
-}
+    .action-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+    }
 
-.info-row:last-child {
-  margin-bottom: 0;
-}
+    .action-btn.delete {
+      background: black;
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 4px;
+    }
 
-.address-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid #eee;
-}
+    .action-btn.edit {
+      background: #e6e6e6;
+      color: #333;
+      border: none;
+    }
 
-.action-btn {
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.9rem;
-}
+    .action-btn:hover {
+      opacity: 0.9;
+    }
 
-.action-btn.delete {
-  background: black;
-  color: white;
-  border: none;
-  padding: 0.5rem;
-  border-radius: 4px;
-}
+    .add-address-btn {
+      background-color: #e94f37;
+      color: white;
+      border: none;
+      padding: 0.75rem 2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 1rem;
+    }
 
-.action-btn.edit {
-  background: #e6e6e6;
-  color: #333;
-  border: none;
-}
+    .add-address-btn:hover {
+      background-color: #d03f2a;
+    }
 
-.action-btn:hover {
-  opacity: 0.9;
-}
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .addresses-grid {
+        grid-template-columns: 1fr;
+      }
 
-.add-address-btn {
-  background-color: #e94f37;
-  color: white;
-  border: none;
-  padding: 0.75rem 2rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  margin-top: 1rem;
-}
+      .addresses-container {
+        padding: 1rem;
+      }
 
-.add-address-btn:hover {
-  background-color: #d03f2a;
-}
+      .address-card {
+        padding: 1rem;
+      }
+    }
+  </style>
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .addresses-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .addresses-container {
-    padding: 1rem;
-  }
-  
-  .address-card {
-    padding: 1rem;
-  }
-}
-</style>
-
-<%-include('../userPages/partialFooterUser.ejs')%>
+  <%-include('../userPages/partialFooterUser.ejs')%>

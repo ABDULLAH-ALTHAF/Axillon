@@ -24,16 +24,32 @@
 
                     <div class="form-group">
                         <label for="phone">Phone</label>
-                        <input type="text" name="phone-show" value="<%= user.phone %>" class="form-control" readonly>
+                        <input type="text" id="phone" name="phone" value="<%= user.phone %>" class="form-control">
+                        <small id="phoneError" style="color: red; display: none;">Phone number must be exactly 10 digits.</small>
                     </div>
+                    
+                    <script>
+                        const phoneInput = document.getElementById('phone');
+                        const phoneError = document.getElementById('phoneError');
+                        const form = document.querySelector('form'); // Ensure your form has the <form> tag
+                    
+                        form.addEventListener('submit', (e) => {
+                            const phoneValue = phoneInput.value.trim();
+                            const isEmpty = phoneValue === '';
+                            const isValidLength = /^\d{10}$/.test(phoneValue);
+                    
+                            // Validation logic
+                            if (!isEmpty && !isValidLength) {
+                                e.preventDefault(); // Prevent form submission
+                                phoneError.style.display = 'block'; // Show the error message
+                            } else {
+                                phoneError.style.display = 'none'; // Hide the error message if valid
+                            }
+                        });
+                    </script>
+                    
 
-                    <div class="form-group">
-                        <label for="phone">Change Phone</label>
-                        <div class="phone-input">
-                            <span class="country-code">+91</span>
-                            <input type="tel" name="phone" placeholder="Change your phone number" class="form-control">
-                        </div>
-                    </div>
+                    
 
                     <button type="submit" class="edit-profile-btn">Save Changes</button>
                 </form>

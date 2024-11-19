@@ -1,0 +1,68 @@
+
+<%-include("../userPages/partialHeadUser.ejs")%>
+<div class="profile-container">
+
+
+
+<%-include("../userPages/profilePartial.ejs")%>
+
+
+
+
+<form action="/postEditAddress/<%=address._id%>" method="POST" style="width: 70%; margin: auto; padding: 1rem; border: 1px solid #ccc; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <div class="form-group" style="margin-bottom: 0.5rem;">
+            <label for="street" style="display: block; margin-bottom: 0.25rem;">Street</label>
+            <input type="text" class="form-control" id="street" name="street" value="<%=address.street%>" required style="padding: 0.25rem; border: 1px solid #ccc; border-radius: 5px;">
+        </div>
+        <div class="form-group" style="margin-bottom: 0.5rem;">
+            <label for="country" style="display: block; margin-bottom: 0.25rem;">Country</label>
+            <input type="text" class="form-control" id="country" name="country" value="<%=address.country%>" required style="padding: 0.25rem; border: 1px solid #ccc; border-radius: 5px;">
+        </div>
+        <div class="form-group" style="margin-bottom: 0.5rem;">
+            <label for="zip" style="display: block; margin-bottom: 0.25rem;">Zip</label>
+            <input type="text" class="form-control" id="zip" name="zip" value="<%=address.zip%>" required style="padding: 0.25rem; border: 1px solid #ccc; border-radius: 5px;">
+        </div>
+        <div class="form-group" style="margin-bottom: 0.5rem;">
+            <label for="phone" style="display: block; margin-bottom: 0.25rem;">Phone</label>
+            <input type="text" class="form-control" id="phone" name="phone" value="<%=address.phone%>" 
+                style="padding: 0.25rem; border: 1px solid #ccc; border-radius: 5px;">
+            <small id="phoneError" style="color: red; display: none;">Phone must contain exactly 10 digits.</small>
+        </div>
+        
+        <script>
+            const phoneInput = document.getElementById('phone');
+            const phoneError = document.getElementById('phoneError');
+            const form = document.querySelector('form'); // Adjust if your form has a specific ID or class
+        
+            form.addEventListener('submit', (e) => {
+                const phoneValue = phoneInput.value.trim();
+                const isValid = phoneValue === '' || /^\d{10}$/.test(phoneValue); // Allow empty or 10 digits
+        
+                if (!isValid) {
+                    e.preventDefault(); // Prevent form submission if invalid
+                    phoneError.style.display = 'block'; // Show error message
+                    phoneInput.style.borderColor = 'red'; // Highlight input field
+                } else {
+                    phoneError.style.display = 'none'; // Hide error message
+                    phoneInput.style.borderColor = '#ccc'; // Reset border color
+                }
+            });
+        </script>
+        
+        <div class="form-group" style="margin-bottom: 0.5rem;">
+            <label for="city" style="display: block; margin-bottom: 0.25rem;">City</label>
+            <input type="text" class="form-control" id="city" name="city" value="<%=address.city%>" required style="padding: 0.25rem; border: 1px solid #ccc; border-radius: 5px;">
+        </div>
+        <div class="form-group" style="margin-bottom: 0.5rem;">
+            <label for="state" style="display: block; margin-bottom: 0.25rem;">State</label>
+            <input type="text" class="form-control" id="state" name="state" value="<%=address.state%>" required style="padding: 0.25rem; border: 1px solid #ccc; border-radius: 5px;">
+        </div>
+        <div class="form-group" style="margin-bottom: 0.5rem;">
+            <label for="label" style="display: block; margin-bottom: 0.25rem;">Label</label>
+            <input type="text" class="form-control" id="label" name="label" value="<%=address.label%>"  style="padding: 0.25rem; border: 1px solid #ccc; border-radius: 5px;">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.25rem; border-radius: 5px; background-color: #007bff; color: white; border: none; cursor: pointer;">Edit Address</button>
+    </form>
+
+</div>
+<%-include("../userPages/partialFooterUser.ejs")%>

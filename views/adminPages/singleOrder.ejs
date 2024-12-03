@@ -1,0 +1,134 @@
+<%-include('../adminPages/partialHead.ejs')%>
+
+<style>
+    
+    
+    .main-content {
+        margin-left: 250px;
+        padding: 30px;
+        width: calc(100% - 250px);
+    }
+        .order-status-badge {
+            transition: all 0.3s ease;
+        }
+        .order-status-badge.pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .order-status-badge.processing {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        .order-status-badge.completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .order-image{
+        width: 50px;
+        height: 50px;
+    }
+    </style>
+
+    <div class="main-content">
+
+        <h1 class="text-xl font-bold">Order #<%= order.orderId %></h1>
+                <div class="order-status-badge <%= order.status.toLowerCase() %> 
+                    px-3 py-1 rounded-full text-sm font-medium capitalize">
+                    <%= order.status %>
+                </div>
+
+        <div class="grid md:grid-cols-2 gap-4 p-4">
+
+        <section class="shipping-address bg-white p-4 rounded-lg shadow-sm">
+            <h2 class="text-lg font-semibold mb-4">Shipping Address</h2>
+            <address class="text-gray-700">
+                <% if (order.address.label) { %>
+                    <p class="font-medium"><%= order.address.label %></p>
+                <% } %>
+                <p><%= order.address.street %></p>
+                <p>
+                    <%= order.address.city %>, 
+                    <%= order.address.state %> 
+                    <%= order.address.zip %>
+                </p>
+                <p><%= order.address.country %></p>
+                <p class="mt-2">
+                    <span class="text-gray-600">Phone:</span> 
+                    <%= order.address.phone %>
+                </p>
+            </address>
+        </section>
+
+
+        <section class="order-info-section ">
+            <h2 class="text-lg font-semibold mb-4">Order Information</h2>
+            <ul class="order-info-list grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <li class="flex flex-col">
+                    <span class="text-gray-600 text-sm">Order Date</span>
+                    <span class="font-medium">
+                        <%= order.createdAt.toLocaleDateString() %>
+                    </span>
+                </li>
+                <li class="flex flex-col">
+                    <span class="text-gray-600 text-sm">Total Items</span>
+                    <span class="font-medium">
+                        <%= order.orderedItems.length %>
+                    </span>
+                </li>
+                <li class="flex flex-col">
+                    <span class="text-gray-600 text-sm">Subtotal</span>
+                    <span class="font-medium">
+                        ₹<%= order.totalAmount %>
+                    </span>
+                </li>
+                <li class="flex flex-col">
+                    <span class="text-gray-600 text-sm">Shipping</span>
+                    <span class="font-medium">₹0.00</span>
+                </li>
+                <li class="flex flex-col">
+                    <span class="text-gray-600 text-sm">Final Amount</span>
+                    <span class="font-medium">
+                        ₹<%= order.finalAmount %>
+                    </span>
+                </li>
+            </ul>
+        </section>
+        
+        
+        <section class="order-items-section p-4 bg-gray-50">
+            <h2 class="text-lg font-semibold mb-4">Ordered Items</h2>
+            <ul class="order-items-list space-y-4">
+                <% order.orderedItems.forEach(item => { %>
+                    <li class="order-item flex items-center bg-white p-4 rounded-lg shadow-sm">
+                        <div class="item-image mr-4">
+                            <!-- Image Placeholder -->
+                            <div class="w-16 h-16 bg-gray-200 rounded"></div>
+                        </div>
+                        <div class="item-details flex-grow">
+                            <img src="<%=item.image.replace('public','')%>" alt="Product Image" class="order-image">
+                            <h3 class="item-name text-md font-medium">
+                                <%= item.productName %>
+                            </h3>
+                            <div class="item-price-quantity flex justify-between text-sm text-gray-600">
+                                <span class="item-price">₹<%= item.price %></span>
+                                <span class="item-quantity">
+                                    x<%= item.quantity %>
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                <% }); %>
+            </ul>
+        </section>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { type } = require("os");
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -18,15 +19,13 @@ const userSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required:false,
-    sparse:true,
-    default:null,
+    required: false,
+    sparse: true,
+    default: null,
   },
   googleId: {
-
-    type:String,
-    uinique:true,
-
+    type: String,
+    uinique: true,
   },
   createdAt: {
     type: Date,
@@ -44,6 +43,34 @@ const userSchema = new mongoose.Schema({
   isAdmin: {
     type: Boolean,
   },
+  wallet: {
+    type: Number,
+    default: 0,
+  },
+  transactions: [
+    {
+      type: {
+        type: String,
+        required: true,
+      },
+      amount: {
+        type: Number,
+        required: true,
+      },
+      description: {
+        type: String,
+        required: true,
+      },
+      order_id:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Order',
+      },
+      createdOn: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
 });
 
 const User = mongoose.model("User", userSchema);

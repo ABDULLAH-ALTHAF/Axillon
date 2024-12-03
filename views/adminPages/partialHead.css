@@ -14,14 +14,14 @@ body {
 }
 
  /* Navbar styles */
- .navbar {
+nav {
     display: flex;
     position: fixed;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
     width: 100vw;
-    z-index: 1;
+    z-index: 6;
     background-color: #f8f8f8;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

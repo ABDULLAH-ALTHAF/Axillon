@@ -10,10 +10,10 @@ const VariantsSchema = new mongoose.Schema({
     type: String,
   },
   price: {
-    type: String,
+    type: Number,
   },
   stock: {
-    type: String,
+    type: Number,
   },
   createdAt: {
     type: Date,

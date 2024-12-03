@@ -67,19 +67,19 @@
         <div class="metrics-grid">
             <div class="metric-card">
                 <div class="metric-title">Overall Sales Count</div>
-                <div class="metric-value">7,265</div>
+                <div class="metric-value"><%= totalSalesCount %></div>
             </div>
             <div class="metric-card">
                 <div class="metric-title">Overall Order Amount</div>
-                <div class="metric-value">3,671</div>
+                <div class="metric-value"><%= totalSales %></div>
             </div>
             <div class="metric-card">
                 <div class="metric-title">Overall Discount</div>
-                <div class="metric-value">156</div>
+                <div class="metric-value"><%= totalDiscount %></div>
             </div>
         </div>
 
-        <div class="graph-container">
+        <!-- <div class="graph-container">
             <h2 class="graph-title">Sales Data Graph</h2>
             <div id="salesChart" style="height: 300px;"></div>
         </div>
@@ -87,10 +87,75 @@
         <div class="graph-container">
             <h2 class="graph-title">Revenue Data Graph</h2>
             <div id="revenueChart" style="height: 300px;"></div>
-        </div>
+        </div> -->
+
+        <div class="report-container">
+            <h3 class="report-title">Generate Sales Report</h3>
+            <form id="sales-report-form" method="POST" action="/admin/sales-report">
+              <div class="form-group">
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate" name="startDate" required class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate" name="endDate" required class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="format">Format:</label>
+                <select id="format" name="format" required class="form-control">
+                  <option value="pdf">PDF</option>
+                  <option value="excel">Excel</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">Download Report</button>
+            </form>
+          </div>
     </div>
 
-    <!-- Include ApexCharts for the graphs -->
+    
+
+      <script>
+        document.getElementById('sales-report-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const startDate = formData.get('startDate');
+            const endDate = formData.get('endDate');
+
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
+
+            const response = await fetch('/admin/sales-report', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                startDate,
+                endDate,
+                format: formData.get('format'),
+                }),
+            });
+
+            if (response.ok) {
+                const blob = await response.blob();
+                const format = formData.get('format');
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `sales_report.${format}`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                const error = await response.text();
+                alert(`Error: ${error}`);
+            }
+            });
+
+      </script>
+      
+
+    <!-- Include ApexCharts for the graphs
     <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.35.0/apexcharts.min.js"></script>
     <script>
         // Sales Chart
@@ -142,4 +207,4 @@
 
         const revenueChart = new ApexCharts(document.querySelector("#revenueChart"), revenueOptions);
         revenueChart.render();
-    </script>
+    </script> -->

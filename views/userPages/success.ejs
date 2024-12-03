@@ -1,0 +1,91 @@
+<%-include('../userPages/partialHeadUser.ejs')%>
+
+
+    <style>
+        .main-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1rem;
+            /* max-width: 1400px; */
+            margin-top: 5vh;
+            margin-left: 4vw;
+            height: 60vh;
+            
+        }
+        
+        .confirmation-card {
+            background: white;
+            width: fit-content;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            padding: 6%;
+            background: #e6f7ed;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+        
+        .checkmark {
+            color: #1eb372;
+            font-size: 80px;
+        }
+        
+        h1 {
+            color: #1a1f36;
+            font-size: 2rem;
+            margin-bottom: 26px;
+        }
+
+
+
+        .button {
+            background: #0a0b3b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 16px;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 20px;
+            margin-left: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .button:hover {
+            background: #1a1f4b;
+        }
+
+    </style>
+
+    <main class="main-container ">
+
+        <div class="confirmation-card">
+            <div class="success-icon">
+                <span class="checkmark">✓</span>
+            </div>
+
+            <h1>Thanks a lot for putting up this order</h1>
+
+            <a href="/shop" class="button" style="text-decoration: none;">Back to shop</a>
+            <a href="/orders" class="button" style="text-decoration: none;">Orders</a>
+        </div>
+    </main>
+
+    <%-include('../userPages/partialFooterUser.ejs')%>
+
+        </body>
+
+        </html>

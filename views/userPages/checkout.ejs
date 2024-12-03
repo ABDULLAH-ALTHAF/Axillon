@@ -1,0 +1,437 @@
+<%-include('../userPages/partialHeadUser.ejs')%>
+
+
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .checkout-title {
+            text-align: center;
+            color: #1a0f5f;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+
+
+        .checkout-form {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+
+        .address-option {
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .more-btn {
+            color: #1a0f5f;
+            text-decoration: none;
+            font-size: 0.9rem;
+            float: right;
+        }
+
+        .next-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: #1a0f5f;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 2rem;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .next-btn:hover {
+            background: #150c4a;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-bar::before {
+                width: 280px;
+            }
+        }
+
+
+        /* payment section */
+
+        .payment-form {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .payment-section-title {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-option {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .payment-option.selected {
+            border-color: #1a0f5f;
+            background-color: #f8f8ff;
+        }
+
+        .payment-option-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .payment-option-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .payment-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+
+        .back-btn,
+        .next-btn {
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+
+
+        .next-btn {
+            background: #1a0f5f;
+            border: none;
+            color: #fff;
+        }
+
+        .payment-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .security-note {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+    </style>
+    <div class="breadcrumbs">
+        <a href="/">Home</a> > <a href="/shop">Shop</a> > <a href="/cart"> Shopping Cart</a> > <a href="/cart">
+            Checkout</a>
+    </div>
+
+
+
+    <div class="container">
+        <h1 class="checkout-title">Where and how should we sent the order?</h1>
+
+
+
+        <!-- <form class="checkout-form" action="/checkoutPayment" method="POST">
+            <div class="saved-addresses mb-3"> -->
+                <h3>Checkout Details</h3>
+
+
+                <div class="address-option">
+                    <% if (addresses.length> 0) { %>
+                        <select class="form-control" id="address" name="address" >
+                            <option value="" disabled selected> Select an
+                                Address</option>
+                            <% for (let i=0; i < addresses.length; i++) { %>
+                                <option value="<%= addresses[i]._id %>">
+                                    <%= `${addresses[i].street}, ${addresses[i].city}, ${addresses[i].state}` %>
+                                </option>
+                                <% } %>
+                        </select>
+                        <% } else { %>
+                            <p>No addresses available. Please add an address first.</p>
+                            <% } %>
+                </div>
+
+
+
+                 <!--Add Modal -->
+        <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addAddressModalLabel">Add New Address</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form action="/postmyAddressCheckout" method="POST">
+                <div class="mb-3">
+                  <label for="street" class="form-label">street</label>
+                  <input type="text" class="form-control" id="street" name="street" required>
+                </div>
+                <div class="mb-3">
+                  <label for="city" class="form-label">City</label>
+                  <input type="text" class="form-control" id="city" name="city" required>
+                </div>
+                <div class="mb-3">
+                  <label for="state" class="form-label">State</label>
+                  <input type="text" class="form-control" id="state" name="state" required>
+                </div>
+                <div class="mb-3">
+                  <label for="zip" class="form-label">Zip</label>
+                  <input type="text" class="form-control" id="zip" name="zip" required>
+                </div>
+                <div class="mb-3">
+                  <div class="form-group" style="margin-bottom: 0.5rem;">
+                    <label for="phone" style="display: block; margin-bottom: 0.25rem;" >Phone</label>
+                    <input type="text" class="form-control" id="phone" name="phone" required
+                        style="padding: 0.25rem; border: 1px solid #ccc; border-radius: 5px;">
+                    <small id="phoneError" style="color: red; display: none;">Phone must contain exactly 10 digits.</small>
+                </div>
+                
+                <script>
+                    const phoneInput = document.getElementById('phone');
+                    const phoneError = document.getElementById('phoneError');
+                    const form = document.querySelector('form'); 
+                
+                    form.addEventListener('submit', (e) => {
+                        const phoneValue = phoneInput.value.trim();
+                        const isValid = phoneValue === '' || /^\d{10}$/.test(phoneValue);
+                
+                        if (!isValid) {
+                            e.preventDefault(); 
+                            phoneError.style.display = 'block'; 
+                            phoneInput.style.borderColor = 'red'; 
+                        } else {
+                            phoneError.style.display = 'none'; 
+                            phoneInput.style.borderColor = '#ccc'; 
+                        }
+                    });
+                </script>
+                
+                </div>
+                <div class="mb-3">
+                  <label for="country" class="form-label">country</label>
+                  <input type="text" class="form-control" id="country" name="country" required>
+                </div>
+                <div class="mb-3">
+                  <label for="label" class="form-label">Label</label>
+                  <input type="text" class="form-control" id="label" name="label">
+                </div>
+                <button type="submit" class="btn btn-primary">Add</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+                <div>
+                    
+            
+            <button type="button" class="btn btn-primary add-address-btn" data-bs-toggle="modal" data-bs-target="#addAddressModal" style="margin-bottom: 1rem;">
+                        Or Add New Address
+                    </button>
+                </div>
+
+                <div class="mb-3">
+                    <label for="coupon" class="form-label" style="font-weight: bold;">Coupons</label>
+                    <select class="form-select" id="coupon" name="coupon">
+                        <option value="">Available Coupons</option>
+                        <% coupons.forEach(coupon => { %>
+                            <option value="<%=coupon._id%>"><%=coupon.couponName%> <%=coupon.percentage%>-%-OFF</option>
+                        <% }); %>
+                    </select>                    
+                </div>
+
+                <div class="payment-option">
+                    <div class="payment-option-header">
+                        <div class="payment-option-title">
+                            <input type="radio" name="payment-method" value="COD" checked>
+                            <span>Cash On Delivery (COD)</span>
+                        </div>
+                        <i style="font-size: 30px;" class="fa-solid fa-handshake"></i>
+                    </div>
+                    <div class="payment-description">
+                        Our Product is On your Stepdoor.
+                    </div>
+                </div>
+<!-- Wallet Payment Option -->
+<div class="payment-option">
+    <div class="payment-option-header">
+        <div class="payment-option-title">
+            <input type="radio" name="payment-method" value="WLT">
+            <span>Wallet</span>
+        </div>
+        <i style="font-size: 30px;" class="fa-solid fa-wallet"></i>
+    </div>
+    <div class="payment-description">
+        Pay using your wallet balance.
+    </div>
+</div>
+                <!-- Razorpay Payment Option -->
+                <div class="payment-option">
+                    <div class="payment-option-header">
+                        <div class="payment-option-title">
+                            <input type="radio" name="payment-method" value="RZP">
+                            <span>RazorPay</span>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                  d="m22.436 0l-11.91 7.773l-1.174 4.276l6.625-4.297L11.65 24h4.391zM14.26 10.098L3.389 17.166L1.564 24h9.008z" />
+                        </svg>
+                    </div>
+                    <div class="payment-description">
+                        You will be redirected to the RazorPay website after submitting your order
+                    </div>
+                </div>
+                
+                <div class="security-note">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 0L2 2V7C2 11.5 4.5 15.5 8 16C11.5 15.5 14 11.5 14 7V2L8 0Z" fill="#666" />
+                    </svg>
+                    We protect your payment information using encryption to provide bank-level security.
+                </div>
+                
+                <div class="button-group">
+                    <a href="/cart" class="next-btn">← Back</a>
+                    <a onclick="placeOrder()" class="next-btn">Place Order →</a>
+                </div>
+</div>                
+
+
+                <%-include('../userPages/partialFooterUser.ejs')%>
+                <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+                <script>
+                    async function placeOrder() {
+                        const selectedAddressId = document.querySelector('#address').value;
+                        const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+                        var selectedCouponId = document.querySelector('#coupon').value;
+                        if(!selectedCouponId){
+                            selectedCouponId = null
+                        }
+                        
+
+                
+                        if (!selectedAddressId) {
+                            Swal.fire({
+                                title: "Please Note",
+                                text: `please select an address.`,
+                                icon: "error"
+                            });
+                            return;
+                        }
+                
+                        const response = await fetch('/placeOrder', {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ selectedAddressId, selectedPaymentMethod, selectedCouponId }),
+                        });
+                
+                        if (response.ok) {
+                            if (selectedPaymentMethod === "RZP") {
+                                const razorpayOrderData = await response.json();
+                                initiateRazorpayPayment(razorpayOrderData);
+                            } else {
+                                window.location = '/success';
+                            }
+                        } else  {
+                            const err = await response.json();
+                            Swal.fire({
+                                title: "Please Note",
+                                text: `${err.message}.`,
+                                icon: "error"
+                            });
+                        }
+                    }
+                
+                    function initiateRazorpayPayment(orderData) {
+                        const options = {
+                            key: "rzp_test_o8NbEzmS8geUeF",  
+                            amount: orderData.amount ,  
+                            currency: 'INR',
+                            order_id: orderData.order_id,
+                            handler: function (response) {
+                                
+                                fetch('/verifyRazorpayPayment', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify(response),
+                                }).then(res => res.json())
+                                  .then(data => {
+                                      if (data.success) {
+                                          window.location = '/success';
+                                      } else {
+                                          alert("Payment failed");
+                                      }
+                                  });
+                            },
+                            prefill: {
+                                name: 'Customer Name',  // Optional, set dynamically
+                                email: 'customer@example.com',  // Optional, set dynamically
+                                phone: 9188057842
+                            },
+                            notes: {
+                                address: 'Address for delivery'
+                            },
+                            theme: {
+                                color: '#F37254'
+                            }
+                        };
+                        const rzp1 = new Razorpay(options);
+                        rzp1.open();
+                    }
+                </script>
+                 

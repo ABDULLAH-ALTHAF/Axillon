@@ -1,0 +1,146 @@
+<%-include('../userPages/partialHeadUser.ejs')%>
+
+    <!-- EJS Template -->
+    <style>
+        .main-content {
+                 /* flex: 1; */
+                 width: 100%;
+                 background: white;
+                 border-radius: 8px;
+                 padding: 2rem;
+                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+             }
+     
+             .section-title {
+                 color: #e94f37;
+                 font-size: 1.2rem;
+                 margin-bottom: 1.5rem;
+                 padding-bottom: 0.5rem;
+                 border-bottom: 1px solid #eee;
+             }
+     
+             .form-group {
+                 margin-bottom: 1.5rem;
+             }
+     
+             .form-group label {
+                 display: block;
+                 margin-bottom: 0.5rem;
+                 color: #666;
+             }
+     
+             .form-control {
+                 width: 100%;
+                 padding: 0.75rem;
+                 border: 1px solid #ddd;
+                 border-radius: 4px;
+                 background-color: #f8f9fa;
+             }
+     
+             .phone-input {
+                 display: flex;
+                 align-items: center;
+                 gap: 0.5rem;
+             }
+     
+             .country-code {
+                 padding: 0.75rem;
+                 background-color: #f8f9fa;
+                 border: 1px solid #ddd;
+                 border-radius: 4px;
+                 color: #666;
+             }
+     
+             .edit-profile-btn {
+                 background-color: #e94f37;
+                 color: white;
+                 border: none;
+                 padding: 0.75rem 2rem;
+                 border-radius: 4px;
+                 cursor: pointer;
+                 transition: background-color 0.2s;
+             }
+     
+             .edit-profile-btn:hover {
+                 background-color: #d03f2a;
+             }
+     
+             .referral-section {
+                 margin-top: 2rem;
+             }
+     
+             .referral-code {
+                 display: flex;
+                 align-items: center;
+                 justify-content: space-between;
+                 padding: 1rem;
+                 background-color: #f8f9fa;
+                 border-radius: 4px;
+             }
+     
+             .copy-btn {
+                 background: none;
+                 border: none;
+                 cursor: pointer;
+                 padding: 0.5rem;
+             }
+     
+             .copy-btn:hover {
+                 color: #e94f37;
+             }
+     
+             [class^="icon-"] {
+                 font-size: 1.2rem;
+             }
+         </style>
+    <div class="profile-container">
+        
+<%-include('../userPages/profilePartial.ejs')%>
+
+
+
+        <div class="main-content">
+            <h2 class="section-title">Available Coupons</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Coupon Code</th>
+                        <th>Discount</th>
+                        <th>Minimum Purchase</th>
+                        <th>Expiry</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% coupons.forEach(coupon => { %>
+                    <tr>
+                        <td><%= coupon.couponName %></td>
+                        <td>₹<%= coupon.percentage %></td>
+                        <td><%= coupon.minimum %></td>
+                        <td><%= new Date(coupon.expiredAt).toDateString() %></td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+            <style>
+                .available-coupons {
+                    list-style-type: none;
+                    padding: 0;
+                }
+                
+                .coupon-row {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 1rem;
+                    border-bottom: 1px solid #ddd;
+                }
+            </style>
+        </div>
+    </div>
+
+    
+
+    <%-include('../userPages/partialFooterUser.ejs')%>
+
+        </body>
+
+        </html>

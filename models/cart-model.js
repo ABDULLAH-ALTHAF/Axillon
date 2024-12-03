@@ -6,23 +6,17 @@ const CartSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  product_id: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
+  items:[{
+    variant_id:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Variants",
+        required:true,
     },
-  ],
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
-  quantity: {
-    type: Number,
-  },
+    quantity:{
+        type:Number,
+        default:0,
+    },
+  }]
 });
 
 const Cart = mongoose.model("Cart", CartSchema);

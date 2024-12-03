@@ -1,0 +1,229 @@
+<%-include('../userPages/partialHeadUser.ejs')%>
+
+    <div class="profile-container">
+
+        <%-include('../userPages/profilePartial.ejs')%>
+
+        <div class="order-details">
+            <h2>Orders</h2>
+           
+            <ul>
+                <% orders.forEach(order => { %>
+
+                    <!-- order-card.ejs -->
+<div class="order-card">
+    <div class="order-header">
+        <div class="order-image">
+            <img src="<%=order.orderedItems[0].image.replace('public','')%>" alt="Product Image">
+        </div>
+        <div class="order-status-badge <%= order.status.toLowerCase() %>">
+            <%= order.status %>
+        </div>
+    </div>
+    
+    <div class="order-details">
+        <ul class="order-info-list">
+            <li>
+                <span class="label">Order ID</span>
+                <span class="value"><%= order.orderId %></span>
+            </li>
+            <li>
+                <span class="label">Date</span>
+                <span class="value"><%= order.createdAt.toDateString() %></span>
+            </li>
+            <li>
+                <span class="label">Amount</span>
+                <span class="value">₹<%= order.totalAmount %></span>
+            </li>
+        </ul>
+
+        <div class="order-products-section">
+            <h3>Ordered Products</h3>
+            <ul class="products-list">
+                <% order.orderedItems.forEach(product => { %>
+                    <li class="product-item">
+                        <span class="product-name"><%= product.name %></span>
+                        <span class="product-quantity">×<%= product.quantity %></span>
+                    </li>
+                <% }); %>
+            </ul>
+        </div>
+
+        <a href="/singleOrderDetails/<%=order._id%>" class="details-button">
+            View Details
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6"/>
+            </svg>
+        </a>
+    </div>
+
+    <style>
+        .order-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin: 16px 0;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .order-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .order-header {
+            position: relative;
+            background: #f8f9fa;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-image img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .order-status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+
+        .order-status-badge.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .order-status-badge.processing {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .order-status-badge.completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .order-details {
+            padding: 24px;
+            width: 100%;
+        }
+
+        .order-info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 24px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .order-info-list li {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .label {
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .value {
+            color: #212529;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .order-products-section {
+            margin-bottom: 24px;
+        }
+
+        .order-products-section h3 {
+            color: #212529;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .products-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .product-name {
+            color: #212529;
+            font-weight: 500;
+        }
+
+        .product-quantity {
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .details-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #0d6efd;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .details-button:hover {
+            background: #0b5ed7;
+        }
+
+        @media (max-width: 768px) {
+            .order-info-list {
+                grid-template-columns: 3fr;
+                gap: 12px;
+            }
+            
+            .order-header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+    </style>
+</div>
+                <% }); %>
+            </ul>
+        </div>
+
+    </div>
+    </div>
+
+
+    
+
+    <%-include('../userPages/partialFooterUser.ejs')%>

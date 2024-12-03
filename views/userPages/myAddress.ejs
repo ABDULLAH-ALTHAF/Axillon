@@ -36,9 +36,7 @@
                 </div>
               </div>
               <div class="address-actions">
-                <a class="action-btn delete" href="javascript:void(0);"
-                  onclick="if(confirm('Are you sure to delete this address?')) { window.location.href='/deleteAddress/<%=address._id%>'; }"
-                  style="text-decoration: none;">
+                <a class="action-btn delete" href="/deleteAddress/<%=address._id%>" style="text-decoration: none;">
                   <i class="fa-solid fa-trash-can"></i>
                 </a>
 
@@ -83,8 +81,8 @@
                   </div>
                   <div class="mb-3">
                     <div class="form-group" style="margin-bottom: 0.5rem;">
-                      <label for="phone" style="display: block; margin-bottom: 0.25rem;">Phone</label>
-                      <input type="text" class="form-control" id="phone" name="phone" 
+                      <label for="phone" style="display: block; margin-bottom: 0.25rem;" >Phone</label>
+                      <input type="text" class="form-control" id="phone" name="phone" required
                           style="padding: 0.25rem; border: 1px solid #ccc; border-radius: 5px;">
                       <small id="phoneError" style="color: red; display: none;">Phone must contain exactly 10 digits.</small>
                   </div>

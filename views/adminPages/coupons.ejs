@@ -1,0 +1,188 @@
+<%-include('../adminPages/partialHead.ejs')%>
+
+<style>
+    
+    
+    .main-content {
+        margin-left: 250px;
+        padding: 30px;
+        width: calc(100% - 250px);
+    }
+    
+    
+    
+    
+    .brands-table {
+        width: 100%;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        border-collapse: collapse;
+        overflow: hidden;
+    }
+    
+    .brands-table th {
+        text-align: left;
+        padding: 15px;
+        background: #f8f9fa;
+        font-weight: bold;
+        color: #333;
+    }
+    
+    .brands-table td {
+        padding: 15px;
+        border-top: 1px solid #eee;
+    }
+    
+    .status {
+        color: #2ecc71;
+        font-weight: 500;
+    }
+    
+    .btn {
+        padding: 6px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-right: 5px;
+        color: white;
+    }
+    
+    .btn-change-status {
+        background: #e74c3c;
+    }
+    
+    .btn-edit {
+        background: #000;
+    }
+    
+    .btn-variants {
+        background: #3498db;
+    }
+    
+    .add-new {
+        display: inline-block;
+        background: #e74c3c;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 6px;
+        text-decoration: none;
+        margin-top: 20px;
+        font-weight: bold;
+    }
+    
+    .brand-id {
+        color: #666;
+        font-family: monospace;
+    }
+    
+    
+    </style>
+
+    <div class="main-content">
+
+
+        <div class="modal fade" id="addCouponModal" tabindex="-1" aria-labelledby="addCouponModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addCouponModalLabel">Add New Coupon</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="/admin/postCoupon" method="POST">
+                        <div class="modal-body">    
+                            <div class="form-group">
+                                <label for="couponName">Coupon Name</label>
+                                <input type="text" class="form-control" id="couponName" name="couponName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="expiredAt">From</label>
+                                <input type="date" class="form-control" id="from" name="from" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="expiredAt">Expired At</label>
+                                <input type="date" class="form-control" id="expiredAt" name="expiredAt" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="percentage">Percentage</label>
+                                <input type="number" class="form-control" id="percentage" name="percentage" required
+                                    oninput="this.value = Math.min(this.value, 100);">
+                            </div>
+                            <div class="form-group">
+                                <label for="minimum">Minimum Amount</label>
+                                <input type="number" class="form-control" id="minimum" name="minimum" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Coupon</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+
+
+        <table class="brands-table">
+            <thead>
+                <tr>
+                    <th>Coupon ID</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (coupons.length > 0) { %>
+                    <% coupons.forEach(coupon => { %>
+                        <tr>
+                            <td class="brand-id">#<%= coupon._id %></td>
+                            <td><%= coupon.couponName %></td>
+                            
+                            <td>
+                               
+                                
+                                    <!-- Toggle form for changing status -->
+                                    <form action="/admin/changeStatusCoupon/<%= coupon._id %>" method="POST">
+                                        <input type="hidden" name="status" value="<%= !coupon.status %>">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" name="statusToggle"
+                                                onchange="this.form.submit()" <%=coupon.status ? 'checked' : '' %>
+                                            >
+                                        </div>
+                                    </form>
+                                
+
+                            </td>
+                            <td>
+                                <a href="/admin/editCoupons/<%= coupon._id%>" class="btn btn-variants">Edit</a>
+
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="4" class="text-center">No coupons found</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+        
+        <button type="button" class="add-new btn btn-primary" data-toggle="modal" data-target="#addCouponModal">
+            Add New+
+        </button>
+
+    </div>
+
+
+
+
+
+
+
+
+

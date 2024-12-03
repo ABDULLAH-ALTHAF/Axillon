@@ -21,17 +21,39 @@
 
         </div>
 
+        <%if(message){%>    
+            
+            <div><p style="color: red;"><%=message%></p></div>
+            
+            <%}%>
         
-        
-        <form action="/postEmailVerification" method="POST">
+        <form action="/postEmailVerification" method="POST" id="email-form">
             <div class="input-group">
                 <label for="email">Enter your email address</label>
-                <input type="email" id="email" name="email" placeholder="email address" required>
+                <input type="text" id="email" name="email" placeholder="email address" >
             </div>
-
-            <button type="submit" class="sendOTP-button">Send OTP</button>
+            <div class="error-message " style="color: red;" id="error-message"></div>
+            <button type="submit" class="sendOTP-button">Verify Email</button>
         </form>
+        <script>
+            const emailForm = document.getElementById('email-form');
+            emailForm.addEventListener('submit', (e) => {
+                const email = document.getElementById('email').value;
+                if (email.includes(' ')) {
+                    document.getElementById('error-message').innerHTML = "Email should not contain any spaces";
+                    e.preventDefault();
+                } else {
+                    const atPosition = email.indexOf('@');
+                    const dotPosition = email.lastIndexOf('.');
+                    if (atPosition < 1 || dotPosition < atPosition + 2 || dotPosition + 2 >= email.length) {
+                        document.getElementById('error-message').innerHTML = "Email should be in a valid format";
+                        e.preventDefault();
+                    }
+                }
+            });
+        </script>
     </div>
+    
 </body>
 </html>
 

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { type } = require("os");
 
 const addressesSchema = new mongoose.Schema({
   user_id: {
@@ -44,6 +45,9 @@ const addressesSchema = new mongoose.Schema({
     },
     label: {
       type: String,
+    },
+    isDefault:{
+      type:Boolean
     }
   }]
   

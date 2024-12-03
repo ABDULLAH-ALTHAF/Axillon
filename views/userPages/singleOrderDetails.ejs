@@ -1,0 +1,243 @@
+<%-include('../userPages/partialHeadUser.ejs')%>
+
+
+
+<div class="profile-container">
+
+    <%-include('../userPages/profilePartial.ejs')%>
+
+    <div class="order-details-container">
+        <!-- Order Header -->
+        <header class="order-header flex justify-between items-center p-4 bg-gray-100 border-b">
+            <div class="order-title flex items-center space-x-4">
+                <h1 class="text-xl font-bold">Order #<%= order.orderId %></h1>
+                <div class="order-status-badge <%= order.status.toLowerCase() %> 
+                    px-3 py-1 rounded-full text-sm font-medium capitalize">
+                    <%= order.status %>
+                </div>
+                <!-- Cancel Order Modal -->
+                <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order?</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure you want to cancel your order?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <form action="/cancelOrder/<%= order.orderId %>" method="post">
+                                    <button type="submit" class="btn btn-danger">Confirm Cancel</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Button trigger modal -->
+                <% if (order.status !== 'Cancelled' && order.status !=='Delivered' && order.status !=='Return Request' && order.status !=='Returned') { %>
+                    <button type="button" class="btn btn-danger mt-5" data-bs-toggle="modal" data-bs-target="#cancelOrderModal">
+                        Cancel Order
+                    </button>
+                <% } %>
+
+                <% if(order.status == 'Delivered') {%>
+                    <button type="button" class="btn btn-success mt-5" onclick="downloadInvoice('<%= order.orderId %>')">
+                        Download Invoice
+                    </button>
+
+                    <script>
+                        function downloadInvoice(orderId) {
+                            window.location.href = '/downloadInvoice/' + orderId;
+                        }
+                    </script>
+                    <%}%>
+                <% if (order.status == 'Delivered') { %>
+                    <!-- Return Order Modal -->
+                    <div class="modal fade" id="returnOrderModal" tabindex="-1" aria-labelledby="returnOrderModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="returnOrderModalLabel">Return Order?</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to return your order?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-danger" onclick="returnOrder('<%= order.orderId %>')">Confirm Return</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-danger mt-5" data-bs-toggle="modal" data-bs-target="#returnOrderModal">
+                        Return Order
+                    </button>
+                <% } %>
+            </div>
+        </header>
+    
+        <!-- Order Information Grid -->
+        <div class="grid md:grid-cols-2 gap-4 p-4"> 
+            <!-- Shipping Address Section -->
+            <section class="shipping-address bg-white p-4 rounded-lg shadow-sm">
+                <h2 class="text-lg font-semibold mb-4">Shipping Address</h2>
+                <address class="text-gray-700">
+                    <% if (order.address.label) { %>
+                        <p class="font-medium"><%= order.address.label %></p>
+                    <% } %>
+                    <p><%= order.address.street %></p>
+                    <p>
+                        <%= order.address.city %>, 
+                        <%= order.address.state %> 
+                        <%= order.address.zip %>
+                    </p>
+                    <p><%= order.address.country %></p>
+                    <p class="mt-2">
+                        <span class="text-gray-600">Phone:</span> 
+                        <%= order.address.phone %>
+                    </p>
+                </address>
+            </section>
+    
+            <!-- Order Information Section -->
+            <section class="order-info-section ">
+                <h2 class="text-lg font-semibold mb-4">Order Information</h2>
+                <ul class="order-info-list grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <li class="flex flex-col">
+                        <span class="text-gray-600 text-sm">Order Date</span>
+                        <span class="font-medium">
+                            <%= order.createdAt.toLocaleDateString() %>
+                        </span>
+                    </li>
+                    <li class="flex flex-col">
+                        <span class="text-gray-600 text-sm">Total Items</span>
+                        <span class="font-medium">
+                            <%= order.orderedItems.length %>
+                        </span>
+                    </li>
+                    
+                    <li class="flex flex-col">
+                        <span class="text-gray-600 text-sm">Subtotal</span>
+                        <span class="font-medium">
+                            ₹<%= order.finalAmount %>
+                        </span>
+                    </li>
+                    <li class="flex flex-col">
+                        <span class="text-gray-600 text-sm">Shipping</span>
+                        <span class="font-medium">₹0.00</span>
+                    </li>
+                    <li class="flex flex-col">
+                        <span class="text-gray-600 text-sm">Discount Used</span>
+                        <span class="font-medium">
+                            <%= order.discount %>
+                        </span>
+                    </li>
+                    <li class="flex flex-col">
+                        <span class="text-gray-600 text-sm">Final Amount</span>
+                        <span class="font-medium">
+                            ₹<%= order.totalAmount %>
+                        </span>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    
+        <!-- Ordered Items Section -->
+        <section class="order-items-section p-4 bg-gray-50">
+            <h2 class="text-lg font-semibold mb-4">Ordered Items</h2>
+            <ul class="order-items-list space-y-4">
+                <% order.orderedItems.forEach(item => { %>
+                    <li class="order-item flex items-center bg-white p-4 rounded-lg shadow-sm">
+                        <div class="item-image mr-4">
+                            <!-- Image Placeholder -->
+                            <div class="w-16 h-16 bg-gray-200 rounded"></div>
+                        </div>
+                        <div class="item-details flex-grow">
+                            <img src="<%=item.image.replace('public','')%>" alt="Product Image" class="order-image">
+                            <h3 class="item-name text-md font-medium">
+                                <%= item.productName %>
+                            </h3>
+                            <div class="item-price-quantity flex justify-between text-sm text-gray-600">
+                                <span class="item-price">₹<%= item.price %></span>
+                                <span class="item-quantity">
+                                    x<%= item.quantity %>
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                <% }); %>
+            </ul>
+        </section>
+    </div>
+    
+
+
+    <script>
+         async function returnOrder(orderId) {
+            console.log(orderId);
+                const response = await fetch('/returnOrder', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ orderId }),
+                })
+
+                if (response.ok) {
+                    try {
+                        let res = await response.json();
+                        Swal.fire({
+                        title: "Please Note",
+                        text: `${res.message}`,
+                        icon: `success`
+                    });
+                        setTimeout(() => {
+                        location.reload()
+                        }, 2000);
+                    } catch (error) {
+                        console.error("Error parsing JSON response:", error);
+                    }
+                }else{
+                    let err = response.json()
+                    Swal.fire({
+                        title: "Please Note",
+                        text: `${err.message}`,
+                        icon: "error"
+                    });
+                }
+            }
+    </script>
+
+
+
+    <!-- Responsive & Dynamic Status Badge Styles -->
+    <style>
+        .order-status-badge {
+            transition: all 0.3s ease;
+        }
+        .order-status-badge.pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .order-status-badge.processing {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        .order-status-badge.completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .order-image{
+        width: 50px;
+        height: 50px;
+    }
+    </style>
+
+</div>
+
+<%-include('../userPages/partialFooterUser.ejs')%>
+

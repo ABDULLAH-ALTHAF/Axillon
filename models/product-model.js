@@ -33,6 +33,10 @@ const productSchema = new mongoose.Schema({
   status: {
     type: Boolean,
   },
+  offer:{
+    type:Number,
+    default:0,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

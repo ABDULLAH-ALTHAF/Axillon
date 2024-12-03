@@ -17,11 +17,12 @@
 
         .progress-bar {
             display: flex;
+            flex-direction: row;
             justify-content: center;
             align-items: center;
             margin-bottom: 3rem;
             position: relative;
-        }
+        }   
 
         .progress-step {
             display: flex;
@@ -81,7 +82,7 @@
         }
 
         .payment-form {
-            background: #fff;
+            background: #fff;   
             padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
@@ -173,13 +174,14 @@
             margin-top: 2rem;
             justify-content: center;
         } 
-
    </style>
-   
-   <div class="container">
-        <h1 class="payment-title">How would you like to pay?</h1>
 
-        <div class="progress-bar">
+
+<%-include('../userPages/partialHeadUser.ejs')%>
+   <div class="container">
+       <h1 class="payment-title">How would you like to pay?</h1>
+       
+       <div class="progress-bar">
             <div class="progress-step">
                 <div class="step-circle completed">✓</div>
                 <span class="step-label">Welcome</span>
@@ -193,31 +195,31 @@
                 <span class="step-label">Order</span>
             </div>
         </div>
-
+        
         <form class="payment-form" action="/checkout/complete" method="POST">
             <div class="payment-option">
                 <div class="payment-option-header">
                     <div class="payment-option-title">
                         <input type="radio" name="payment-method" value="apple-pay" checked>
-                        <span>Apple Pay</span>
+                        <span>Cash On Delivery (COD)</span>
                     </div>
-                    <img src="/images/apple-pay.png" alt="Apple Pay">
+                    <i class="bi bi-cash" style="font-size: 2rem; color: #000000;"></i>
                 </div>
                 <div class="payment-description">
-                    Unlimited users and unlimited individual data.
+                    Our Product is On your Stepdoor.
                 </div>
             </div>
-
+            
             <div class="payment-option">
                 <div class="payment-option-header">
                     <div class="payment-option-title">
-                        <input type="radio" name="payment-method" value="paypal">
-                        <span>PayPal</span>
+                        <input type="radio" name="payment-method" value="razorpay">
+                        <span>RazorPay</span>
                     </div>
-                    <img src="/images/paypal.png" alt="PayPal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"><path fill="currentColor" d="m22.436 0l-11.91 7.773l-1.174 4.276l6.625-4.297L11.65 24h4.391zM14.26 10.098L3.389 17.166L1.564 24h9.008z"/></svg>
                 </div>
                 <div class="payment-description">
-                    You will be redirected to the PayPal website after submitting your order
+                    You will be redirected to the RazorPay website after submitting your order
                 </div>
             </div>
 
@@ -234,5 +236,7 @@
             </div>
         </form>
     </div>
+    <%-include('../userPages/partialFooterUser.ejs')%>
+
 </body>
 </html>

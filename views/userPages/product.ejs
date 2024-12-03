@@ -289,6 +289,28 @@
             border-radius: 5px;
             cursor: pointer;
         }
+        .card-buttons {
+            display: flex;
+        }
+
+        .cart-btn {
+            width: 100%;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            background: #a5adb8;
+            color: rgb(0, 0, 0);
+            cursor: pointer;
+            /* gap: 1rem; */
+            transition: background 0.3s ease;
+            display: flex;
+            /* align-items: center; */
+            justify-content: center;
+        }
+
+        .cart-btn:hover {
+            background: #0056b3;
+        }
     </style>
 
 
@@ -326,6 +348,26 @@
                     transform: scale(2);
                     cursor: zoom-in;
                 }
+            .favorite-btn {
+            /* position: absolute; */
+            /* top: 50px;
+            right: 50px; */
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 20%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .favorite-btn:hover {
+            background: rgba(190, 214, 55, 0.9);
+            transform: scale(1.1);
+        }
             </style>
 
             <script>
@@ -358,13 +400,50 @@
                         updateMainImage(this);
                     });
                 });
+
+
+                async function addToWishList(defualtVariantId) {
+                console.log(defualtVariantId);
+                const response = await fetch('/addToWishList', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ defualtVariantId }),
+                })
+
+                if(response.ok){
+                    let note = await response.json()
+                    console.log(note);
+                    Swal.fire({
+                        title: "Please Note",
+                        text: `${note.message}`,
+                        icon: `success`
+                    });
+                    
+                    
+                }else if(!response.ok){
+                    let note = await response.json()
+                    Swal.fire({
+                        title: "Please Note",
+                        text: `${note.message}`,
+                        icon: "error"
+                    });
+                }
+            }
+
             </script>
         </div>
 
         <div class="product-info">
+            <div class="d-flex flex-row justify-content-between">
             <h1>
                 <%=variantDetails.product_id.productName%>
             </h1>
+            <button class="favorite-btn" onclick="addToWishList(`<%= variantDetails._id %>`)" >
+                <i class="far fa-heart"></i>
+            </button>
+        </div>
 
             <div class="rating">
                 <span>★</span>
@@ -372,20 +451,47 @@
                 <span>★</span>
                 <span></span>
                 <span></span>
+                <%if(!variantDetails.stock){%>
+                <span class="stock">(Out Of Stock)</span>
+                <%}else{%>
                 <span class="stock">(In Stock)</span>
+                    <%}%>
+            </div>
+            <div>
+                <% if(offerPrice>0){%>
+                    <%if(offer.productOffer){%>
+                <span class="stock">SPECIAL OFFER FOR THIS PRODUCT (-<%=offerPrice%>)</span>
+
+                        <%} else if(offer.brandOffer) {%>
+                <span class="stock">SPECIAL OFFER FOR THIS BRAND (-<%=offerPrice%>)</span>
+                            <%}%>  
+                <%}%>
             </div>
             <div class="price">
+                <%if(!offerPrice){%>
                 <span id="curr">₹<%=variantDetails.price%></span>
-                <span id="old" class="original-price">₹<%=variantDetails.price*1+5000%></span>
-                <span id="disc" class="discount">
-                    <%= Math.round(((5000 / (variantDetails.price)) * 100)) %> %
-                </span>
+                    <%} else {%>
+                        <span id="curr">₹<%=variantDetails.price-offerPrice%></span>
+                        <%}%>
+                <% if(offerPrice) {%>
+                <span id="old" class="original-price">₹<%=variantDetails.price%></span>
+                    <%}%>
+                
             </div>
             <p class="shipping-note">Price includes Import Duties and Taxes. Free shipping available.</p>
 
             <div class="size-selection">
                 <div class="size-title">Brand: <%=variantDetails.product_id.brand_id.brandName%>
                 </div>
+                <%if(variantDetails.stock > 0) {%>
+                <div>
+                    stocks left <%=variantDetails.stock%>
+                </div>
+                <%}else{%>
+                    <div>
+                        NO STOCKS AVAILABLE
+                    </div>
+                    <%}%>
                 <div class="size-title">Choose Size</div>
                 <div class="size-buttons">
 
@@ -404,10 +510,29 @@
                 </div>
             </div>
 
-            <button class="add-to-cart">Add to Cart</button>
+        
+<%=variantDetails._id%>
+            
+
+            <% if(variantDetails.stock < 1) { %>
+                <button class="cart-btn" id="addToCartBtn" style="width: 100%; background-color: black; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: not-allowed;">
+                    NO STOCK AVAILABLE
+                </button>
+                <% } else if(alreadyInCart.user_id){%>
+                    <button class="cart-btn" id="addToCartBtn" style="width: 100%; background-color: black; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;" onclick="window.location.href='/cart'">
+                        <i class="fas fa-shopping-cart">  GO TO CART</i>
+                    </button>
+            <% } else { %>
+                <button class="cart-btn" id="addToCartBtn" style="width: 100%; background-color: black; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;" onclick="window.location.href='/addToCart/<%= variantDetails._id %>'">
+                    <i class="fas fa-bag-shopping">  ADD TO CART</i>
+                </button>
+            <% } %>
+            
         </div>
     </div>
-
+<script>
+    
+</script>
     <div class="product-details">
         <h2 class="details-title">Product Details</h2>
         <div class="details-grid">
@@ -433,24 +558,45 @@
 
     <!-- review box -->
 
+
+
     <div class="related-products">
         <h2 class="related-title">RELATED PRODUCTS</h2>
         <div class="products-grid">
-            <div class="product-card">
-                <img src="<%=variantDetails.product_id.images[0].replace('public', '')%>" alt="Wheel"
-                    class="product-image">
-                <div class="product-name">Motegi Racing Mr139 Rf11 Wheel, 15x7.0 +15 Offset 5x100, Satin Black -
-                    MR13957051715</div>
-                <div class="product-rating">
-                    ★★★★★
-                    (4)
+            <% related.forEach(element => { %>
+             
+                <div class="product-card">
+                    <img src="<%=element.product_id.images[0].replace('public', '')%>" alt="Wheel"
+                        class="product-image">
+                    <div class="product-name"><%=element.product_id.productName%></div>
+                    <div class="product-rating">
+                        ★★★★★
+                        (4)
+                    </div>
+                    <div class="product-price">
+                        <span class="price-new">₹<%= element.price %></span>
+                    </div>
+                    <div class="product-price">
+                        <span class="price-new">SIZE : <%= element.size %></span>
+                    </div>
+                    <div class="card-buttons">
+                        <a class="cart-btn" href="/product/<%= element._id %>"
+                            style="text-decoration: none;">
+    
+                            <span style="font-family: Arial, Helvetica, sans-serif "><i
+                                    class="fas fa-info-circle"></i> View Details</span>
+                        </a>
+                    </div>
                 </div>
-                <div class="product-price">
-                    <span class="price-new">₹12,999</span>
-                </div>
-                <button class="add-cart-btn">🛒</button>
-            </div>
+            <% }) %>
         </div>
     </div>
 
+
+    
+
     <%-include('../userPages/partialFooterUser.ejs')%>
+
+
+
+    

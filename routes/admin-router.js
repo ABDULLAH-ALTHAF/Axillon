@@ -25,6 +25,7 @@ const {
   changeStatusUser,
   changeStatusBrand,
   changeStatusType,
+  changeStatusCoupon,
   editTypes,
   postEditTypes,
   editBrands,
@@ -32,7 +33,25 @@ const {
   logout,
   postLogout,
   search,
-  part
+  // part,
+  orders,
+  cancelOrder,
+  deliverOrder,
+  coupons,
+  postCoupon,
+  acceptReturn,
+  rejectReturn,
+  singleOrder,
+  offers,
+  productOffer,
+  brandOffer,
+  postBrandOffer,
+  postProductOffer,
+  deleteBrandOffer,
+  editBrandOffer,
+  editProductOffer,
+  deleteProductOffer,
+  generateSalesReport
 
 } = require("../controllers/admin-controller");
 const multerMiddleware = require("../middlewares/multer").multerMiddleware;
@@ -62,6 +81,7 @@ router.post('/changeStatusProduct/:productId', changeStatusProduct)
 router.post('/changeStatusUser/:userId', changeStatusUser)
 router.post('/changeStatusBrand/:brandId' ,changeStatusBrand)
 router.post('/changeStatusType/:typeId' ,changeStatusType)
+router.post('/changeStatusCoupon/:couponId' ,changeStatusCoupon)
 router.get('/editTypes/:typeId', editTypes)
 router.post('/postEditTypes/:typeId', postEditTypes)
 router.get('/editBrands/:brandId', editBrands)
@@ -69,6 +89,26 @@ router.post('/postEditBrands/:brandId', postEditBrands)
 router.get('/logout',logout)
 router.get('/postLogout', postLogout)
 router.get('/search',search)
-router.get('/part',part)
+// router.get('/part',part)
+router.get('/orders',orders)
+router.post('/cancelOrder/:orderId', cancelOrder)
+router.post('/deliverOrder/:orderId', deliverOrder)
+router.post('/acceptReturn/:orderId',acceptReturn)
+router.post('/rejectReturn/:orderId',rejectReturn)
+router.get('/coupons',coupons)
+router.post('/postCoupon',postCoupon)
+router.get('/singleOrder/:orderId',singleOrder)
+router.get('/offers',offers)
+router.get('/productOffer',productOffer)
+router.get('/brandOffer',brandOffer)
+router.post('/postBrandOffer',postBrandOffer)
+router.post('/postProductOffer',postProductOffer)
+router.post('/deleteBrandOffer/:BofferId',deleteBrandOffer)
+router.post('/deleteProductOffer/:PofferId',deleteProductOffer)
+router.post('/editBrandOffer/:BofferId',editBrandOffer)
+router.post('/editProductOffer/:PofferId',editProductOffer)
+router.post('/sales-report', generateSalesReport);
+
 
 module.exports = router;
+  

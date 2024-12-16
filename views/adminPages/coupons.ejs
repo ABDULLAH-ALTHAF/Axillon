@@ -1,89 +1,86 @@
 <%-include('../adminPages/partialHead.ejs')%>
 
-<style>
-    
-    
-    .main-content {
-        margin-left: 250px;
-        padding: 30px;
-        width: calc(100% - 250px);
-    }
-    
-    
-    
-    
-    .brands-table {
-        width: 100%;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        border-collapse: collapse;
-        overflow: hidden;
-    }
-    
-    .brands-table th {
-        text-align: left;
-        padding: 15px;
-        background: #f8f9fa;
-        font-weight: bold;
-        color: #333;
-    }
-    
-    .brands-table td {
-        padding: 15px;
-        border-top: 1px solid #eee;
-    }
-    
-    .status {
-        color: #2ecc71;
-        font-weight: 500;
-    }
-    
-    .btn {
-        padding: 6px 16px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-        margin-right: 5px;
-        color: white;
-    }
-    
-    .btn-change-status {
-        background: #e74c3c;
-    }
-    
-    .btn-edit {
-        background: #000;
-    }
-    
-    .btn-variants {
-        background: #3498db;
-    }
-    
-    .add-new {
-        display: inline-block;
-        background: #e74c3c;
-        color: white;
-        padding: 12px 24px;
-        border-radius: 6px;
-        text-decoration: none;
-        margin-top: 20px;
-        font-weight: bold;
-    }
-    
-    .brand-id {
-        color: #666;
-        font-family: monospace;
-    }
-    
-    
+    <style>
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            width: calc(100% - 250px);
+        }
+
+
+
+
+        .brands-table {
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-collapse: collapse;
+            overflow: hidden;
+        }
+
+        .brands-table th {
+            text-align: left;
+            padding: 15px;
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .brands-table td {
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .status {
+            color: #2ecc71;
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 5px;
+            color: white;
+        }
+
+        .btn-change-status {
+            background: #e74c3c;
+        }
+
+        .btn-edit {
+            background: #000;
+        }
+
+        .btn-variants {
+            background: #3498db;
+        }
+
+        .add-new {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .brand-id {
+            color: #666;
+            font-family: monospace;
+        }
     </style>
 
     <div class="main-content">
 
 
-        <div class="modal fade" id="addCouponModal" tabindex="-1" aria-labelledby="addCouponModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addCouponModal" tabindex="-1" aria-labelledby="addCouponModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -93,7 +90,7 @@
                         </button>
                     </div>
                     <form action="/admin/postCoupon" method="POST">
-                        <div class="modal-body">    
+                        <div class="modal-body">
                             <div class="form-group">
                                 <label for="couponName">Coupon Name</label>
                                 <input type="text" class="form-control" id="couponName" name="couponName" required>
@@ -124,7 +121,7 @@
                 </div>
             </div>
         </div>
-        
+
 
 
         <table class="brands-table">
@@ -132,57 +129,128 @@
                 <tr>
                     <th>Coupon ID</th>
                     <th>Name</th>
+                    <th>Discount</th>
+                    <th>Min Purchase</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <% if (coupons.length > 0) { %>
-                    <% coupons.forEach(coupon => { %>
+                <% if (coupons.length> 0) { %>
+                    <% coupons.forEach(coupon=> { %>
                         <tr>
-                            <td class="brand-id">#<%= coupon._id %></td>
-                            <td><%= coupon.couponName %></td>
-                            
+                            <td class="brand-id">#<%= coupon._id %>
+                            </td>
                             <td>
-                               
-                                
-                                    <!-- Toggle form for changing status -->
-                                    <form action="/admin/changeStatusCoupon/<%= coupon._id %>" method="POST">
-                                        <input type="hidden" name="status" value="<%= !coupon.status %>">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" name="statusToggle"
-                                                onchange="this.form.submit()" <%=coupon.status ? 'checked' : '' %>
-                                            >
-                                        </div>
-                                    </form>
-                                
+                                <%= coupon.couponName %>
+                            </td>
+                            <td>
+                                <%= coupon.percentage %>%-
+                            </td>
+                            <td>
+                                <%=coupon.minimum%>
+                            </td>
+
+                            <td>
+
+
+                                <!-- Toggle form for changing status -->
+                                <form action="/admin/changeStatusCoupon/<%= coupon._id %>" method="POST">
+                                    <input type="hidden" name="status" value="<%= !coupon.status %>">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" name="statusToggle"
+                                            onchange="this.form.submit()" <%=coupon.status ? 'checked' : '' %>
+                                        >
+                                    </div>
+                                </form>
+
 
                             </td>
                             <td>
-                                <a href="/admin/editCoupons/<%= coupon._id%>" class="btn btn-variants">Edit</a>
+                                <!-- Edit Coupon Modal  -->
+                                <button type="button" class="btn btn-variants" data-toggle="modal"
+                                    data-target="#editCouponModal<%= coupon._id %>">
+                                    Edit
+                                </button>
+
+                                <!-- Edit Coupon Modal -->
+                                <div class="modal fade" id="editCouponModal<%= coupon._id %>" tabindex="-1"
+                                    aria-labelledby="editCouponModalLabel<%= coupon._id %>" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="editCouponModalLabel<%= coupon._id %>">Edit
+                                                    Coupon</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form action="/admin/editCoupon/<%= coupon._id %>" method="POST">
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label for="couponName<%= coupon._id %>">Coupon Name</label>
+                                                        <input type="text" class="form-control"
+                                                            id="couponName<%= coupon._id %>" name="couponName"
+                                                            value="<%= coupon.couponName %>" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="expiredAt<%= coupon._id %>">Expired At</label>
+                                                        <input type="date" class="form-control"
+                                                            id="expiredAt<%= coupon._id %>" name="expiredAt"
+                                                            value="<%= coupon.expiredAt %>" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="percentage<%= coupon._id %>">Percentage</label>
+                                                        <input type="number" class="form-control"
+                                                            id="percentage<%= coupon._id %>" name="percentage"
+                                                            value="<%= coupon.percentage %>" required
+                                                            oninput="this.value = Math.min(this.value, 100);">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="minimum<%= coupon._id %>">Minimum Amount</label>
+                                                        <input type="number" class="form-control"
+                                                            id="minimum<%= coupon._id %>" name="minimum"
+                                                            value="<%= coupon.minimum %>" required>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
 
                             </td>
                         </tr>
-                    <% }); %>
-                <% } else { %>
-                    <tr>
-                        <td colspan="4" class="text-center">No coupons found</td>
-                    </tr>
-                <% } %>
+                        <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="4" class="text-center">No coupons found</td>
+                                </tr>
+                                <% } %>
             </tbody>
         </table>
-        
+
         <button type="button" class="add-new btn btn-primary" data-toggle="modal" data-target="#addCouponModal">
             Add New+
         </button>
 
     </div>
+    <script>
 
-
-
-
-
-
-
-
-
+        let error = "<%=error%>"
+        if (error) {
+            Swal.fire({
+                title: "Please Note",
+                text: `${error}.`,
+                icon: "error"
+            });
+            setTimeout(() => {
+                window.location = '/admin/coupons'
+            }, 3000);
+        }
+    </script>

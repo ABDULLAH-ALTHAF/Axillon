@@ -446,11 +446,6 @@
         </div>
 
             <div class="rating">
-                <span>★</span>
-                <span>★</span>
-                <span>★</span>
-                <span></span>
-                <span></span>
                 <%if(!variantDetails.stock){%>
                 <span class="stock">(Out Of Stock)</span>
                 <%}else{%>
@@ -494,40 +489,28 @@
                     <%}%>
                 <div class="size-title">Choose Size</div>
                 <div class="size-buttons">
-
-
-
                     <% for(let i=0; i < sizes.length; i++) { %>
-
                         <button class="size-button" value="<%= sizes[i]._id %>">
                             <a class="text-decoration-none" href="/product/<%= sizes[i]._id %>">
                                 <%= sizes[i].size %>
                             </a>
                         </button>
-
-                        <% } %>
-
+                    <% } %>
                 </div>
             </div>
-
-        
-<%=variantDetails._id%>
-            
-
             <% if(variantDetails.stock < 1) { %>
                 <button class="cart-btn" id="addToCartBtn" style="width: 100%; background-color: black; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: not-allowed;">
                     NO STOCK AVAILABLE
                 </button>
-                <% } else if(alreadyInCart.user_id){%>
-                    <button class="cart-btn" id="addToCartBtn" style="width: 100%; background-color: black; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;" onclick="window.location.href='/cart'">
-                        <i class="fas fa-shopping-cart">  GO TO CART</i>
-                    </button>
+            <% } else if(alreadyInCart.user_id){%>
+                <button class="cart-btn" id="addToCartBtn" style="width: 100%; background-color: black; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;" onclick="window.location.href='/cart'">
+                    <i class="fas fa-shopping-cart">  GO TO CART</i>
+                </button>
             <% } else { %>
                 <button class="cart-btn" id="addToCartBtn" style="width: 100%; background-color: black; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;" onclick="window.location.href='/addToCart/<%= variantDetails._id %>'">
                     <i class="fas fa-bag-shopping">  ADD TO CART</i>
                 </button>
             <% } %>
-            
         </div>
     </div>
 <script>

@@ -9,13 +9,14 @@
         body {
             min-height: 100vh;
             background: linear-gradient(rgba(0, 0, 0, 0.134), rgba(0, 0, 0, 0.5)),
-                        url('/images/center-bmw.jpg');
+                        url('/images/bmw_f30_widebody_5k-HD.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             display: flex;
             align-items: center;
             justify-content: center;
+            
         }
 
         .logo {
@@ -34,7 +35,7 @@
             margin-left: 700px;
             max-width: 450px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(7px);
         }
 
         .welcome-text {

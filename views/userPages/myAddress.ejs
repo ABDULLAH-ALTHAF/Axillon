@@ -83,29 +83,54 @@
                     <div class="form-group" style="margin-bottom: 0.5rem;">
                       <label for="phone" style="display: block; margin-bottom: 0.25rem;" >Phone</label>
                       <input type="text" class="form-control" id="phone" name="phone" required
-                          style="padding: 0.25rem; border: 1px solid #ccc; border-radius: 5px;">
+       pattern="\S+" 
+       style="padding: 0.25rem; border: 1px solid #ccc; border-radius: 5px;"
+       title="Spaces are not allowed">
+
                       <small id="phoneError" style="color: red; display: none;">Phone must contain exactly 10 digits.</small>
                   </div>
                   
                   <script>
-                      const phoneInput = document.getElementById('phone');
-                      const phoneError = document.getElementById('phoneError');
-                      const form = document.querySelector('form'); 
-                  
-                      form.addEventListener('submit', (e) => {
-                          const phoneValue = phoneInput.value.trim();
-                          const isValid = phoneValue === '' || /^\d{10}$/.test(phoneValue);
-                  
-                          if (!isValid) {
-                              e.preventDefault(); 
-                              phoneError.style.display = 'block'; 
-                              phoneInput.style.borderColor = 'red'; 
-                          } else {
-                              phoneError.style.display = 'none'; 
-                              phoneInput.style.borderColor = '#ccc'; 
-                          }
-                      });
-                  </script>
+                    const phoneInput = document.getElementById('phone');
+                    const phoneError = document.getElementById('phoneError');
+                    const form = document.querySelector('form');
+                
+                    form.addEventListener('submit', (e) => {
+                        const phoneValue = phoneInput.value; 
+                        console.log("Raw input value:", phoneValue); 
+                       
+                        const hasSpaces = /\s/.test(phoneValue); 
+                        console.log("Contains spaces:", hasSpaces); 
+                       
+                        const isValid = /^\d{10}$/.test(phoneValue.trim());
+                        console.log("Valid number:", isValid); 
+                
+                        if (phoneValue.trim() === '') {
+                            e.preventDefault();
+                            phoneError.textContent = 'Phone number is required.';
+                            phoneError.style.display = 'block';
+                            phoneInput.style.borderColor = 'red';
+                        } else if (hasSpaces) {
+                            e.preventDefault();
+                            phoneError.textContent = 'Phone number cannot include spaces.';
+                            phoneError.style.display = 'block';
+                            phoneInput.style.borderColor = 'red';
+                        } else if (!isValid) {
+                            e.preventDefault();
+                            phoneError.textContent = 'Phone number must be exactly 10 digits.';
+                            phoneError.style.display = 'block';
+                            phoneInput.style.borderColor = 'red';
+                        } else {
+                            phoneError.style.display = 'none';
+                            phoneInput.style.borderColor = '#ccc';
+                            console.log("Form submission allowed"); 
+                        }
+                    });
+                </script>
+                
+                
+                
+                
                   
                   </div>
                   <div class="mb-3">
@@ -156,8 +181,10 @@
                   </div>
                   <div class="mb-3">
                     <label for="phone" class="form-label">Phone</label>
-                    <input type="text" class="form-control" id="phone" name="phone" required>
-                  </div>
+                    <input type="number" class="form-control" id="phone" name="phone"  pattern="\S/"  title="Spaces are not allowed" required>
+                </div>
+                
+                
                   <div class="mb-3">
                     <label for="country" class="form-label">country</label>
                     <input type="text" class="form-control" id="country" name="country" required>

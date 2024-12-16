@@ -230,71 +230,177 @@
             background: #000;
             color: white;
         }
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f1f3f6;
+    margin: 0;
+    padding: 20px;
+}
+
+.filter-card,
+.brand-filter-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.filter-title {
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.filter-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 20px;
+}
+
+.sort-by-options {
+    grid-template-columns: 1fr;
+    row-gap: 12px; /* Adjusts vertical spacing */
+}
+
+.filter-options label {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    color: #555;
+    cursor: pointer;
+}
+
+.filter-options input[type="checkbox"] {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+}
+
+.apply-filter-button {
+    display: inline-block;
+    padding: 10px 109px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+}
+
+.apply-filter-button:hover {
+    background-color: #0056b3;
+}
+
+/* Styling for hover effects and alignment */
+.sort-by-options label,
+.brand-options label {
+    justify-content: space-between;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: background-color 0.2s ease;
+}
+
+.sort-by-options label:hover,
+.brand-options label:hover {
+    background-color: #e6e6e6;
+}
+
     </style>
 
 
     <div class="breadcrumbs">
         <a href="/home">Home</a> / <span>Shop</span>
     </div>
-    <main class="main-container ">
-        <div class="filter-card"
-     style="background: #f8f9fa; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); margin-bottom: 20px;">
-    <h4 class="filter-title" style="font-weight: bold; margin-bottom: 10px; color: #333;">Sort By</h4>
-    <div style="display: flex; flex-direction: column; gap: 10px;">
-        <label style="display: flex; align-items: center;">
-            <input type="radio" name="sortCriteria" value="popularity" />
-            defualt
-        </label>
-        <label style="display: flex; align-items: center;">
-            <input type="radio" name="sortCriteria" value="popularity"  />
-            Popularity
-        </label>
-        <label style="display: flex; align-items: center;">
-            <input type="radio" name="sortCriteria" value="priceLowToHigh" />
-            Price: Low to High
-        </label>
-        <label style="display: flex; align-items: center;">
-            <input type="radio" name="sortCriteria" value="priceHighToLow" />
-            Price: High to Low
-        </label>
-        <label style="display: flex; align-items: center;">
-            <input type="radio" name="sortCriteria" value="averageRatings" />
-            Average Ratings
-        </label>
-        <label style="display: flex; align-items: center;">
-            <input type="radio" name="sortCriteria" value="featured" />
-            Featured
-        </label>
-        <label style="display: flex; align-items: center;">
-            <input type="radio" name="sortCriteria" value="newArrivals" />
-            New Arrivals
-        </label>
-        <label style="display: flex; align-items: center;">
-            <input type="radio" name="sortCriteria" value="nameAZ" />
-            A-Z
-        </label>
-        <label style="display: flex; align-items: center;">
-            <input type="radio" name="sortCriteria" value="nameZA" />
-            Z-A
-        </label>
+    <div class="search-bar-container">
+        <form action="/shop" method="GET">
+            <input type="text" name="search" id="search" placeholder="Search products..." class="search-bar"
+                style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; width: 95.6%; font-size: 1rem; box-sizing: border-box;">
+            <button type="submit" class="search-btn"
+                style="background: #000; color: white; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer;">
+                <i class="fas fa-search" style="font-size: 1.2rem;"></i>
+            </button>
+        </form>
     </div>
-    <!-- Add Apply Filter button -->
-    <button id="applyFilterButton" 
-            style="margin-top: 15px; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
-        Apply Filter
-    </button>
-</div>
-
-
-
-        <!-- <button class="apply-filter">Apply Filter</button> -->
+    <main class="main-container ">
+        <div class="filter-card">
+            <h4 class="filter-title">Sort By</h4>
+            <div class="filter-options sort-by-options">
+                
+                <label>
+                    <input type="checkbox" name="sortCriteria" value="priceLowToHigh" />
+                    Price: Low to High
+                </label>
+                <label>
+                    <input type="checkbox" name="sortCriteria" value="priceHighToLow" />
+                    Price: High to Low
+                </label>
+                <label>
+                    <input type="checkbox" name="sortCriteria" value="newArrivals" />
+                    New Arrivals
+                </label>
+                <label>
+                    <input type="checkbox" name="sortCriteria" value="nameAZ" />
+                    A-Z
+                </label>
+                <label>
+                    <input type="checkbox" name="sortCriteria" value="nameZA" />
+                    Z-A
+                </label>
+            
         </div>
+        
+        <div class="brand-filter-card">
+            <h4 class="filter-title">Filter by Brand</h4>
+            <div class="filter-options brand-options">
+                <label>
+                    <input type="checkbox" name="brandFilter" value="enkei" />
+                    ENKEI
+                </label>
+                <label>
+                    <input type="checkbox" name="brandFilter" value="motegi" />
+                    MOTEGI
+                </label>
+                <label>
+                    <input type="checkbox" name="brandFilter" value="american" />
+                    AMERICAN
+                </label>
+            </div>
+        </div>
+
+        
+        
+        <button id="applyFilterButton" class="apply-filter-button">
+            Apply Filter
+        </button>
+
+        <div class="without-filter-button" style="text-align: center; margin-top: 10px;">
+            <a href="/shop" class="btn btn-secondary" style="padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; background-color: #e6e6e6; color: #555;">
+                Without Filter
+            </a>
+        </div>
+
+    </div>
+
+
+
+        
+       
 
 
         <div class="products-grid">
             <% products.forEach(product=> { %>
 
-                <%if(product.defaultVariant && product.status) {%>
+                <%if(product.defaultVariant && product.status==true) {%>
                     <div class="product-card">
                         <div class="product-image-container">
                             <a href="/product/<%= product.defaultVariant._id %>">
@@ -316,23 +422,18 @@
                                     <%} else {%>
                             <span class="stock">OFFER ON BRAND (-<%=product.offerPrice%>)</span>
                                         <%}%>  
-                            <%}%>
-                            <div class="rating">
-                                <% for(let i=1; i <=5; i++) { %>
-                                    <span class="star <%= i <= (product.rating || 0) ? 'filled' : '' %>">
-                                        <%= i <=(product.rating || 0) ? '★' : '☆' %>
-                                    </span>
-                                    <% } %>
-                                        <span class="rating-text">
-                                            <%= product.rating || 0 %>/5
-                                        </span>
-                            </div>
+                            <%} else {%>
+                            <span class="stock">OFFER SOON!</span>
+                                <%}%>
+                            
                             <div class="price-info">
                                 <%if(product.offerPrice>0){%>
                                 <span class="current-price">₹<%= product.defaultVariant.price-product.offerPrice %></span>
                                 <span><i class="fa-solid fa-gift" style="color: #e94f37;"></i></span>
                                 <span style="text-decoration: line-through; color: red;" class="current-price">₹<%= product.defaultVariant.price %></span>
                                 <%}else{%>
+                                    <span></span>
+                                    <span></span>
                                 <span class="current-price">₹<%= product.defaultVariant.price %></span>
                                 <%}%>
                             </div>
@@ -354,24 +455,30 @@
         </div>
 
 
-
-    </main>
+    
+</main>
+      
 
     <div class="pagination">
+        
         <% if (currentPage > 1) { %>
-            <a href="?page=<%= currentPage - 1 %>&sort=<%= currentSort %>" class="page-number" style="text-decoration: none;">Previous</a>
+            <a href="?page=<%= currentPage - 1 %>&sort=<%= sort || '' %>&search=<%= search || '' %>&brandFilter=<%= brandFilter || '' %>" 
+               class="page-number" style="text-decoration: none;">Previous</a>
         <% } %>
-    
+        
         <% for (let i = 1; i <= totalPages; i++) { %>
-            <a href="?page=<%= i %>&sort=<%= currentSort %>" 
-               class="page-number <%= i === currentPage ? 'active' : '' %>" style="text-decoration: none;">
+            <a href="?page=<%= i %>&sort=<%= sort || '' %>&search=<%= search || '' %>&brandFilter=<%= brandFilter || '' %>" 
+               class="page-number <%= i === currentPage ? 'active' : '' %>" 
+               style="text-decoration: none;">
                <%= i %>
             </a>
         <% } %>
-    
+        
         <% if (currentPage < totalPages) { %>
-            <a href="?page=<%= currentPage + 1 %>&sort=<%= currentSort %>" class="page-number" style="text-decoration: none;">Next</a>
+            <a href="?page=<%= currentPage + 1 %>&sort=<%= sort || '' %>&search=<%= search || '' %>&brandFilter=<%= brandFilter || '' %>" 
+               class="page-number" style="text-decoration: none;">Next</a>
         <% } %>
+        
     </div>
     
 
@@ -380,21 +487,21 @@
 
 
 
-        </body>
-
-        </html>
+       
 
         <script>
             const applyFilterButton = document.getElementById("applyFilterButton");
-                    applyFilterButton.addEventListener("click", () => {
-                const selectedSort = document.querySelector('input[name="sortCriteria"]:checked')?.value;
-        
-                if (selectedSort) {
+            applyFilterButton.addEventListener("click", () => {
+                const selectedSorts = Array.from(document.querySelectorAll('input[name="sortCriteria"]:checked')).map(input => input.value);
+                const selectedBrands = Array.from(document.querySelectorAll('input[name="brandFilter"]:checked')).map(input => input.value);
+                
+                if (selectedSorts.length > 0 || selectedBrands.length > 0) {
                     const currentUrl = new URL(window.location.href);
-                    currentUrl.searchParams.set("sort", selectedSort);        
+                    currentUrl.searchParams.set("sort", selectedSorts.join(","));
+                    currentUrl.searchParams.set("brandFilter", selectedBrands.join(","));
                     window.location.href = currentUrl;
                 } else {
-                    alert("Please select a sorting criteria.");
+                    alert("Please select at least one sorting criteria or brand.");
                 }
             });
 
@@ -430,5 +537,3 @@
             }
 
         </script>
-        
-        

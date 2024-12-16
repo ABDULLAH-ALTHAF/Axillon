@@ -160,6 +160,20 @@
         </button>
 
     </div>
+    
+    <script>
+        let error = "<%=error%>"
+        if (error) {
+            Swal.fire({
+                title: "Please Note",
+                text: `${error}.`,
+                icon: "error"
+            });
+            setTimeout(() => {
+                window.location = '/admin/categorieBrand'
+            }, 3000);
+        }
+    </script>
 
 
 

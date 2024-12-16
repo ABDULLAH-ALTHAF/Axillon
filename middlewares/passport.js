@@ -17,10 +17,17 @@ passport.use(
         if (user) {
           return done(null, user);
         } else {
+          let userReferral = "";
+          for (let i = 0; i < 12; i++) {
+            userReferral += Math.floor(Math.random() * 10);
+          }
+          console.log(userReferral); 
+
           user = new User({
             username: profile.displayName,
             email: profile.emails[0].value,
             googleId: profile.id,
+            referral:userReferral,
             status: true,
             isAdmin: false,
           });
@@ -28,7 +35,7 @@ passport.use(
           return done(null, user);
         }
       } catch (erorr) {
-        console.log(erorr)
+        console.log(erorr);
         return done(erorr, null);
       }
     }

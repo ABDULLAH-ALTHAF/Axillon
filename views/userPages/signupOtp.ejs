@@ -16,6 +16,12 @@
         <h1 class="otp-title">Sign-up OTP</h1>
         <p class="otp-message">We have sent a verification code to your email id</p>
 
+        <%if(messaged){%>
+            
+            <div><p style="color: red;"><%=messaged%></p></div>
+            
+            <%}%>
+<br>
         <form action="/postSignupOtp" method="POST">
             <div class="otp-input-group">  
                 <input type="text" name="otp1" class="otp-input" maxlength="1" required oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" onkeyup="if (this.value.length == this.maxLength) document.getElementsByName('otp2')[0].focus(); else if (this.value.length == 0) document.getElementsByName('otp4')[0].focus();">
@@ -28,7 +34,7 @@
         </form>
 
         <div class="text-center mt-3">
-            <h4 style="color: #0a8a26; font-weight: 500; margin-bottom: 1.5rem;"><%= message %></h4>
+            
             <button type="button" class="btn btn-warning resend-otp-btn" id="resendOTP" disabled>
                 Resend OTP (<span id="time-left"></span>s)
             </button>
@@ -51,7 +57,7 @@
             </style>
 
             <script>
-                var timeLeft = 61;
+                var timeLeft = 2;
                 var resendOTPBtn = document.getElementById("resendOTP");
                 var timerId = setInterval(function () {
                     timeLeft -= 1;

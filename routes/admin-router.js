@@ -51,7 +51,8 @@ const {
   editBrandOffer,
   editProductOffer,
   deleteProductOffer,
-  generateSalesReport
+  generateSalesReport,
+  editCoupon
 
 } = require("../controllers/admin-controller");
 const multerMiddleware = require("../middlewares/multer").multerMiddleware;
@@ -108,6 +109,8 @@ router.post('/deleteProductOffer/:PofferId',deleteProductOffer)
 router.post('/editBrandOffer/:BofferId',editBrandOffer)
 router.post('/editProductOffer/:PofferId',editProductOffer)
 router.post('/sales-report', generateSalesReport);
+router.post('/editCoupon/:couponId',editCoupon)
+
 
 
 module.exports = router;

@@ -122,6 +122,9 @@ const orderSchema = new Schema(
     //         default: null
     //     }
     // },
+    razorpayOrderId: {
+      type:String
+    },
   },
   { timestamps: true }
 );

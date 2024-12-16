@@ -217,7 +217,7 @@
                 <!-- Sample item -->
                 <% docCart.forEach(doc=>{%>
                     <div class="cart-item">
-                        
+
                         <img src="<%= doc.variant_id.product_id.images[0].replace('public', '')%>" alt="Item 1"
                             class="item-image">
                         <div class="item-details">
@@ -230,27 +230,28 @@
                         </div>
                         <%if(doc.variant_id.product_id.offer){%>
                             <div class="item-price" id="itemPrice" data-price="<%= doc.variant_id.price %>">₹<%=
-                                doc.variant_id.price-doc.variant_id.product_id.offer %>
-                        </div>
+                                    doc.variant_id.price-doc.variant_id.product_id.offer %>
+                            </div>
                             <%}else{%>
                                 <div class="item-price" id="itemPrice" data-price="<%= doc.variant_id.price %>">₹<%=
-                                    doc.variant_id.price%>
-                            </div>
+                                        doc.variant_id.price%>
+                                </div>
                                 <%}%>
-                        
-                        <div class="quantity-control">
-                            <button class="quantity-btn"
-                                onclick="updateQuantity(`<%=doc.variant_id.id%>`, 'decrease',`<%=doc.quantity%>`)">-</button>
-                            <span id='<%=doc.variant_id.id%>' class="item-quantity" data-quantity="<%= doc.quantity %>">
-                                <%= doc.quantity %>
-                            </span>
-                            <button class="quantity-btn"
-                                onclick="updateQuantity(`<%=doc.variant_id.id%>`, 'increase','<%= doc.quantity%>')">+</button>
-                        </div>
 
-                        <button class="delete-btn"
-                            onclick="updateQuantity(`<%=doc.variant_id.id%>`,'remove','<%= doc.quantity%>')"><i
-                                class="fa-solid fa-trash-can"></i></button>
+                                    <div class="quantity-control">
+                                        <button class="quantity-btn"
+                                            onclick="updateQuantity(`<%=doc.variant_id.id%>`, 'decrease',`<%=doc.quantity%>`)">-</button>
+                                        <span id='<%=doc.variant_id.id%>' class="item-quantity"
+                                            data-quantity="<%= doc.quantity %>">
+                                            <%= doc.quantity %>
+                                        </span>
+                                        <button class="quantity-btn"
+                                            onclick="updateQuantity(`<%=doc.variant_id.id%>`, 'increase','<%= doc.quantity%>')">+</button>
+                                    </div>
+
+                                    <button class="delete-btn"
+                                        onclick="updateQuantity(`<%=doc.variant_id.id%>`,'remove','<%= doc.quantity%>')"><i
+                                            class="fa-solid fa-trash-can"></i></button>
                     </div>
                     <%})%>
             </div>
@@ -277,15 +278,15 @@
                     <span>Total</span>
                     <span id="total">₹<%=subTotal%></span>
                 </div>
-                <% if (subTotal <= 0) { %>
+                <% if (subTotal <=0) { %>
                     <button class="checkout-btn" onclick="location.href='/shop'">
                         Continue Shopping →
                     </button>
-                <% } else { %>
-                    <button class="checkout-btn" onclick="goToCheckout()">
-                        Go to Checkout →
-                    </button>
-                <% } %>
+                    <% } else { %>
+                        <button class="checkout-btn" onclick="goToCheckout()">
+                            Go to Checkout →
+                        </button>
+                        <% } %>
             </div>
         </div>
     </div>
@@ -300,7 +301,7 @@
             async function updateQuantity(variant_id, action, currentQuantity) {
                 console.log(currentQuantity)
 
-               
+
 
                 let productQuantitySpan = document.getElementById(`${variant_id}`)
                 currentQuantity = productQuantitySpan.textContent
@@ -379,8 +380,8 @@
                     Swal.fire({
                         title: `Please Note`,
                         text: `Some items in your cart exceed stock limits: ${err.outOfStockItems.map(
-          (item) => `${item.productName} (Stock: ${item.stock}, Requested: ${item.requested})`
-        ).join(", ")}`,
+                            (item) => `${item.productName} (Stock: ${item.stock}, Requested: ${item.requested})`
+                        ).join(", ")}`,
                         icon: "error"
                     });
                     console.log(err, 'failed')

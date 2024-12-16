@@ -190,6 +190,7 @@
     <% } else { %>
         <div class="wishlist-grid">
             <% products.items.forEach(element => { %>
+                <%if (element.variant_id.product_id.status==true) {%>
             <div class="wishlist-item">
                 <a href="/product/<%=element.variant_id._id%>">
                     <img 
@@ -228,6 +229,8 @@
                     </div>
                 </div>
             </div>
+                    <%}%>
+
             <% }) %>
         </div>
     <% } %>

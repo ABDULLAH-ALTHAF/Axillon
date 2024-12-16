@@ -46,6 +46,10 @@ const {
   coupons,
   returnOrder,
   downloadInvoice,
+  updateFailedPayment,
+  resetPassword,
+  postResetPassword,
+  orderSummary
 } = require("../controllers/user-controller");
 
 router.get("/home", home);
@@ -91,7 +95,11 @@ router.post('/removeFromWishList',removeFromWishList)
 router.get('/wallet',wallet)
 router.get('/coupons',coupons)
 router.post('/returnOrder',returnOrder)
-router.get('/downloadInvoice/:orderId', downloadInvoice)
+router.get('/downloadInvoice/:orderId', downloadInvoice),
+router.post('/updateFailedPayment',updateFailedPayment)
+router.get('/resetPassword',resetPassword)
+router.post('/postResetPassword',postResetPassword)
+router.post('/orderSummary',orderSummary)
 
 router.get('/auth/google', passport.authenticate('google',{scope:['profile','email']}))
 router.get('/google/callback',passport.authenticate('google',{failureRedirect:'/signup'}),(req,res)=>{

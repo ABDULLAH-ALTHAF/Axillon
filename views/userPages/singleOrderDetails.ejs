@@ -10,7 +10,10 @@
         <!-- Order Header -->
         <header class="order-header flex justify-between items-center p-4 bg-gray-100 border-b">
             <div class="order-title flex items-center space-x-4">
-                <h1 class="text-xl font-bold">Order #<%= order.orderId %></h1>
+                <div class=" p-4 rounded-lg shadow-md">
+                    <h1 class="font-bold text-black">Order <%= order.orderId %></h1>
+                </div>
+                
                 <div class="order-status-badge <%= order.status.toLowerCase() %> 
                     px-3 py-1 rounded-full text-sm font-medium capitalize">
                     <%= order.status %>
@@ -36,7 +39,7 @@
                     </div>
                 </div>
                 <!-- Button trigger modal -->
-                <% if (order.status !== 'Cancelled' && order.status !=='Delivered' && order.status !=='Return Request' && order.status !=='Returned') { %>
+                <% if (order.status !== 'Cancelled' && order.status !=='Delivered' && order.status !=='Return Request' && order.status !=='Returned' && order.status !=='Return Cancelled') { %>
                     <button type="button" class="btn btn-danger mt-5" data-bs-toggle="modal" data-bs-target="#cancelOrderModal">
                         Cancel Order
                     </button>
@@ -53,6 +56,21 @@
                         }
                     </script>
                     <%}%>
+
+
+                    <% if(order.status == 'Return Cancelled') {%>
+                        <button type="button" class="btn btn-success mt-5" onclick="downloadInvoice('<%= order.orderId %>')">
+                            Download Invoice
+                        </button>
+    
+                        <script>
+                            function downloadInvoice(orderId) {
+                                window.location.href = '/downloadInvoice/' + orderId;
+                            }
+                        </script>
+                        <%}%>
+
+
                 <% if (order.status == 'Delivered') { %>
                     <!-- Return Order Modal -->
                     <div class="modal fade" id="returnOrderModal" tabindex="-1" aria-labelledby="returnOrderModalLabel" aria-hidden="true">
@@ -114,6 +132,12 @@
                         </span>
                     </li>
                     <li class="flex flex-col">
+                        <span class="text-gray-600 text-sm">Payment Method :</span>
+                        <span class="font-medium">
+                            <%= order.paymentMethod %>
+                        </span>
+                    </li>
+                    <li class="flex flex-col">
                         <span class="text-gray-600 text-sm">Total Items</span>
                         <span class="font-medium">
                             <%= order.orderedItems.length %>
@@ -133,7 +157,7 @@
                     <li class="flex flex-col">
                         <span class="text-gray-600 text-sm">Discount Used</span>
                         <span class="font-medium">
-                            <%= order.discount %>
+                            ₹<%= order.discount %>
                         </span>
                     </li>
                     <li class="flex flex-col">

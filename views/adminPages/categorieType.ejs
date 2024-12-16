@@ -160,6 +160,20 @@
     </div>
 
 
+    <script>
+        let error = "<%=error%>"
+        if (error) {
+            Swal.fire({
+                title: "Please Note",
+                text: `${error}.`,
+                icon: "error"
+            });
+            setTimeout(() => {
+                window.location = '/admin/categorieType'
+            }, 3000);
+        }
+    </script>
+
 
 
 

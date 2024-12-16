@@ -91,7 +91,7 @@
                                 <form action="/admin/editBrandOffer/<%= offer._id %>" method="POST">
                                     <div class="form-group">
                                         <label for="BofferPrice">Offer Price</label>
-                                        <input type="number" name="BofferPrice" id="BofferPrice" class="form-control" value="<%= offer.brandOffer[0].BofferPrice %>">
+                                        <input type="number" name="BofferPrice" min="0" id="BofferPrice" class="form-control" value="<%= offer.brandOffer[0].BofferPrice %>">
                                     </div>
                                     <button type="submit" class="btn btn-primary">Update</button>
                                 </form>
@@ -136,7 +136,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="offerPrice">Offer Price (in rupees)</label>
-                                <input type="number" name="offerPrice" id="offerPrice" class="form-control" required>
+                                <input type="number" min="0" name="offerPrice" id="offerPrice" class="form-control" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Add Offer</button>
                         </form>

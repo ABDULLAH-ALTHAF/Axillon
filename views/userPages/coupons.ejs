@@ -100,7 +100,7 @@
 
 
         <div class="main-content">
-            <h2 class="section-title">Available Coupons</h2>
+            <h2 class="section-title">Used Coupons</h2>
             <table class="table">
                 <thead>
                     <tr>
@@ -114,7 +114,7 @@
                     <% coupons.forEach(coupon => { %>
                     <tr>
                         <td><%= coupon.couponName %></td>
-                        <td>₹<%= coupon.percentage %></td>
+                        <td><%= coupon.percentage %>%-</td>
                         <td><%= coupon.minimum %></td>
                         <td><%= new Date(coupon.expiredAt).toDateString() %></td>
                     </tr>

@@ -547,9 +547,8 @@
         <h2 class="related-title">RELATED PRODUCTS</h2>
         <div class="products-grid">
             <% related.forEach(element => { %>
-             
                 <div class="product-card">
-                    <img src="<%=element.product_id.images[0].replace('public', '')%>" alt="Wheel"
+                    <img src="<%=element.product_id.images[0].replace('public','')%>" alt="Wheel"
                         class="product-image">
                     <div class="product-name"><%=element.product_id.productName%></div>
                     <div class="product-rating">

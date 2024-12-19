@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-// const { v4: uuidv4 } = require("uuid");
 const Product = require("../models/product-model");
 
 const orderSchema = new Schema(
@@ -86,9 +85,6 @@ const orderSchema = new Schema(
         image:{
             type:String
         },
-        // size:{
-        //     type:String,
-        // },
         createdOn: {
           type: Date,
           default: Date.now,
@@ -98,7 +94,6 @@ const orderSchema = new Schema(
     ],
     discount: {
       type: Number,
-    //   required: true,
     },
     totalAmount: {
       type: Number,
@@ -108,20 +103,6 @@ const orderSchema = new Schema(
       type: Number,
       required: true,
     },
-    // deliveryCharge:{
-    //     type: Number,
-    //     required: true
-    // },
-    // couponRedeemed: {
-    //     status: {
-    //         type: Boolean,
-    //         default: false
-    //     },
-    //     coupon: {
-    //         type: String,
-    //         default: null
-    //     }
-    // },
     razorpayOrderId: {
       type:String
     },

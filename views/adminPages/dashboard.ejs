@@ -151,21 +151,46 @@
               <button type="submit" class="btn btn-primary btn-block mb-3">Generate</button>
             </form>
           </div>
+
+          <h2 class="best-seller-title mb-3" style="font-weight: 800; font-style: italic; letter-spacing: 1px; color: #814700; margin-bottom: 20px;">Most Selling Products 1-10</h2>
+
           
-          <div class="best-seller-container " style="display: flex; flex-direction: column; align-items: center; padding: 20px; border: 1px solid #ddd; border-radius: 12px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); background-color: #fff;">
-            <h2 class="best-seller-title mb-3" style="font-weight: 800; font-style: italic; letter-spacing: 1px; color: #814700; margin-bottom: 20px;">Best Selling Product</h2>
-            <% if (mostSellingProduct) { %>
-              <div class="best-seller-content" style="display: flex; gap: 20px; align-items: center;">
-                <img src="<%= mostSellingProduct.image.replace('public', '') %>" alt="Best Selling Product" class="best-seller-image" style="height: 200px; width: 200px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-                <div class="best-seller-details" style="flex-grow: 1;">
-                  <h3 style="font-weight: bold; margin-bottom: 10px; color: #333;"><%= mostSellingProduct.productName %></h3>
-                  
+          <div class="row">
+          <% mostSellingProducts.forEach(mostSellingProduct => { %>
+          <div class="col-md-3">
+            <div class="best-seller-container card mx-2 my-3" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title" style="font-weight: 800; font-style: italic; letter-spacing: 1px; color: #814700;"><%= mostSellingProduct.productName %></h5>
+                <img src="<%= mostSellingProduct.image.replace('public', '') %>" alt="Best Selling Product" class="card-img-top" style="height: 200px; width: 98%; border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+              </div>
+            </div>
+          </div>
+          <% }); %>
+          </div>
+
+          <h2 class="best-seller-title mb-3" style="font-weight: 800; font-style: italic; letter-spacing: 1px; color: #814700; margin-bottom: 20px;">Most Selling Brands 1-10</h2>
+
+
+          <div class="row">
+          <% mostSellingBrand.forEach(mostSellingBrand => { %>
+            <div class="col-md-3">
+              <div class="best-seller-container card mx-2 my-3" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title" style="font-weight: 800; font-style: italic; letter-spacing: 1px; color: #814700;"><%= mostSellingBrand.brandName %></h5>
+                  <p class="card-text"><%= mostSellingBrand.description %></p>
+                  <%if(mostSellingBrand.brandName=='enkei'){%>
+                    <img src="https://ih1.redbubble.net/image.5158760776.5387/st,small,507x507-pad,600x600,f8f8f8.jpg" class="card-img-top" alt="Best Selling Product">
+                    <%}else if(mostSellingBrand.brandName=='motegi'){%>
+                      <img src="https://i.pinimg.com/originals/3f/c7/2e/3fc72e542e13a534da496a72b3a45e45.jpg" class="card-img-top" alt="Best Selling Product">
+                      <%}else if(mostSellingBrand.brandName=='american'){%>
+                        <img src="https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/0008/3047/brand.gif?itok=FflHWuEr" class="card-img-top" alt="Best Selling Product">
+                        <%}%>
                 </div>
               </div>
-            <% } else { %>
-              <p style="font-size: 18px; color: #555;">No products found.</p>
-            <% } %>
+            </div>
+          <% }); %>
           </div>
+
     </div>
 
 

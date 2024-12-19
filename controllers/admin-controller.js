@@ -6,7 +6,6 @@ const Types = require("../models/categorieType-model");
 const Variants = require("../models/variants-model");
 const Orders = require("../models/orders-model");
 const Coupons = require("../models/coupons-model");
-// const Offers = require("../models/offer-model")
 const Boffer = require("../models/Boffer-model");
 const Poffer = require("../models/Poffer-model");
 const fs = require("fs");
@@ -33,7 +32,6 @@ const adminSignin = (req, res) => {
 const postAdminSignin = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email: email, password: password });
-  console.log(user, "user details");
   if (!user || user.isAdmin == false) {
     res.redirect("/admin/adminSignin?invalid=Invalid Inputs");
   }
@@ -49,9 +47,10 @@ const dashboard = async (req, res) => {
   if (req.session.admin) {
     const orders = await Orders.find();
     let totalSalesCount = await Orders.find({
-      status: { $in: ["Cancelled", "Pending", "Delivered"] },
+      status: {
+        $in: ["Cancelled", "Pending", "Delivered", "Return Cancelled"],
+      },
     }).countDocuments();
-    console.log(totalSalesCount, "total Sales Count");
     let totalSalesAmount = await Orders.aggregate([
       {
         $match: {
@@ -68,7 +67,15 @@ const dashboard = async (req, res) => {
       },
     ]);
 
-    let mostSellingProduct = await Orders.aggregate([
+    let mostSellingProducts = await Orders.aggregate([
+      {
+        $match: {
+          status: {
+            $in: ["Cancelled", "Pending", "Delivered", "Return Cancelled"],
+          },
+        },
+      },
+
       { $unwind: "$orderedItems" },
       {
         $group: {
@@ -79,16 +86,66 @@ const dashboard = async (req, res) => {
         },
       },
       { $sort: { totalQuantity: -1 } },
-      { $limit: 1 },
+      { $limit: 10 },
     ]);
 
-    
-
-
-    if (mostSellingProduct.length > 0) {
-      mostSellingProduct = mostSellingProduct[0];
+    if (mostSellingProducts.length > 0) {
+      console.log("Top Selling Products:", mostSellingProducts);
     } else {
-      mostSellingProduct = null;
+      console.log("No products found.");
+    }
+
+    let mostSellingBrand = await Orders.aggregate([
+      {
+        $match: {
+          status: {
+            $in: ["Cancelled", "Pending", "Delivered", "Return Cancelled"],
+          },
+        },
+      },
+      { $unwind: "$orderedItems" },
+      {
+        $lookup: {
+          from: "variants",
+          localField: "orderedItems.variantId",
+          foreignField: "_id",
+          as: "variantDetails",
+        },
+      },
+      { $unwind: "$variantDetails" },
+      {
+        $lookup: {
+          from: "products",
+          localField: "variantDetails.product_id",
+          foreignField: "_id",
+          as: "productDetails",
+        },
+      },
+      { $unwind: "$productDetails" },
+      {
+        $lookup: {
+          from: "brands",
+          localField: "productDetails.brand_id",
+          foreignField: "_id",
+          as: "brandDetails",
+        },
+      },
+      { $unwind: "$brandDetails" },
+      {
+        $group: {
+          _id: "$brandDetails._id",
+          brandName: { $first: "$brandDetails.brandName" },
+          totalQuantity: { $sum: "$orderedItems.quantity" },
+        },
+      },
+      { $sort: { totalQuantity: -1 } },
+      { $limit: 10 },
+    ]);
+
+    if (mostSellingBrand.length > 0) {
+      console.log("Top Selling Brands:", mostSellingBrand);
+    } else {
+      console.log("No brands found in the selected criteria.");
     }
 
     let totalDiscountAmount = await Orders.aggregate([
@@ -118,7 +175,8 @@ const dashboard = async (req, res) => {
       totalSales,
       totalSalesCount,
       orders,
-      mostSellingProduct,
+      mostSellingProducts,
+      mostSellingBrand,
       url: req.originalUrl,
     });
   } else {
@@ -141,7 +199,6 @@ const products = async (req, res) => {
       const brand = await Brands.find({ status: true });
       const type = await Types.find({ status: true });
       const products = await Product.find().populate("brand_id");
-      console.log(products, "checking");
       res.render("adminPages/products", {
         products,
         brand,
@@ -158,7 +215,6 @@ const products = async (req, res) => {
 
 const postProducts = async (req, res) => {
   if (req.session.admin) {
-    console.log("1");
     try {
       const {
         brand_id,
@@ -173,7 +229,6 @@ const postProducts = async (req, res) => {
       if (req.files && Array.isArray(req.files)) {
         images = req.files.map((file) => file.path);
       }
-      console.log(images);
       await Product.create({
         brand_id,
         productName,
@@ -185,7 +240,6 @@ const postProducts = async (req, res) => {
         status: true,
         createdAt,
       });
-      console.log(productName, "productname from postProducts");
       res.redirect("/admin/products");
     } catch (error) {
       console.log(error);
@@ -208,7 +262,10 @@ const categorieBrand = async (req, res) => {
     try {
       let error = req.query.error;
       const brands = await Brands.find();
-      res.render("adminPages/categorieBrand", { brands, url: req.originalUrl ,error: error ? error : null,
+      res.render("adminPages/categorieBrand", {
+        brands,
+        url: req.originalUrl,
+        error: error ? error : null,
       });
     } catch (error) {
       console.log(error);
@@ -222,13 +279,17 @@ const postCategorieBrand = async (req, res) => {
   if (req.session.admin) {
     try {
       const { brandName } = req.body;
-    const already = await Brands.findOne({ brandName: new RegExp(`^${brandName}$`, 'i') });
-    if(!already){
-      await Brands.create({ brandName, status: true });
-      res.redirect("/admin/categorieBrand");
-    }else{
-      res.redirect("/admin/categorieBrand?error=You Cant Create Brand With Same Name");
-    }
+      const already = await Brands.findOne({
+        brandName: new RegExp(`^${brandName}$`, "i"),
+      });
+      if (!already) {
+        await Brands.create({ brandName, status: true });
+        res.redirect("/admin/categorieBrand");
+      } else {
+        res.redirect(
+          "/admin/categorieBrand?error=You Cant Create Brand With Same Name"
+        );
+      }
     } catch (error) {
       console.log(error);
     }
@@ -242,7 +303,11 @@ const categorieType = async (req, res) => {
     try {
       let error = req.query.error;
       const types = await Types.find({});
-      res.render("adminPages/categorieType", { types, url: req.originalUrl ,error: error ? error : null});
+      res.render("adminPages/categorieType", {
+        types,
+        url: req.originalUrl,
+        error: error ? error : null,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -255,16 +320,19 @@ const postCategorieType = async (req, res) => {
   if (req.session.admin) {
     try {
       const { typeName } = req.body;
-    const already = await Types.findOne({ typeName: new RegExp(`^${typeName}$`, 'i') });
-    if(!already){
-      await Types.create({ typeName, status: true });
-      console.log("postCategorieType");
-      res.redirect("/admin/categorieType");
-    }else{
-      res.redirect("/admin/categorieType?error=You Cant Create Type With Same Name");
-    }
+      const already = await Types.findOne({
+        typeName: new RegExp(`^${typeName}$`, "i"),
+      });
+      if (!already) {
+        await Types.create({ typeName, status: true });
+        res.redirect("/admin/categorieType");
+      } else {
+        res.redirect(
+          "/admin/categorieType?error=You Cant Create Type With Same Name"
+        );
+      }
     } catch (error) {
-      console.log(error);
+      console.log(error, "from postCategoritype");
     }
   } else {
     res.redirect("/admin/adminSignin");
@@ -276,7 +344,6 @@ const variants = async (req, res) => {
     const productId = req.params.productId;
     req.session.productId = productId;
     const variants = await Variants.find({ product_id: productId });
-    console.log(variants);
     res.render("adminPages/variants", { variants, url: req.originalUrl });
   } else {
     res.redirect("/admin/adminSignin");
@@ -298,8 +365,6 @@ const editVariants = async (req, res) => {
   if (req.session.admin) {
     const variantId = req.params.variantId;
     const variant = await Variants.find({ _id: variantId });
-    console.log(variant, "variant full extracted");
-    console.log(variant);
     res.render("adminPages/editVariants", { variant, url: req.originalUrl });
   } else {
     res.redirect("/admin/adminSignin");
@@ -312,13 +377,11 @@ const postEditVariants = async (req, res) => {
     const { size, price, stock } = req.body;
     const product = await Variants.findById(variantId).populate("product_id");
     const productVariant = product.product_id._id;
-    console.log(product.product_id._id, "neww");
     await Variants.findByIdAndUpdate(variantId, {
       size,
       price,
       stock,
     });
-    console.log("ivdend mone");
     res.redirect(`/admin/variants/${productVariant}`);
   } else {
     res.redirect("/admin/adminSignin");
@@ -361,10 +424,8 @@ const cancelOrder = async (req, res) => {
   if (req.session.admin) {
     try {
       const { orderId } = req.params;
-      console.log(orderId, "is the orderId in cancel order");
 
       const order = await Orders.findOne({ orderId: orderId });
-      console.log(order, "is the order found in the mongodb");
       if (!order)
         return res
           .status(404)
@@ -390,7 +451,6 @@ const cancelOrder = async (req, res) => {
         });
       }
       res.redirect("/admin/orders");
-      // res.status(200).json({ success: true, message: '' })
     } catch (error) {
       console.log("Error in cancelling order: ", error);
       res.status(500).json({ success: false, message: "server" });
@@ -446,7 +506,6 @@ const postEditTypes = async (req, res) => {
     await Types.findByIdAndUpdate(typeId, {
       typeName,
     });
-    console.log("ivdend mone");
     res.redirect("/admin/categorieType");
   } else {
     res.redirect("/admin/adminSignin");
@@ -470,7 +529,6 @@ const postEditBrands = async (req, res) => {
     await Brands.findByIdAndUpdate(brandId, {
       brandName,
     });
-    console.log("ivdend mone");
     res.redirect("/admin/categorieBrand");
   } else {
     res.redirect("/admin/adminSignin");
@@ -498,10 +556,8 @@ const editProduct = async (req, res) => {
 const postEditProduct = async (req, res) => {
   if (req.session.admin) {
     const productId = req.params.productId;
-    console.log(req.body);
     const { productName, colour, brand_id, type_id, boltPattern, description } =
       req.body;
-    console.log("edited");
 
     await Product.findByIdAndUpdate(productId, {
       brand_id,
@@ -543,7 +599,6 @@ const postEditImages = async (req, res) => {
     if (req.files && Array.isArray(req.files)) {
       images = req.files.map((file) => file.path);
     }
-    console.log(images);
     await Product.findByIdAndUpdate(productId, {
       images: images,
     });
@@ -588,7 +643,6 @@ const changeStatusUser = async (req, res) => {
       if (user) {
         req.session.user = false;
       }
-      console.log(user);
 
       if (!user) {
         return res.status(404).send("User not found");
@@ -613,7 +667,6 @@ const changeStatusBrand = async (req, res) => {
       const brand = await Brands.findByIdAndUpdate(brandId, {
         status: newStatus,
       });
-      console.log(brand);
 
       if (!brand) {
         return res.status(404).send("User not found");
@@ -636,7 +689,6 @@ const changeStatusType = async (req, res) => {
 
     try {
       const type = await Types.findByIdAndUpdate(typeId, { status: newStatus });
-      console.log(type);
 
       if (!type) {
         return res.status(404).send("Type not found");
@@ -661,7 +713,6 @@ const changeStatusCoupon = async (req, res) => {
       const coupon = await Coupons.findByIdAndUpdate(couponId, {
         status: newStatus,
       });
-      console.log(coupon);
 
       if (!coupon) {
         return res.status(404).send("Coupon not found");
@@ -687,7 +738,6 @@ const logout = (req, res) => {
 
 const coupons = async (req, res) => {
   let error = req.query.error;
-  // console.log(error)
   if (req.session.admin) {
     const coupons = await Coupons.find({});
     res.render("adminPages/coupons", {
@@ -704,13 +754,19 @@ const postCoupon = async (req, res) => {
   if (req.session.admin) {
     const { couponName, expiredAt, from, percentage, minimum } = req.body;
     const today = new Date();
-    
+
     if (expiredAt < today) {
-      return res.redirect("/admin/coupons?error=Expire Date Must Be greater than Todays");
-    }else if(from > expiredAt){
-      return res.redirect("/admin/coupons?error=Cant Give Coupon From Given Date");
+      return res.redirect(
+        "/admin/coupons?error=Expire Date Must Be greater than Todays"
+      );
+    } else if (from > expiredAt) {
+      return res.redirect(
+        "/admin/coupons?error=Cant Give Coupon From Given Date"
+      );
     }
-    const already = await Coupons.findOne({ couponName: new RegExp(`^${couponName}$`, 'i') });
+    const already = await Coupons.findOne({
+      couponName: new RegExp(`^${couponName}$`, "i"),
+    });
     if (!already) {
       await Coupons.create({
         couponName: couponName,
@@ -720,9 +776,9 @@ const postCoupon = async (req, res) => {
         percentage: percentage,
         minimum: minimum,
       });
-    return  res.redirect("/admin/coupons");
+      return res.redirect("/admin/coupons");
     } else {
-     return res.redirect("/admin/coupons?error=Coupon Already exist");
+      return res.redirect("/admin/coupons?error=Coupon Already exist");
     }
   } else {
     return res.redirect("/admin/adminSignin");
@@ -737,12 +793,10 @@ const postLogout = (req, res) => {
 const search = async (req, res) => {
   if (req.session.admin) {
     const searchFor = req.query.searchFor;
-    console.log(searchFor);
     const users = await User.find({
       username: { $regex: searchFor, $options: "i" },
       isAdmin: false,
     });
-    console.log(users, "from search");
     res.render("adminPages/users", { users, url: req.originalUrl });
   } else {
     return res.redirect("/admin/adminSignin");
@@ -824,7 +878,6 @@ const productOffer = async (req, res) => {
   if (req.session.admin) {
     const products = await Product.find();
     const offers = await Poffer.find().populate("productOffer.productId");
-    console.log(offers, "from productOffer");
     res.render("adminPages/productOffer", {
       offers,
       products,
@@ -839,7 +892,6 @@ const brandOffer = async (req, res) => {
   if (req.session.admin) {
     const brands = await Brands.find();
     const offers = await Boffer.find().populate("brandOffer.brandId");
-    console.log(offers[0], "from brandOffer");
 
     res.render("adminPages/brandOffer", {
       offers,
@@ -919,7 +971,6 @@ const editBrandOffer = async (req, res) => {
   if (req.session.admin) {
     const { BofferId } = req.params;
     const { BofferPrice } = req.body;
-    console.log(BofferPrice, "to check edit of brand offer");
     if (BofferId) {
       await Boffer.updateOne(
         { _id: BofferId },
@@ -936,7 +987,6 @@ const editProductOffer = async (req, res) => {
   if (req.session.admin) {
     const { PofferId } = req.params;
     const { PofferPrice } = req.body;
-    console.log(PofferPrice, "to check edit of product offer");
     if (PofferId) {
       await Poffer.updateOne(
         { _id: PofferId },
@@ -952,7 +1002,6 @@ const editProductOffer = async (req, res) => {
 const editCoupon = async (req, res) => {
   const { couponId } = req.params;
   const { couponName, expiredAt, percentage, minimum } = req.body;
-  console.log(couponId);
   const coupon = await Coupons.findOne({ _id: couponId });
   if (coupon) {
     coupon.couponName = couponName;
@@ -964,23 +1013,11 @@ const editCoupon = async (req, res) => {
   res.redirect("/admin/coupons");
 };
 
-// const part = (req, res) => {
-//   res.render("adminPages/partialHead");
-// };
-
 const generateSalesReport = async (req, res) => {
   if (req.session.admin) {
     const { startDate, endDate, format } = req.body;
-    console.log(format, "format isiiiiiiiiiiiii");
-    // if (format === "graph") {
-
-    // }
-
-    console.log("Start Date:", startDate);
-    console.log("End Date:", endDate);
 
     try {
-      // Validate dates
       if (!startDate || !endDate) {
         return res.status(400).send("Start date and end date are required.");
       }
@@ -1006,10 +1043,6 @@ const generateSalesReport = async (req, res) => {
         createdAt: { $gte: start, $lte: end },
       }).populate("userId");
 
-      // if (!orders || orders.length === 0) {
-      //   return res.status(404).send("No orders found for the selected period.");
-      // }
-
       const totalSales = orders.reduce(
         (sum, order) => sum + order.finalAmount,
         0
@@ -1020,9 +1053,6 @@ const generateSalesReport = async (req, res) => {
       );
       const totalOrders = orders.length;
 
-      console.log("fwdghfdhfghdgdhgfdygfdhfgdgfdhgfdhfgdh", orders);
-
-      // console.log(orders,"pdf design");
       const reportData = orders.map((order) => ({
         orderId: order.orderId,
         date: new Date(order.createdAt).toLocaleDateString(),
@@ -1149,7 +1179,6 @@ const generateSalesReport = async (req, res) => {
           amount: order.finalAmount,
         }));
 
-      
         let dailySalesData = await Orders.aggregate([
           {
             $match: {
@@ -1161,12 +1190,12 @@ const generateSalesReport = async (req, res) => {
           {
             $group: {
               _id: {
-                $dateToString: { format: "%Y-%m-%d", date: "$createdAt" }, // Group by date (YYYY-MM-DD)
+                $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
               },
-              totalSales: { $sum: "$finalAmount" }, // Sum sales amount for each day
+              totalSales: { $sum: "$finalAmount" },
             },
           },
-          { $sort: { _id: 1 } }, // Sort by date
+          { $sort: { _id: 1 } },
         ]);
 
         return res.json({
@@ -1219,7 +1248,6 @@ module.exports = {
   logout,
   postLogout,
   search,
-  // part,
   orders,
   cancelOrder,
   deliverOrder,

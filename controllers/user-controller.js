@@ -796,11 +796,13 @@ const checkout = async (req, res) => {
     let discountOffer = 0;
 
     for (const item of cart.items) {
-      originalPrice += item.variant_id.price * item.quantity;
-      discountOffer += item.variant_id.product_id.offer;
-      totalPrice +=
-        (item.variant_id.price - item.variant_id.product_id.offer) *
-        item.quantity;
+      if (item.variant_id.product_id.status) {
+        originalPrice += item.variant_id.price * item.quantity;
+        discountOffer += item.variant_id.product_id.offer;
+        totalPrice +=
+          (item.variant_id.price - item.variant_id.product_id.offer) *
+          item.quantity;
+      }
     }
 
     const coupons = await Coupons.find({
@@ -877,13 +879,14 @@ const placeOrder = async (req, res) => {
       let orderedItems = [];
 
       for (const element of cart.items) {
+        console.log(element);
         if (element.quantity > element.variant_id.stock) {
           outOfStockItems.push({
             productName: element.variant_id.product_id.productName,
             stock: element.variant_id.stock,
             requested: element.quantity,
           });
-        } else {
+        } else if(element.variant_id.product_id.status==true) {
           inStockItems.push({
             productName: element.variant_id.product_id.productName,
             stock: element.variant_id.stock,

@@ -277,6 +277,7 @@
             </div>
             <ul class="list-group list-group-flush">
                 <% carts.forEach(item=> { %>
+                    <%if(item.variant_id.product_id.status==true){%>
                     <li class="list-group-item d-flex justify-content-between">
                         <span><img src="<%= item.variant_id.product_id.images[0].replace('public', '')%>" alt="Item 1"
                                 class="item-image" style="width: 50px; height: 50px;"></span>
@@ -287,6 +288,7 @@
                                 class="font-weight-bold"><%=item.variant_id.price-item.variant_id.product_id.offer%></span>
                             x <%=item.quantity%></span>
                     </li>
+                    <%}%>
                     <% }); %>
             </ul>
             <div class="card-body">

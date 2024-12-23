@@ -1,6 +1,6 @@
-<!-- login.ejs -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,52 +8,47 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="userPages/emailVerification.css">
 </head>
+
 <body>
     <img src="/images/axillon white cropped.png" alt="Axillon Logo" class="logo">
-    
-
     <div class="login-container">
         <div class="welcome-text">
-            
             <h1>Welcome to <span>AXILLON</span></h1>
             <h2>Email Verification</h2>
-           
-
         </div>
-
-        <%if(message){%>    
-            
-            <div><p style="color: red;"><%=message%></p></div>
-            
-            <%}%>
-        
-        <form action="/postEmailVerification" method="POST" id="email-form">
-            <div class="input-group">
-                <label for="email">Enter your email address</label>
-                <input type="text" id="email" name="email" placeholder="email address" >
+        <%if(message){%>
+            <div>
+                <p style="color: red;">
+                    <%=message%>
+                </p>
             </div>
-            <div class="error-message " style="color: red;" id="error-message"></div>
-            <button type="submit" class="sendOTP-button">Verify Email</button>
-        </form>
-        <script>
-            const emailForm = document.getElementById('email-form');
-            emailForm.addEventListener('submit', (e) => {
-                const email = document.getElementById('email').value;
-                if (email.includes(' ')) {
-                    document.getElementById('error-message').innerHTML = "Email should not contain any spaces";
-                    e.preventDefault();
-                } else {
-                    const atPosition = email.indexOf('@');
-                    const dotPosition = email.lastIndexOf('.');
-                    if (atPosition < 1 || dotPosition < atPosition + 2 || dotPosition + 2 >= email.length) {
-                        document.getElementById('error-message').innerHTML = "Email should be in a valid format";
-                        e.preventDefault();
-                    }
-                }
-            });
-        </script>
+            <%}%>
+                <form action="/postEmailVerification" method="POST" id="email-form">
+                    <div class="input-group">
+                        <label for="email">Enter your email address</label>
+                        <input type="text" id="email" name="email" placeholder="email address">
+                    </div>
+                    <div class="error-message " style="color: red;" id="error-message"></div>
+                    <button type="submit" class="sendOTP-button">Verify Email</button>
+                </form>
+                <script>
+                    const emailForm = document.getElementById('email-form');
+                    emailForm.addEventListener('submit', (e) => {
+                        const email = document.getElementById('email').value;
+                        if (email.includes(' ')) {
+                            document.getElementById('error-message').innerHTML = "Email should not contain any spaces";
+                            e.preventDefault();
+                        } else {
+                            const atPosition = email.indexOf('@');
+                            const dotPosition = email.lastIndexOf('.');
+                            if (atPosition < 1 || dotPosition < atPosition + 2 || dotPosition + 2 >= email.length) {
+                                document.getElementById('error-message').innerHTML = "Email should be in a valid format";
+                                e.preventDefault();
+                            }
+                        }
+                    });
+                </script>
     </div>
-    
 </body>
-</html>
 
+</html>

@@ -89,12 +89,6 @@ const dashboard = async (req, res) => {
       { $limit: 10 },
     ]);
 
-    if (mostSellingProducts.length > 0) {
-      console.log("Top Selling Products:", mostSellingProducts);
-    } else {
-      console.log("No products found.");
-    }
-
     let mostSellingBrand = await Orders.aggregate([
       {
         $match: {
@@ -141,12 +135,6 @@ const dashboard = async (req, res) => {
       { $sort: { totalQuantity: -1 } },
       { $limit: 10 },
     ]);
-
-    if (mostSellingBrand.length > 0) {
-      console.log("Top Selling Brands:", mostSellingBrand);
-    } else {
-      console.log("No brands found in the selected criteria.");
-    }
 
     let totalDiscountAmount = await Orders.aggregate([
       {
@@ -437,7 +425,25 @@ const cancelOrder = async (req, res) => {
           .json({ success: false, message: "Order already Cancelled" });
 
       if (order.paymentMethod !== "COD") {
+        const userId = order.userId;
         order.paymentStatus = "Refunded";
+        const totalAmount = order.totalAmount;
+        if (order.paymentMethod == "RZP" || order.paymentMethod == "WLT") {
+          await User.updateOne(
+            { _id: userId },
+            {
+              $inc: { wallet: +totalAmount },
+              $push: {
+                transactions: {
+                  type: "Credit",
+                  amount: order.totalAmount,
+                  description: `Amount Credited For Admin Cancellation on ${order._id} Order`,
+                  order_id: order._id,
+                },
+              },
+            }
+          );
+        }
       } else {
         order.paymentStatus = "Payment Cancelled";
       }

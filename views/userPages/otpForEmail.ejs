@@ -1,205 +1,204 @@
-<!-- login.ejs -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Axillon - Sign In</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
 </head>
-<body>
 
+<body>
     <style>
         * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-}
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
 
-body {
-    min-height: 100vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.134), rgba(0, 0, 0, 0.5)),
+        body {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.134), rgba(0, 0, 0, 0.5)),
                 url('/images/bmw_f30_widebody-HD.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.logo {
-    position: absolute;
-    top: 40px;
-    left: 40px;
-    width: 100px;
-    height: auto;
-}
+        .logo {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            width: 100px;
+            height: auto;
+        }
 
-.otp-container {
-    background: rgba(255, 255, 255, 0.566);
-    padding: 40px;
-    border-radius: 16px;
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-}
+        .otp-container {
+            background: rgba(255, 255, 255, 0.566);
+            padding: 40px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
 
-.otp-title {
-    font-size: 24px;
-    color: #000000;
-    margin-bottom: 15px;
-    font-weight: 500;
-}
+        .otp-title {
+            font-size: 24px;
+            color: #000000;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
 
-.otp-message {
-    color: #000000;
-    font-size: 14px;
-    margin-bottom: 30px;
-}
+        .otp-message {
+            color: #000000;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
 
-.otp-input-group {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 30px;
-}
+        .otp-input-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
 
-.otp-input {
-    width: 50px;
-    height: 50px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    text-align: center;
-    font-size: 24px;
-    font-weight: 500;
-    background: white;
-}
+        .otp-input {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 500;
+            background: white;
+        }
 
-.otp-input:focus {
-    outline: none;
-    border-color: #1f2937;
-}
+        .otp-input:focus {
+            outline: none;
+            border-color: #1f2937;
+        }
 
-.verify-button {
-    width: 100%;
-    padding: 14px;
-    background-color: #1f2937;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-bottom: 20px;
-}
+        .verify-button {
+            width: 100%;
+            padding: 14px;
+            background-color: #1f2937;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 20px;
+        }
 
-.verify-button:hover {
-    background-color: #374151;
-}
+        .verify-button:hover {
+            background-color: #374151;
+        }
 
-.resend-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    font-size: 14px;
-    color: #666;
-}
+        .resend-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #666;
+        }
 
-.resend-link {
-    color: #2196F3;
-    text-decoration: none;
-    cursor: pointer;
-}
+        .resend-link {
+            color: #2196F3;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
-.resend-link:hover {
-    text-decoration: underline;
-}
+        .resend-link:hover {
+            text-decoration: underline;
+        }
 
-.timer {
-    color: #000000;
-}
+        .timer {
+            color: #000000;
+        }
 
-@media (max-width: 768px) {
-    .login-container {
-        margin: 20px;
-        padding: 30px;
-    }
-}
+        @media (max-width: 768px) {
+            .login-container {
+                margin: 20px;
+                padding: 30px;
+            }
+        }
     </style>
-
     <img src="/images/axillon white cropped.png" alt="Axillon Logo" class="logo">
-    
-
     <div class="otp-container">
         <h1 class="otp-title">Sign-up OTP</h1>
         <p class="otp-message">We have sent a verification code to your email id</p>
         <%if(messaged){%>
-            
-            <div><p style="color: red;"><%=messaged%></p></div>
-            
-            <%}%>
-
-        <form action="/postPasswordOtp" method="POST">
-            <div class="otp-input-group">  
-                <input type="text" name="otp1" class="otp-input" maxlength="1" required oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" onkeyup="if (this.value.length == this.maxLength) document.getElementsByName('otp2')[0].focus(); else if (this.value.length == 0) document.getElementsByName('otp4')[0].focus();">
-                <input type="text" name="otp2" class="otp-input" maxlength="1" required oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" onkeyup="if (this.value.length == this.maxLength) document.getElementsByName('otp3')[0].focus(); else if (this.value.length == 0) document.getElementsByName('otp1')[0].focus();">
-                <input type="text" name="otp3" class="otp-input" maxlength="1" required oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" onkeyup="if (this.value.length == this.maxLength) document.getElementsByName('otp4')[0].focus(); else if (this.value.length == 0) document.getElementsByName('otp2')[0].focus();">
-                <input type="text" name="otp4" class="otp-input" maxlength="1" required oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" onkeyup="if (this.value.length == 0) document.getElementsByName('otp3')[0].focus();">
+            <div>
+                <p style="color: red;">
+                    <%=messaged%>
+                </p>
             </div>
+            <%}%>
+                <form action="/postPasswordOtp" method="POST">
+                    <div class="otp-input-group">
+                        <input type="text" name="otp1" class="otp-input" maxlength="1" required
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+                            onkeyup="if (this.value.length == this.maxLength) document.getElementsByName('otp2')[0].focus(); else if (this.value.length == 0) document.getElementsByName('otp4')[0].focus();">
+                        <input type="text" name="otp2" class="otp-input" maxlength="1" required
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+                            onkeyup="if (this.value.length == this.maxLength) document.getElementsByName('otp3')[0].focus(); else if (this.value.length == 0) document.getElementsByName('otp1')[0].focus();">
+                        <input type="text" name="otp3" class="otp-input" maxlength="1" required
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+                            onkeyup="if (this.value.length == this.maxLength) document.getElementsByName('otp4')[0].focus(); else if (this.value.length == 0) document.getElementsByName('otp2')[0].focus();">
+                        <input type="text" name="otp4" class="otp-input" maxlength="1" required
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
+                            onkeyup="if (this.value.length == 0) document.getElementsByName('otp3')[0].focus();">
+                    </div>
+                    <button type="submit" class="verify-button">Verify</button>
+                </form>
+                <div class="text-center mt-3">
+                    <h4 style="color: #0a8a26; font-weight: 500; margin-bottom: 1.5rem;"></h4>
+                    <button type="button" class="btn btn-warning resend-otp-btn" id="resendOTP" disabled>
+                        Resend OTP (<span id="time-left"></span>s)
+                    </button>
+                    <style>
+                        .resend-otp-btn {
+                            background-color: #000000;
+                            color: #ffffff;
+                            font-weight: 500;
+                            padding: 8px 16px;
+                            border-radius: 10px;
+                            cursor: not-allowed;
+                            transition: all 0.3s ease-in-out;
+                        }
 
-            <button type="submit" class="verify-button">Verify</button>
-        </form>
-
-        <div class="text-center mt-3">
-            <h4 style="color: #0a8a26; font-weight: 500; margin-bottom: 1.5rem;"></h4>
-            <button type="button" class="btn btn-warning resend-otp-btn" id="resendOTP" disabled>
-                Resend OTP (<span id="time-left"></span>s)
-            </button>
-            <style>
-                .resend-otp-btn {                              
-                    background-color: #000000;
-                    color: #ffffff;
-                    font-weight: 500;
-                    padding: 8px 16px;
-                    border-radius: 10px;
-                    cursor: not-allowed;
-                    transition: all 0.3s ease-in-out;
-                }
-
-                .resend-otp-btn:not([disabled]) {
-                    background-color: #3562f5;
-                    cursor: pointer;
-                    border: none;
-                }
-            </style>
-
-            <script>
-                var timeLeft = 60;
-                var resendOTPBtn = document.getElementById("resendOTP");
-                var timerId = setInterval(function () {
-                    timeLeft -= 1;
-                    document.getElementById("time-left").textContent = timeLeft;
-                    if (timeLeft <= 0) {
-                        resendOTPBtn.disabled = false;
-                        resendOTPBtn.textContent = "Resend OTP";
-                        resendOTPBtn.onclick = function () {
-                            window.location.href = "/resendPasswordOtp";
-                        };
-                        clearInterval(timerId);
-                    }
-                }, 1000);
-            </script>
-
-        </div>
+                        .resend-otp-btn:not([disabled]) {
+                            background-color: #3562f5;
+                            cursor: pointer;
+                            border: none;
+                        }
+                    </style>
+                    <script>
+                        var timeLeft = 60;
+                        var resendOTPBtn = document.getElementById("resendOTP");
+                        var timerId = setInterval(function () {
+                            timeLeft -= 1;
+                            document.getElementById("time-left").textContent = timeLeft;
+                            if (timeLeft <= 0) {
+                                resendOTPBtn.disabled = false;
+                                resendOTPBtn.textContent = "Resend OTP";
+                                resendOTPBtn.onclick = function () {
+                                    window.location.href = "/resendPasswordOtp";
+                                };
+                                clearInterval(timerId);
+                            }
+                        }, 1000);
+                    </script>
+                </div>
     </div>
-
-    
-
 </body>
+
 </html>

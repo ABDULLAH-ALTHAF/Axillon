@@ -1,89 +1,79 @@
 <%-include('../adminPages/partialHead.ejs')%>
+    <style>
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            width: calc(100% - 250px);
+        }
 
-<style>
-    
-    
-    .main-content {
-        margin-left: 250px;
-        padding: 30px;
-        width: calc(100% - 250px);
-    }
-    
-    
-    
-    
-    .brands-table {
-        width: 100%;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        border-collapse: collapse;
-        overflow: hidden;
-    }
-    
-    .brands-table th {
-        text-align: left;
-        padding: 15px;
-        background: #f8f9fa;
-        font-weight: bold;
-        color: #333;
-    }
-    
-    .brands-table td {
-        padding: 15px;
-        border-top: 1px solid #eee;
-    }
-    
-    .status {
-        color: #2ecc71;
-        font-weight: 500;
-    }
-    
-    .btn {
-        padding: 6px 16px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-        margin-right: 5px;
-        color: white;
-    }
-    
-    .btn-change-status {
-        background: #e74c3c;
-    }
-    
-    .btn-edit {
-        background: #000;
-    }
-    
-    .btn-variants {
-        background: #3498db;
-    }
-    
-    .add-new {
-        display: inline-block;
-        background: #e74c3c;
-        color: white;
-        padding: 12px 24px;
-        border-radius: 6px;
-        text-decoration: none;
-        margin-top: 20px;
-        font-weight: bold;
-    }
-    
-    .brand-id {
-        color: #666;
-        font-family: monospace;
-    }
-    
-    
+        .brands-table {
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-collapse: collapse;
+            overflow: hidden;
+        }
+
+        .brands-table th {
+            text-align: left;
+            padding: 15px;
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .brands-table td {
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .status {
+            color: #2ecc71;
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 5px;
+            color: white;
+        }
+
+        .btn-change-status {
+            background: #e74c3c;
+        }
+
+        .btn-edit {
+            background: #000;
+        }
+
+        .btn-variants {
+            background: #3498db;
+        }
+
+        .add-new {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .brand-id {
+            color: #666;
+            font-family: monospace;
+        }
     </style>
-
     <div class="main-content">
-
-
-        <div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -107,9 +97,6 @@
                 </div>
             </div>
         </div>
-        
-
-
         <table class="brands-table">
             <thead>
                 <tr>
@@ -120,47 +107,43 @@
                 </tr>
             </thead>
             <tbody>
-                <% if (brands.length > 0) { %>
-                    <% brands.forEach(brand => { %>
+                <% if (brands.length> 0) { %>
+                    <% brands.forEach(brand=> { %>
                         <tr>
-                            <td class="brand-id">#<%= brand._id %></td>
-                            <td><%= brand.brandName %></td>
-                            
+                            <td class="brand-id">#<%= brand._id %>
+                            </td>
                             <td>
-                               
-                                
-                                    <!-- Toggle form for changing status -->
-                                    <form action="/admin/changeStatusBrand/<%= brand._id %>" method="POST">
-                                        <input type="hidden" name="status" value="<%= !brand.status %>">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" name="statusToggle"
-                                                onchange="this.form.submit()" <%=brand.status ? 'checked' : '' %>
-                                            >
-                                        </div>
-                                    </form>
-                                
-
+                                <%= brand.brandName %>
+                            </td>
+                            <td>
+                                <!-- Toggle form for changing status -->
+                                <form action="/admin/changeStatusBrand/<%= brand._id %>" method="POST">
+                                    <input type="hidden" name="status" value="<%= !brand.status %>">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" name="statusToggle"
+                                            onchange="this.form.submit()" <%=brand.status ? 'checked' : '' %>
+                                        >
+                                    </div>
+                                </form>
                             </td>
                             <td>
                                 <a href="/admin/editBrands/<%= brand._id%>" class="btn btn-variants">Edit</a>
 
                             </td>
                         </tr>
-                    <% }); %>
-                <% } else { %>
-                    <tr>
-                        <td colspan="4" class="text-center">No brands found</td>
-                    </tr>
-                <% } %>
+                        <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="4" class="text-center">No brands found</td>
+                                </tr>
+                                <% } %>
             </tbody>
         </table>
-        
+
         <button type="button" class="add-new btn btn-primary" data-toggle="modal" data-target="#addBrandModal">
             Add New+
         </button>
-
     </div>
-    
     <script>
         let error = "<%=error%>"
         if (error) {
@@ -174,12 +157,3 @@
             }, 3000);
         }
     </script>
-
-
-
-
-
-
-
-
-

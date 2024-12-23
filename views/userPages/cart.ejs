@@ -203,22 +203,17 @@
             font-size: medium;
         }
     </style>
-
-
     <div class="breadcrumbs">
         <a href="/">Home</a> > <a href="/shop">Shop</a> > Shopping Cart
     </div>
-
     <div class="container">
         <h1 class="cart-title">YOUR CART</h1>
-
         <div class="cart-grid">
             <div class="cart-items">
-                <!-- Sample item -->
-                 
+                <!-- item -->
                 <% docCart.forEach(doc=>{%>
+                    <%if(doc.variant_id.product_id.status==true){%>
                     <div class="cart-item">
-
                         <img src="<%= doc.variant_id.product_id.images[0].replace('public', '')%>" alt="Item 1"
                             class="item-image">
                         <div class="item-details">
@@ -238,7 +233,6 @@
                                         doc.variant_id.price%>
                                 </div>
                                 <%}%>
-
                                     <div class="quantity-control">
                                         <button class="quantity-btn"
                                             onclick="updateQuantity(`<%=doc.variant_id.id%>`, 'decrease',`<%=doc.quantity%>`)">-</button>
@@ -254,11 +248,9 @@
                                         onclick="updateQuantity(`<%=doc.variant_id.id%>`,'remove','<%= doc.quantity%>')"><i
                                             class="fa-solid fa-trash-can"></i></button>
                     </div>
+                    <%}%>
                     <%})%>
             </div>
-
-
-
             <div class="order-summary">
                 <h2 class="summary-title">Order Summary</h2>
                 <div class="summary-row">
@@ -267,14 +259,6 @@
                         ₹<%=subTotal%>
                     </span>
                 </div>
-                <!-- <div class="summary-row">
-                    <span>Discount (-0%)</span>
-                    <span class="discount">-₹0.00</span>
-                </div> -->
-                <!-- <div class="summary-row">
-                    <span>Delivery Fee</span>
-                    <span>₹0.00</span>
-                </div> -->
                 <div class="summary-row total">
                     <span>Total</span>
                     <span id="total">₹<%=subTotal%></span>
@@ -294,15 +278,10 @@
 
     <%-include('../userPages/partialFooterUser.ejs')%>
 
-
-
-
         <script>
 
             async function updateQuantity(variant_id, action, currentQuantity) {
                 console.log(currentQuantity)
-
-
 
                 let productQuantitySpan = document.getElementById(`${variant_id}`)
                 currentQuantity = productQuantitySpan.textContent
@@ -337,9 +316,9 @@
                     console.log(err, 'failed')
                 }
             }
-
+            
             async function updateOrderSummery() {
-
+                
                 let cartItems = document.querySelectorAll('.cart-item')
                 let total = 0
                 cartItems.forEach((element) => {
@@ -354,9 +333,10 @@
 
                 let subTotal = document.getElementById('subTotal')
                 subTotal.textContent = '₹' + total
-
+                
                 let Total = document.getElementById('total')
                 Total.textContent = '₹' + total
+                window.location.href = '/cart';
 
             }
 
@@ -377,16 +357,16 @@
                         console.error("Error parsing JSON response:", error);
                     }
                 } else if (!response.ok) {
+                    console.log("hiii");
                     let err = await response.json()
+                    console.log(err, 'failed')
                     Swal.fire({
                         title: `Please Note`,
-                        text: `Some items in your cart exceed stock limits: ${err.outOfStockItems.map(
+                        text: `${err.message} ${err.outOfStockItems.map(
                             (item) => `${item.productName} (Stock: ${item.stock}, Requested: ${item.requested})`
                         ).join(", ")}`,
                         icon: "error"
                     });
-                    console.log(err, 'failed')
-
                 }
             }
         </script>

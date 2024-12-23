@@ -1,41 +1,25 @@
-
 <%-include('../adminPages/partialHead.ejs')%>
+    <style>
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            width: calc(100% - 250px);
+        }
 
-
-<style>
-
-.main-content {
-    margin-left: 250px;
-    padding: 30px;
-    width: calc(100% - 250px);
-}
-
-
-
-
-.buttonn {
-    margin-top: 200px;
-    width: 40%;
-    height: 80px;
-}
-
-
-</style>
-
-    <div class="main-content d-flex justify-content-center gap-3 pt-5 mt-5" >
-
-        
-
+        .buttonn {
+            margin-top: 200px;
+            width: 40%;
+            height: 80px;
+        }
+    </style>
+    <div class="main-content d-flex justify-content-center gap-3 pt-5 mt-5">
         <button class="btn btn-danger buttonn" type="submit">
             <a class="text-decoration-none text-light fs-1" href="/admin/postLogout">YES</a>
         </button>
-
         <button class="btn btn-success buttonn" type="submit">
             <a class="text-decoration-none text-light fs-1" href="/admin/dashboard">NO</a>
         </button>
-
-
     </div>
-</body>
+    </body>
 
-</html>
+    </html>

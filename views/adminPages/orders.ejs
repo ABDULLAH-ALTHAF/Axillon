@@ -1,5 +1,4 @@
 <%- include('../adminPages/partialHead.ejs') %>
-
     <style>
         .main-content {
             margin-left: 250px;
@@ -73,27 +72,26 @@
         }
 
         .pagination a {
-    margin: 0 5px;
-    padding: 5px 10px;
-    text-decoration: none;
-    border-radius: 4px;
-}
-.pagination a.btn {
-    color: white;
-    background-color: #3498db;
-    border: none;
-}
-.pagination a.btn-secondary {
-    background-color: #ff4444;
-    pointer-events: none;
-}
+            margin: 0 5px;
+            padding: 5px 10px;
+            text-decoration: none;
+            border-radius: 4px;
+        }
 
+        .pagination a.btn {
+            color: white;
+            background-color: #3498db;
+            border: none;
+        }
+
+        .pagination a.btn-secondary {
+            background-color: #ff4444;
+            pointer-events: none;
+        }
     </style>
-
     <div class="main-content">
         <h1 class="title">Orders</h1>
         <div class="search-box">
-            
         </div>
         <table class="users-table">
             <thead>
@@ -109,20 +107,20 @@
                 </tr>
             </thead>
             <tbody>
-                <% order.forEach(order => { %> 
+                <% order.forEach(order=> { %>
                     <tr>
                         <td>
                             <%= order.userId ? order.userId.username : 'N/A' %>
-                        </td> 
+                        </td>
                         <td>
                             <%= order.address.city %>
-                        </td> 
+                        </td>
                         <td>
                             <%= order.totalAmount %>
-                        </td> 
+                        </td>
                         <td>
                             <%= order.status %>
-                        </td> 
+                        </td>
                         <td>
                             <%=order.paymentStatus%>
                         </td>
@@ -131,7 +129,7 @@
                         </td>
                         <td>
                             <%= new Date(order.createdAt).toLocaleDateString('en-US') %>
-                        </td> 
+                        </td>
                         <td class="d-flex">
                             <!-- Cancel Order Modal -->
                             <div class="modal fade" id="cancelOrderModal<%= order.orderId %>" tabindex="-1"
@@ -139,7 +137,8 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="cancelOrderModalLabel<%= order.orderId %>">Cancel Order?</h5>
+                                            <h5 class="modal-title" id="cancelOrderModalLabel<%= order.orderId %>">
+                                                Cancel Order?</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
@@ -156,16 +155,10 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <!-- Button trigger modal -->
-                            
-                            <!-- new wave -->
-                             
-                            <a href="/admin/singleOrder/<%= order.orderId %>" class="btn btn-primary" >
+                            <a href="/admin/singleOrder/<%= order.orderId %>" class="btn btn-primary">
                                 view
                             </a>
-                            
-                            <% if (order.status === 'Pending') { %>
+                            <% if (order.status==='Pending' ) { %>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#deliverOrderModal<%= order.orderId %>">
                                     Mark as Delivered
@@ -174,132 +167,156 @@
                                     data-bs-target="#cancelOrderModal<%= order.orderId %>">
                                     Cancel
                                 </button>
-                            <% } else if (order.status === 'Delivered') { %>
-                                <button type="button" class="btn btn-primary" disabled>
-                                    Delivered
-                                </button>
-                            <% } %>
-
-                            <% if (order.status === 'Cancelled') { %>
-                                <button type="button" class="btn btn-danger" disabled>
-                                    Cancelled
-                                </button>
-                            <% } %>
-
-                            <% if (order.status === 'Return Request') { %>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#acceptReturnOrderModal<%= order.orderId %>">
-                                    Accept Return
-                                </button>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#rejectReturnOrderModal<%= order.orderId %>">
-                                    Reject Request
-                                </button>
-                            <% }else if(order.status === 'Returned') { %>
-                                <button type="button" class="btn btn-primary" disabled>
-                                    Product Returned
-                                </button>
-                                <% } else if (order.status === 'Return Cancelled') { %>
+                                <% } else if (order.status==='Delivered' ) { %>
                                     <button type="button" class="btn btn-primary" disabled>
-                                        Returned Rejected
+                                        Delivered
                                     </button>
                                     <% } %>
-                            <!-- Deliver Order Modal -->
-                            <div class="modal fade" id="deliverOrderModal<%= order.orderId %>" tabindex="-1"
-                                aria-labelledby="deliverOrderModalLabel<%= order.orderId %>" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="deliverOrderModalLabel<%= order.orderId %>">Mark as Delivered?</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>Are you sure you want to mark the order as delivered?</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <form action="/admin/deliverOrder/<%= order.orderId %>" method="post">
-                                                <button type="submit" class="btn btn-primary">Confirm Delivered</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- modal for accept return -->
-                            <div class="modal fade" id="acceptReturnOrderModal<%= order.orderId %>" tabindex="-1"
-                                aria-labelledby="acceptReturnOrderModalLabel<%= order.orderId %>" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="acceptReturnOrderModalLabel<%= order.orderId %>">Mark as Delivered?</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>Are you sure you want to accept the returnrequest ?</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <form action="/admin/acceptReturn/<%= order.orderId %>" method="post">
-                                                <button type="submit" class="btn btn-primary">Accept Return</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <!-- modal for reject return request -->
-
-
-                            <div class="modal fade" id="rejectReturnOrderModal<%= order.orderId %>" tabindex="-1"
-                                aria-labelledby="rejectReturnOrderModalLabel<%= order.orderId %>" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="rejectReturnOrderModalLabel<%= order.orderId %>">Mark as Delivered?</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>Are you sure you want to reject the return request ?</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <form action="/admin/rejectReturn/<%= order.orderId %>" method="post">
-                                                <button type="submit" class="btn btn-primary">Reject Request</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
+                                        <% if (order.status==='Cancelled' ) { %>
+                                            <button type="button" class="btn btn-danger" disabled>
+                                                Cancelled
+                                            </button>
+                                            <% } %>
+                                                <% if (order.status==='Return Request' ) { %>
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                        data-bs-target="#acceptReturnOrderModal<%= order.orderId %>">
+                                                        Accept Return
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                        data-bs-target="#rejectReturnOrderModal<%= order.orderId %>">
+                                                        Reject Request
+                                                    </button>
+                                                    <% }else if(order.status==='Returned' ) { %>
+                                                        <button type="button" class="btn btn-primary" disabled>
+                                                            Product Returned
+                                                        </button>
+                                                        <% } else if (order.status==='Return Cancelled' ) { %>
+                                                            <button type="button" class="btn btn-primary" disabled>
+                                                                Returned Rejected
+                                                            </button>
+                                                            <% } %>
+                                                                <!-- Deliver Order Modal -->
+                                                                <div class="modal fade"
+                                                                    id="deliverOrderModal<%= order.orderId %>"
+                                                                    tabindex="-1"
+                                                                    aria-labelledby="deliverOrderModalLabel<%= order.orderId %>"
+                                                                    aria-hidden="true">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title"
+                                                                                    id="deliverOrderModalLabel<%= order.orderId %>">
+                                                                                    Mark as Delivered?</h5>
+                                                                                <button type="button" class="btn-close"
+                                                                                    data-bs-dismiss="modal"
+                                                                                    aria-label="Close"></button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <p>Are you sure you want to mark the
+                                                                                    order as delivered?</p>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button"
+                                                                                    class="btn btn-secondary"
+                                                                                    data-bs-dismiss="modal">Close</button>
+                                                                                <form
+                                                                                    action="/admin/deliverOrder/<%= order.orderId %>"
+                                                                                    method="post">
+                                                                                    <button type="submit"
+                                                                                        class="btn btn-primary">Confirm
+                                                                                        Delivered</button>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- modal for accept return -->
+                                                                <div class="modal fade"
+                                                                    id="acceptReturnOrderModal<%= order.orderId %>"
+                                                                    tabindex="-1"
+                                                                    aria-labelledby="acceptReturnOrderModalLabel<%= order.orderId %>"
+                                                                    aria-hidden="true">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title"
+                                                                                    id="acceptReturnOrderModalLabel<%= order.orderId %>">
+                                                                                    Mark as Delivered?</h5>
+                                                                                <button type="button" class="btn-close"
+                                                                                    data-bs-dismiss="modal"
+                                                                                    aria-label="Close"></button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <p>Are you sure you want to accept the
+                                                                                    returnrequest ?</p>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button"
+                                                                                    class="btn btn-secondary"
+                                                                                    data-bs-dismiss="modal">Close</button>
+                                                                                <form
+                                                                                    action="/admin/acceptReturn/<%= order.orderId %>"
+                                                                                    method="post">
+                                                                                    <button type="submit"
+                                                                                        class="btn btn-primary">Accept
+                                                                                        Return</button>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- modal for reject return request -->
+                                                                <div class="modal fade"
+                                                                    id="rejectReturnOrderModal<%= order.orderId %>"
+                                                                    tabindex="-1"
+                                                                    aria-labelledby="rejectReturnOrderModalLabel<%= order.orderId %>"
+                                                                    aria-hidden="true">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title"
+                                                                                    id="rejectReturnOrderModalLabel<%= order.orderId %>">
+                                                                                    Mark as Delivered?</h5>
+                                                                                <button type="button" class="btn-close"
+                                                                                    data-bs-dismiss="modal"
+                                                                                    aria-label="Close"></button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <p>Are you sure you want to reject the
+                                                                                    return request ?</p>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button"
+                                                                                    class="btn btn-secondary"
+                                                                                    data-bs-dismiss="modal">Close</button>
+                                                                                <form
+                                                                                    action="/admin/rejectReturn/<%= order.orderId %>"
+                                                                                    method="post">
+                                                                                    <button type="submit"
+                                                                                        class="btn btn-primary">Reject
+                                                                                        Request</button>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                         </td>
                     </tr>
-                <% }); %>
+                    <% }); %>
             </tbody>
         </table>
         <div class="pagination" style="text-align: center; margin-top: 20px;">
-            <% if (currentPage > 1) { %>
+            <% if (currentPage> 1) { %>
                 <a href="?page=<%= currentPage - 1 %>" class="btn btn-primary">Previous</a>
-            <% } %>
-        
-            <% for (let i = 1; i <= totalPages; i++) { %>
-                <a href="?page=<%= i %>" 
-                   class="btn <%= i === currentPage ? 'btn-secondary' : 'btn-outline-primary' %>">
-                    <%= i %>
-                </a>
-            <% } %>
-        
-            <% if (currentPage < totalPages) { %>
-                <a href="?page=<%= currentPage + 1 %>" class="btn btn-primary">Next</a>
-            <% } %>
+                <% } %>
+                    <% for (let i=1; i <=totalPages; i++) { %>
+                        <a href="?page=<%= i %>"
+                            class="btn <%= i === currentPage ? 'btn-secondary' : 'btn-outline-primary' %>">
+                            <%= i %>
+                        </a>
+                        <% } %>
+                            <% if (currentPage < totalPages) { %>
+                                <a href="?page=<%= currentPage + 1 %>" class="btn btn-primary">Next</a>
+                                <% } %>
         </div>
     </div>
-
-    
-    

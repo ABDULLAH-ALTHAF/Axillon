@@ -1,83 +1,6 @@
 <%-include('../userPages/partialHeadUser.ejs')%>
-
-    <!-- EJS Template -->
-    <div class="profile-container">
-        
-<%-include('../userPages/profilePartial.ejs')%>
-
-
-
-        <div class="main-content">
-            <div class="profile-section">
-                <h3 class="section-title">My Profile</h3>
-
-                <form class="profile-form" action="/editProfile" method="POST">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" name="username" value="<%= user.username %>" class="form-control" >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" name="email" value="<%= user.email %>" class="form-control" readonly>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="phone">Phone</label>
-                        <input type="text" id="phone" name="phone" value="<%= user.phone %>" class="form-control">
-                        <small id="phoneError" style="color: red; display: none;">Phone number must be exactly 10 digits.</small>
-                    </div>
-                    
-                    <script>
-                        const phoneInput = document.getElementById('phone');
-                        const phoneError = document.getElementById('phoneError');
-                        const form = document.querySelector('form'); // Ensure your form has the <form> tag
-                    
-                        form.addEventListener('submit', (e) => {
-                            const phoneValue = phoneInput.value.trim();
-                            const isEmpty = phoneValue === '';
-                            const isValidLength = /^\d{10}$/.test(phoneValue);
-                    
-                            // Validation logic
-                            if (!isEmpty && !isValidLength) {
-                                e.preventDefault(); // Prevent form submission
-                                phoneError.style.display = 'block'; // Show the error message
-                            } else {
-                                phoneError.style.display = 'none'; // Hide the error message if valid
-                            }
-                        });
-                    </script>
-                    
-
-                    
-
-                    <button type="submit" class="edit-profile-btn">Save Changes</button>
-                </form>
-            </div>
-
-            <div class="referral-section">
-                <h3 class="section-title">your referral code</h3>
-                <div class="referral-code">
-                    <span>
-                        <%= user.referral %>
-                    </span>
-                    <button class="copy-btn">
-                        <a href="https://wa.me/?text=Hey check out this awesome AXILLON ALLOY WHEELS! You can get a wallet money of 100 rupees by using my referral code <%= user.referral %>" target="_blank" rel="noopener noreferrer">
-                            <i class="fa fa-share-square fa-2x" aria-hidden="true"></i>
-                        </a>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CSS Styles -->
     <style>
-        
-
-
         .main-content {
-            /* flex: 1; */
             width: 100%;
             background: white;
             border-radius: 8px;
@@ -163,14 +86,68 @@
             color: #e94f37;
         }
 
-        /* Icon styles - You'll need to add your own icon font or SVG icons */
         [class^="icon-"] {
             font-size: 1.2rem;
         }
     </style>
+    <div class="profile-container">
+        <%-include('../userPages/profilePartial.ejs')%>
+            <div class="main-content">
+                <div class="profile-section">
+                    <h3 class="section-title">My Profile</h3>
+                    <form class="profile-form" action="/editProfile" method="POST">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" name="username" value="<%= user.username %>" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" name="email" value="<%= user.email %>" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="text" id="phone" name="phone" value="<%= user.phone %>" class="form-control">
+                            <small id="phoneError" style="color: red; display: none;">Phone number must be exactly 10
+                                digits.</small>
+                        </div>
+                        <script>
+                            const phoneInput = document.getElementById('phone');
+                            const phoneError = document.getElementById('phoneError');
+                            const form = document.querySelector('form');
 
+                            form.addEventListener('submit', (e) => {
+                                const phoneValue = phoneInput.value.trim();
+                                const isEmpty = phoneValue === '';
+                                const isValidLength = /^\d{10}$/.test(phoneValue);
+
+                                if (!isEmpty && !isValidLength) {
+                                    e.preventDefault();
+                                    phoneError.style.display = 'block';
+                                } else {
+                                    phoneError.style.display = 'none';
+                                }
+                            });
+                        </script>
+                        <button type="submit" class="edit-profile-btn">Save Changes</button>
+                    </form>
+                </div>
+                <div class="referral-section">
+                    <h3 class="section-title">your referral code</h3>
+                    <div class="referral-code">
+                        <span>
+                            <%= user.referral %>
+                        </span>
+                        <button class="copy-btn">
+                            <a href="https://wa.me/?text=Hey check out this awesome AXILLON ALLOY WHEELS! You can get a wallet money of 100 rupees by using my referral code <%= user.referral %>"
+                                target="_blank" rel="noopener noreferrer">
+                                <i class="fa fa-share-square fa-2x" aria-hidden="true"></i>
+                            </a>
+                        </button>
+                    </div>
+                </div>
+            </div>
+    </div>
     <%-include('../userPages/partialFooterUser.ejs')%>
-
         </body>
 
         </html>

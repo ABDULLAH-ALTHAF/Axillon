@@ -1,6 +1,4 @@
 <%-include('../userPages/partialHeadUser.ejs')%>
-
-
     <style>
         .container {
             max-width: 800px;
@@ -14,8 +12,6 @@
             font-size: 1.8rem;
             margin-bottom: 2rem;
         }
-
-
 
         .checkout-form {
             background: #fff;
@@ -69,7 +65,6 @@
                 width: 280px;
             }
         }
-
 
         /* payment section */
 
@@ -140,8 +135,6 @@
             gap: 0.5rem;
         }
 
-
-
         .next-btn {
             background: #1a0f5f;
             border: none;
@@ -168,19 +161,9 @@
         <a href="/">Home</a> > <a href="/shop">Shop</a> > <a href="/cart"> Shopping Cart</a> > <a href="/cart">
             Checkout</a>
     </div>
-
-
-
     <div class="container">
         <h1 class="checkout-title">Where and how should we sent the order?</h1>
-
-
-
-        <!-- <form class="checkout-form" action="/checkoutPayment" method="POST">
-            <div class="saved-addresses mb-3"> -->
         <h3>Checkout Details</h3>
-
-
         <div class="address-option">
             <% if (addresses.length> 0) { %>
                 <select class="form-control" id="address" name="address">
@@ -196,9 +179,6 @@
                     <p>No addresses available. Please add an address first.</p>
                     <% } %>
         </div>
-
-
-
         <!--Add Modal -->
         <div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel"
             aria-hidden="true">
@@ -254,7 +234,6 @@
                                         }
                                     });
                                 </script>
-
                             </div>
                             <div class="mb-3">
                                 <label for="country" class="form-label">country</label>
@@ -270,84 +249,73 @@
                 </div>
             </div>
         </div>
-
-
-
-
         <div>
-
-
             <button type="button" class="btn btn-primary add-address-btn" data-bs-toggle="modal"
                 data-bs-target="#addAddressModal" style="margin-bottom: 1rem;">
                 Or Add New Address
             </button>
         </div>
-
         <div class="mb-3">
             <label for="coupon" class="form-label" style="font-weight: bold;">Coupons</label>
             <div class="input-group">
                 <select class="form-select" id="coupon" name="coupon">
                     <option value="">Available Coupons</option>
-                    <% coupons.forEach(coupon => { %>
+                    <% coupons.forEach(coupon=> { %>
                         <option value="<%=coupon._id%>">
                             <%=coupon.couponName%>
-                            <%=coupon.percentage%>-%-OFF
+                                <%=coupon.percentage%>-%-OFF
                         </option>
-                    <% }); %>
+                        <% }); %>
                 </select>
-                <button class="btn btn-primary" id="applyCoupon" type="button" onclick="orderSummary(document.getElementById('coupon').value ? document.getElementById('coupon').value : null,` <%=totalPrice%>` , `<%=discountOffer%>` , `<%=originalPrice%>`)">Apply</button>
+                <button class="btn btn-primary" id="applyCoupon" type="button"
+                    onclick="orderSummary(document.getElementById('coupon').value ? document.getElementById('coupon').value : null,` <%=totalPrice%>` , `<%=discountOffer%>` , `<%=originalPrice%>`)">Apply</button>
             </div>
         </div>
-
-<div class="card mb-3">
-    <div class="card-header">
-        <h5 class="font-weight-bold mb-0">Order Summary</h5>
-    </div>
-    <ul class="list-group list-group-flush">
-        <% carts.forEach(item => { %>
-            <li class="list-group-item d-flex justify-content-between">
-                <span><img src="<%= item.variant_id.product_id.images[0].replace('public', '')%>" alt="Item 1"
-                    class="item-image" style="width: 50px; height: 50px;"></span>
-                <span><%=item.variant_id.product_id.productName%></span>
-                <span>₹<span class="font-weight-bold"><%=item.variant_id.price-item.variant_id.product_id.offer%></span> x <%=item.quantity%></span>
-            </li>
-        <% }); %>
-    </ul>
-    <div class="card-body">
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item d-flex justify-content-between">
-                <span>Original Price</span>
-                <span>₹<span id="originalPrice" class="font-weight-bold"><%=originalPrice%></span></span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between">
-                <span>Discount from Offer</span>
-                <span>-₹<span id="offerDiscount" class="font-weight-bold"><%=discountOffer%></span></span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between">
-                <span>Discount from Coupon</span>
-                <span>-₹<span id="couponDiscount" class="font-weight-bold">0.00</span></span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between">
-                <span>Total Price</span>
-                <span>₹<span id="totalPrice" class="font-weight-bold"><%=totalPrice%></span></span>
-            </li>
-        </ul>
-    </div>
-</div>
-
-<!-- <script>
-    const originalPrice = 1000; // Example original price
-    const offerDiscount = 100;  // Example offer discount
-    const couponDiscount = 50;  // Example coupon discount
-
-    document.getElementById('originalPrice').textContent = originalPrice.toFixed(2);
-    document.getElementById('offerDiscount').textContent = offerDiscount.toFixed(2);
-    document.getElementById('couponDiscount').textContent = couponDiscount.toFixed(2);
-
-    const totalPrice = originalPrice - offerDiscount - couponDiscount;
-    document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
-</script> -->
-
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="font-weight-bold mb-0">Order Summary</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <% carts.forEach(item=> { %>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span><img src="<%= item.variant_id.product_id.images[0].replace('public', '')%>" alt="Item 1"
+                                class="item-image" style="width: 50px; height: 50px;"></span>
+                        <span>
+                            <%=item.variant_id.product_id.productName%>
+                        </span>
+                        <span>₹<span
+                                class="font-weight-bold"><%=item.variant_id.price-item.variant_id.product_id.offer%></span>
+                            x <%=item.quantity%></span>
+                    </li>
+                    <% }); %>
+            </ul>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Original Price</span>
+                        <span>₹<span id="originalPrice" class="font-weight-bold">
+                                <%=originalPrice%>
+                            </span></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Discount from Offer</span>
+                        <span>-₹<span id="offerDiscount" class="font-weight-bold">
+                                <%=discountOffer%>
+                            </span></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Discount from Coupon</span>
+                        <span>-₹<span id="couponDiscount" class="font-weight-bold">0.00</span></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total Price</span>
+                        <span>₹<span id="totalPrice" class="font-weight-bold">
+                                <%=totalPrice%>
+                            </span></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <div class="payment-option">
             <div class="payment-option-header">
                 <div class="payment-option-title">
@@ -373,7 +341,6 @@
                 Pay using your wallet balance.
             </div>
         </div>
-
         <!-- Razorpay Payment Option -->
         <div class="payment-option">
             <div class="payment-option-header">
@@ -390,46 +357,37 @@
                 You will be redirected to the RazorPay website after submitting your order
             </div>
         </div>
-
         <div class="security-note">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M8 0L2 2V7C2 11.5 4.5 15.5 8 16C11.5 15.5 14 11.5 14 7V2L8 0Z" fill="#666" />
             </svg>
             We protect your payment information using encryption to provide bank-level security.
         </div>
-
         <div class="button-group">
             <a href="/cart" class="next-btn">← Back</a>
             <a onclick="placeOrder()" class="next-btn">Place Order →</a>
         </div>
     </div>
-
-
     <%-include('../userPages/partialFooterUser.ejs')%>
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
         <script>
-
-
-
-
-            async function orderSummary(couponId,totalPrice,discountPrice,originalPrice) {
-                console.log(couponId,totalPrice,discountPrice,originalPrice,"checking order summery");
+            async function orderSummary(couponId, totalPrice, discountPrice, originalPrice) {
+                console.log(couponId, totalPrice, discountPrice, originalPrice, "checking order summery");
                 const response = await fetch('/orderSummary', {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({couponId,totalPrice,discountPrice,originalPrice}),
+                    body: JSON.stringify({ couponId, totalPrice, discountPrice, originalPrice }),
                 });
 
                 let msg = await response.json()
 
-                if(response.ok){
-                    document.getElementById('couponDiscount').textContent = msg.couponDiscount.toFixed(2);              
+                if (response.ok) {
+                    document.getElementById('couponDiscount').textContent = msg.couponDiscount.toFixed(2);
                     document.getElementById('totalPrice').textContent = (totalPrice - msg.couponDiscount).toFixed(2);
                 }
-                if(!response.ok){
+                if (!response.ok) {
                     Swal.fire({
                         title: "Please Note",
                         text: `${msg.message}.`,
@@ -438,10 +396,6 @@
                 }
             }
 
-
-
-
-
             async function placeOrder() {
                 const selectedAddressId = document.querySelector('#address').value;
                 const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
@@ -449,8 +403,6 @@
                 if (!selectedCouponId) {
                     selectedCouponId = null
                 }
-
-
 
                 if (!selectedAddressId) {
                     Swal.fire({
@@ -469,19 +421,17 @@
                     body: JSON.stringify({ selectedAddressId, selectedPaymentMethod, selectedCouponId }),
                 });
                 razorpayOrderData = await response.json()
-                // console.log(responseData)
-                // console.log(response);
+
                 if (response.ok) {
                     if (selectedPaymentMethod === "RZP") {
-                        
+
                         let orderIdRZP = razorpayOrderData.orderIdRZP
-                        //  console.log(responseData.orderIdRZP,"checking success order");
+
                         initiateRazorpayPayment(razorpayOrderData);
                     } else {
                         window.location = '/success';
                     }
                 } else {
-                    // const err = await response.json();
                     Swal.fire({
                         title: "Please Note",
                         text: `${razorpayOrderData.message}.`,
@@ -493,49 +443,48 @@
             function initiateRazorpayPayment(orderData) {
                 let response
                 const options = {
-                    key: "rzp_test_o8NbEzmS8geUeF",  
-                    amount: orderData.amount,  
+                    key: "rzp_test_o8NbEzmS8geUeF",
+                    amount: orderData.amount,
                     currency: 'INR',
-                    order_id: orderData.order_id,  
+                    order_id: orderData.order_id,
                     handler: function (response) {
                         const pay = "success"
                         response = response
-                       
+
                         fetch('/verifyRazorpayPayment', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
                             },
-                            body: JSON.stringify({response,pay}),
+                            body: JSON.stringify({ response, pay }),
                         }).then(res => res.json())
                             .then(data => {
-                               
+
                                 if (data.success) {
                                     window.location = '/success';
                                 } else {
                                     alert("Payment failed at verification step!");
                                 }
                             }).catch(error => {
-                                
+
                                 console.error('Error during payment verification:', error);
                                 alert("Error verifying payment");
                             });
                     },
                     prefill: {
-                        name: 'Customer Name',  
-                        email: 'customer@example.com',  
-                        phone: '9188057842'  
+                        name: 'Customer Name',
+                        email: 'customer@example.com',
+                        phone: '9188057842'
                     },
                     notes: {
                         address: 'Address for delivery'
                     },
                     theme: {
-                        color: '#F38354'  
+                        color: '#F38354'
                     },
                     modal: {
                         ondismiss: function () {
-                            // console.log(orderData.orderIdRZP,"failed");
-                            updateFailedPayment(orderData.orderIdRZP,'failed');
+                            updateFailedPayment(orderData.orderIdRZP, 'failed');
                         }
                     }
                 };
@@ -544,18 +493,18 @@
                 rzp1.open();
             }
 
-           async function updateFailedPayment (orderId,pay)  {
-            console.log('function called');
-                console.log(orderId,pay);
+            async function updateFailedPayment(orderId, pay) {
+                console.log('function called');
+                console.log(orderId, pay);
                 const response = await fetch('/updateFailedPayment', {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({orderId,pay}),
+                    body: JSON.stringify({ orderId, pay }),
                 });
 
-                if(response.ok){
+                if (response.ok) {
                     let msg = await response.json()
                     Swal.fire({
                         title: "Please Note",
@@ -563,11 +512,9 @@
                         icon: "error"
                     });
                     setTimeout(() => {
-                    window.location = '/orders'
+                        window.location = '/orders'
                     }, 3000);
                 }
 
-            } 
-
-
+            }
         </script>

@@ -1,88 +1,96 @@
-
 <%-include('../adminPages/partialHead.ejs')%>
-   
+
     <style>
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            width: calc(100% - 250px);
+        }
 
-.main-content {
-    margin-left: 250px;
-    padding: 30px;
-    width: calc(100% - 250px);
-}
+        .products-table {
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-collapse: collapse;
+            overflow: hidden;
+        }
 
+        .products-table th {
+            text-align: left;
+            padding: 15px;
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
 
+        .products-table td {
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
 
+        .status {
+            color: #2ecc71;
+            font-weight: 500;
+        }
 
-.products-table {
-    width: 100%;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-collapse: collapse;
-    overflow: hidden;
-}
+        .btn {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 5px;
+            color: white;
+        }
 
-.products-table th {
-    text-align: left;
-    padding: 15px;
-    background: #f8f9fa;
-    font-weight: bold;
-    color: #333;
-}
+        .btn-change-status {
+            background: #e74c3c;
+        }
 
-.products-table td {
-    padding: 15px;
-    border-top: 1px solid #eee;
-}
+        .btn-edit {
+            background: #000;
+        }
 
-.status {
-    color: #2ecc71;
-    font-weight: 500;
-}
+        .btn-variants {
+            background: #3498db;
+        }
 
-.btn {
-    padding: 6px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-right: 5px;
-    color: white;
-}
+        .add-new {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-top: 20px;
+            font-weight: bold;
+        }
 
-.btn-change-status {
-    background: #e74c3c;
-}
+        .product-id {
+            color: #666;
+            font-family: monospace;
+        }
 
-.btn-edit {
-    background: #000;
-}
+        .modal-body {
+            padding: 1 !important;
+        }
 
-.btn-variants {
-    background: #3498db;
-}
+        .cropper-container {
+            width: 100%;
+            background-color: #f8f9fa;
+        }
 
-.add-new {
-    display: inline-block;
-    background: #e74c3c;
-    color: white;
-    padding: 12px 24px;
-    border-radius: 6px;
-    text-decoration: none;
-    margin-top: 20px;
-    font-weight: bold;
-}
+        .cropper-view-box,
+        .cropper-canvas {
+            border-radius: 0;
+        }
 
-.product-id {
-    color: #666;
-    font-family: monospace;
-}
-
-
-
+        .cropper-modal {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
     </style>
-
     <div class="main-content">
-
         <!-- Add Product Modal -->
         <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
             aria-hidden="true">
@@ -106,7 +114,6 @@
                                 <textarea class="form-control" id="productDescription" name="description" rows="3"
                                     required></textarea>
                             </div>
-
                             <!-- Image Fields for Cropping -->
                             <div class="form-group">
                                 <label for="productImage1">Upload Image 1</label>
@@ -123,7 +130,6 @@
                                 <input type="file" class="form-control" id="productImage3" name="image" required
                                     onchange="openCropper(this, 3)">
                             </div>
-
                             <!-- Additional Product Fields -->
                             <div class="form-group">
                                 <label for="productColour">Colour</label>
@@ -163,7 +169,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Image Cropping Modal -->
         <div class="modal fade" id="cropperModal" tabindex="-1" aria-labelledby="cropperModalLabel" aria-hidden="true">
             <div class="modal-dialog" style="max-width: 90vw;"> <!-- Changed from 1200px to 90vw -->
@@ -186,97 +191,6 @@
                 </div>
             </div>
         </div>
-
-
-        <style>
-            .modal-body {
-                padding: 1 !important;
-            }
-
-            .cropper-container {
-                width: 100%;
-                background-color: #f8f9fa;
-            }
-
-            .cropper-view-box,
-            .cropper-canvas {
-                border-radius: 0;
-            }
-
-            .cropper-modal {
-                background-color: rgba(0, 0, 0, 0.8);
-            }
-        </style>
-
-
-
-        <!-- JavaScript to Handle Cropping -->
-        <script>
-            let cropper;
-            let currentImageFieldId;
-
-            function openCropper(input, imageFieldId) {
-                const file = input.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        const cropperImage = document.getElementById('cropperImage');
-                        cropperImage.src = e.target.result;
-
-                        currentImageFieldId = imageFieldId;
-                        $('#cropperModal').modal('show');
-                    };
-                    reader.readAsDataURL(file);
-                }
-            }
-
-            $('#cropperModal').on('shown.bs.modal', function () {
-                if (cropper) cropper.destroy(); // Destroy any existing cropper instance
-                const cropperImage = document.getElementById('cropperImage');
-                cropper = new Cropper(cropperImage, {
-                    aspectRatio: 1,
-                    viewMode: 1,
-                    autoCropArea: 0.9,
-                    dragMode: 'move',
-                    cropBoxMovable: true,
-                    cropBoxResizable: true,
-                });
-            });
-
-            $('#cropperModal').on('hidden.bs.modal', function () {
-                if (cropper) cropper.destroy(); // Ensure cropper is destroyed when modal closes
-            });
-
-            function cropAndSave() {
-                if (cropper) {
-                    const canvas = cropper.getCroppedCanvas();
-                    canvas.toBlob(blob => {
-                        const fileInput = document.getElementById(`productImage${currentImageFieldId}`);
-                        const dataTransfer = new DataTransfer();
-                        const croppedFile = new File([blob], `cropped-image-${Date.now()}.jpg`, { type: 'image/jpeg' });
-                        dataTransfer.items.add(croppedFile);
-                        fileInput.files = dataTransfer.files; // Set cropped image as file input
-
-                        // Optional: update the preview image if needed
-                        const previewImage = document.getElementById(`previewImage${currentImageFieldId}`);
-                        if (previewImage) {
-                            previewImage.src = URL.createObjectURL(croppedFile);
-                        }
-
-                        $('#cropperModal').modal('hide');
-                    });
-                }
-            }
-
-        </script>
-
-
-
-
-
-
-
-
         <table class="products-table">
             <thead>
                 <tr>
@@ -292,14 +206,12 @@
                 <% products.forEach(product=> { %>
                     <tr>
                         <td>
-
                             <img src="<%= product.images[0].replace('public', '') %>" alt="" style="
                             width: 55px;
                             height: 55px;
                             object-fit: contain;
                             border-radius: 20px;
                             border: black;
-                            
                             ">
                         </td>
                         <td>
@@ -319,7 +231,6 @@
                                     <input class="form-check-input" type="checkbox" name="statusToggle"
                                         onchange="this.form.submit()" <%=product.status ? 'checked' : '' %>
                                     >
-
                                 </div>
                             </form>
                         </td>
@@ -333,14 +244,69 @@
                     <% }); %>
             </tbody>
         </table>
-
         <button type="button" class="add-new btn btn-primary" data-toggle="modal" data-target="#addProductModal">
             Add New+
         </button>
-
     </div>
+    </body>
 
+    </html>
+    <!-- JavaScript to Handle Cropping -->
+    <script>
+        let cropper;
+        let currentImageFieldId;
 
-</body>
+        function openCropper(input, imageFieldId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const cropperImage = document.getElementById('cropperImage');
+                    cropperImage.src = e.target.result;
 
-</html>
+                    currentImageFieldId = imageFieldId;
+                    $('#cropperModal').modal('show');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        $('#cropperModal').on('shown.bs.modal', function () {
+            if (cropper) cropper.destroy(); // Destroy any existing cropper instance
+            const cropperImage = document.getElementById('cropperImage');
+            cropper = new Cropper(cropperImage, {
+                aspectRatio: 1,
+                viewMode: 1,
+                autoCropArea: 0.9,
+                dragMode: 'move',
+                cropBoxMovable: true,
+                cropBoxResizable: true,
+            });
+        });
+
+        $('#cropperModal').on('hidden.bs.modal', function () {
+            if (cropper) cropper.destroy(); // Ensure cropper is destroyed when modal closes
+        });
+
+        function cropAndSave() {
+            if (cropper) {
+                const canvas = cropper.getCroppedCanvas();
+                canvas.toBlob(blob => {
+                    const fileInput = document.getElementById(`productImage${currentImageFieldId}`);
+                    const dataTransfer = new DataTransfer();
+                    const croppedFile = new File([blob], `cropped-image-${Date.now()}.jpg`, { type: 'image/jpeg' });
+                    dataTransfer.items.add(croppedFile);
+                    fileInput.files = dataTransfer.files; // Set cropped image as file input
+
+                    // Optional: update the preview image if needed
+                    const previewImage = document.getElementById(`previewImage${currentImageFieldId}`);
+                    if (previewImage) {
+                        previewImage.src = URL.createObjectURL(croppedFile);
+                    }
+
+                    $('#cropperModal').modal('hide');
+                });
+            }
+        }
+
+    </script>

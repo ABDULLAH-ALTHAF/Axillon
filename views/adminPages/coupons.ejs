@@ -1,14 +1,10 @@
 <%-include('../adminPages/partialHead.ejs')%>
-
     <style>
         .main-content {
             margin-left: 250px;
             padding: 30px;
             width: calc(100% - 250px);
         }
-
-
-
 
         .brands-table {
             width: 100%;
@@ -75,10 +71,7 @@
             font-family: monospace;
         }
     </style>
-
     <div class="main-content">
-
-
         <div class="modal fade" id="addCouponModal" tabindex="-1" aria-labelledby="addCouponModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
@@ -121,9 +114,6 @@
                 </div>
             </div>
         </div>
-
-
-
         <table class="brands-table">
             <thead>
                 <tr>
@@ -150,10 +140,7 @@
                             <td>
                                 <%=coupon.minimum%>
                             </td>
-
                             <td>
-
-
                                 <!-- Toggle form for changing status -->
                                 <form action="/admin/changeStatusCoupon/<%= coupon._id %>" method="POST">
                                     <input type="hidden" name="status" value="<%= !coupon.status %>">
@@ -163,8 +150,6 @@
                                         >
                                     </div>
                                 </form>
-
-
                             </td>
                             <td>
                                 <!-- Edit Coupon Modal  -->
@@ -234,14 +219,11 @@
                                 <% } %>
             </tbody>
         </table>
-
         <button type="button" class="add-new btn btn-primary" data-toggle="modal" data-target="#addCouponModal">
             Add New+
         </button>
-
     </div>
     <script>
-
         let error = "<%=error%>"
         if (error) {
             Swal.fire({

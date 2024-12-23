@@ -1,144 +1,154 @@
 <%-include('../userPages/partialHeadUser.ejs')%>
+    <style>
+        body::-webkit-scrollbar {
+            width: 15px;
+        }
 
-<style>
+        body::-webkit-scrollbar-track {
+            background-color: rgb(149, 149, 109);
 
-    body::-webkit-scrollbar{
-        width: 15px;
-    }
-    body::-webkit-scrollbar-track{
-        background-color: rgb(149, 149, 109);
+        }
 
-    }
-    body::-webkit-scrollbar-thumb{
-        border-radius: 10px;
-        background: rgb(47, 38, 38);
-    }
-   
-.image-section {
-    position: relative;
-    text-align: center;
-}
+        body::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            background: rgb(47, 38, 38);
+        }
 
-.image-section img {
-    width: 100%;
-    height: 85vh;
-    object-fit: cover;
-}
+        .image-section {
+            position: relative;
+            text-align: center;
+        }
 
-.welcome-text {
-    position: absolute;
-    top: 50%;
-    left: 30%;
-    transform: translate(-50%, -50%);
-    color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-    font-size: 30px;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-}
-.welcome-description {
-    max-width: 50rem;
-    margin: 1rem 0;
-    text-align: left;
-}
+        .image-section img {
+            width: 100%;
+            height: 85vh;
+            object-fit: cover;
+        }
 
-.shop-now-button {
-    border: 1px solid white; 
-    color: black; 
-    background-color: white; 
-    border-radius: 10px; 
-    padding: 0.5rem 1rem; 
-    font-size: 1rem; 
-    font-weight: bold;
-    width: 12rem;
-    height: 3.3rem;
-}
+        .welcome-text {
+            position: absolute;
+            top: 50%;
+            left: 30%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: flex-start;
+            flex-direction: column;
+            font-size: 30px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
 
-/* Best-selling brands section styles */
-.brands-section {
-    margin: 4rem 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        .welcome-description {
+            max-width: 50rem;
+            margin: 1rem 0;
+            text-align: left;
+        }
 
-.brands-section h2 {
-    text-align: center;
-}
+        .shop-now-button {
+            border: 1px solid white;
+            color: black;
+            background-color: white;
+            border-radius: 10px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            font-weight: bold;
+            width: 12rem;
+            height: 3.3rem;
+        }
 
-.card {
-    display: flex;
-    flex-direction: row;
-    border: 1px solid #ddd;
-    border-radius: 1rem;
-    margin: 3rem 0;
-    height: 10rem;
-    overflow: hidden;
-    width: 60%;
-}
+        /* Best-selling brands section styles */
+        .brands-section {
+            margin: 4rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-.card img {
-    height: 100%;
-    object-fit: contain;
-}
+        .brands-section h2 {
+            text-align: center;
+        }
 
-.card-description {
-    padding: 1rem;
-    flex-grow: 1;
-}
+        .card {
+            display: flex;
+            flex-direction: row;
+            border: 1px solid #ddd;
+            border-radius: 1rem;
+            margin: 3rem 0;
+            height: 10rem;
+            overflow: hidden;
+            width: 60%;
+        }
 
-/* Responsive styles */
-@media (max-width: 768px) {
-    .navbar img {
-        height: 3rem;
-        width: 8rem;
-    }
+        .card img {
+            height: 100%;
+            object-fit: contain;
+        }
 
-    .card {
-        flex-direction: column;
-    }
+        .card-description {
+            padding: 1rem;
+            flex-grow: 1;
+        }
 
-    .card img {
-        width: 100%;
-    }
-}
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .navbar img {
+                height: 3rem;
+                width: 8rem;
+            }
 
-</style>
+            .card {
+                flex-direction: column;
+            }
 
+            .card img {
+                width: 100%;
+            }
+        }
+    </style>
     <!-- Image Section -->
     <div class="image-section">
-        <img src="/images/home-banner.png" alt="Banner"> 
+        <img src="/images/home-banner.png" alt="Banner">
         <div class="welcome-text">
             <h1>Welcome to AXILLON</h1>
-            <p class="welcome-description">At AXILLON, we’re passionate about elevating your driving experience with the finest selection of alloy wheels. Whether you're looking to enhance your vehicle's performance, upgrade its aesthetics, or strike the perfect balance between style and functionality, AXILLON has you covered.</p>
+            <p class="welcome-description">At AXILLON, we’re passionate about elevating your driving experience with the
+                finest selection of alloy wheels. Whether you're looking to enhance your vehicle's performance, upgrade
+                its aesthetics, or strike the perfect balance between style and functionality, AXILLON has you covered.
+            </p>
             <button class="shop-now-button"><a style="text-decoration: none;" href="/shop">Shop Now</a></button>
         </div>
     </div>
-
     <!-- Best Selling Brands Section -->
     <div class="brands-section">
         <h2>Best Selling Brands</h2>
         <div class="card">
-            <img src="/images/motegi-racing/Motegi Mr118 Ms7 Wheel, 17x8.0 +45 Offset 5x120, Matte Black - MR11878052745.jpg" alt="Brand 1"> 
+            <img src="/images/motegi-racing/Motegi Mr118 Ms7 Wheel, 17x8.0 +45 Offset 5x120, Matte Black - MR11878052745.jpg"
+                alt="Brand 1">
             <div class="card-description">
                 <h3>Motegi Racing</h3>
-                <p>Motegi Racing specializes in high-performance alloy wheels, blending modern designs with track-proven durability. Their wheels are perfect for enhancing both street and motorsport performance with a sleek, aggressive look.</p>
+                <p>Motegi Racing specializes in high-performance alloy wheels, blending modern designs with track-proven
+                    durability. Their wheels are perfect for enhancing both street and motorsport performance with a
+                    sleek, aggressive look.</p>
             </div>
         </div>
         <div class="card">
-            <img src="/images/enkei-wheels/Enkei Wheels 15x7 Enkei ENKEI92 (Gold wMachined Lip) WheelsRims 4x100 (465-570-4938GG).jpg" alt="Brand 2">
+            <img src="/images/enkei-wheels/Enkei Wheels 15x7 Enkei ENKEI92 (Gold wMachined Lip) WheelsRims 4x100 (465-570-4938GG).jpg"
+                alt="Brand 2">
             <div class="card-description">
                 <h3>Enkei Wheels</h3>
-                <p>Enkei Wheels is a world leader in lightweight, high-performance alloy wheels. With innovative manufacturing techniques, Enkei offers wheels that excel in motorsports and daily driving, combining strength, style, and reliability.</p>
+                <p>Enkei Wheels is a world leader in lightweight, high-performance alloy wheels. With innovative
+                    manufacturing techniques, Enkei offers wheels that excel in motorsports and daily driving, combining
+                    strength, style, and reliability.</p>
             </div>
         </div>
         <div class="card">
-            <img src="/images/enkei-wheels/Enkei Wheels 15x7 Enkei ENKEI92 (Gold wMachined Lip) WheelsRims 4x100 (465-570-4938GG).jpg" alt="Brand 3">
+            <img src="/images/enkei-wheels/Enkei Wheels 15x7 Enkei ENKEI92 (Gold wMachined Lip) WheelsRims 4x100 (465-570-4938GG).jpg"
+                alt="Brand 3">
             <div class="card-description">
                 <h3>American Racing</h3>
-                <p>American Racing is known for its classic and durable alloy wheels, especially loved by muscle car and truck enthusiasts. Their iconic designs blend strength and timeless style, making them a top choice for performance and off-road applications.</p>
+                <p>American Racing is known for its classic and durable alloy wheels, especially loved by muscle car and
+                    truck enthusiasts. Their iconic designs blend strength and timeless style, making them a top choice
+                    for performance and off-road applications.</p>
             </div>
         </div>
     </div>
@@ -148,24 +158,27 @@
         <div class="card" style="border: 1px solid #ddd; background-color: black; color: white;">
             <div class="card-description">
                 <h3>What is the return policy?</h3>
-                <p>We offer a 30-day return policy for all orders. If you are unhappy with your purchase, please contact us for a return merchandise authorization (RMA) number and follow the instructions provided.</p>
+                <p>We offer a 30-day return policy for all orders. If you are unhappy with your purchase, please contact
+                    us for a return merchandise authorization (RMA) number and follow the instructions provided.</p>
             </div>
         </div>
         <div class="card" style="border: 1px solid #ddd; background-color: black; color: white;">
             <div class="card-description">
                 <h3>How do I track my order?</h3>
-                <p>Once your order is processed and shipped, you will receive an email with a tracking number. You can use this number to track the status of your package at any time.</p>
+                <p>Once your order is processed and shipped, you will receive an email with a tracking number. You can
+                    use this number to track the status of your package at any time.</p>
             </div>
         </div>
         <div class="card" style="border: 1px solid #ddd; background-color: black; color: white;">
             <div class="card-description">
                 <h3>What payment methods do you accept?</h3>
-                <p>We accept all major credit cards, including Visa, Mastercard, American Express, and Discover. We also accept PayPal payments.</p>
+                <p>We accept all major credit cards, including Visa, Mastercard, American Express, and Discover. We also
+                    accept PayPal payments.</p>
             </div>
         </div>
     </div>
     <!-- Footer Section -->
     <%-include('../userPages/partialFooterUser.ejs')%>
+        </body>
 
-</body>
-</html>
+        </html>

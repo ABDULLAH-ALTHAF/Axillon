@@ -539,16 +539,21 @@ const cart = async (req, res) => {
         path: "product_id",
       },
     });
+
     const docCart = cart?.items || [];
 
     let subTotal;
     if (cart) {
       subTotal = cart.items.reduce((acc, item) => {
-        return (
-          acc +
-          (item.variant_id.price - item.variant_id.product_id?.offer) *
-            item.quantity
-        );
+        if (item.variant_id.product_id.status) {
+          return (
+            acc +
+            (item.variant_id.price - item.variant_id.product_id?.offer) *
+              item.quantity
+          );
+        } else {
+          return acc;
+        }
       }, 0);
     }
     res.render("userPages/cart", { docCart, subTotal });
@@ -671,6 +676,9 @@ const goToCheckout = async (req, res) => {
         },
       });
 
+
+      
+
       let outOfStockItems = [];
       let inStockItems = [];
 
@@ -696,6 +704,56 @@ const goToCheckout = async (req, res) => {
           outOfStockItems,
         });
       }
+
+
+            const isBrandOffer = [];
+            const isProductOffer = [];
+      
+            cart.items.forEach((element) => {
+              if (element.variant_id.product_id._id) {
+                isProductOffer.push({
+                  productId: element.variant_id.product_id._id,
+                });
+              }
+              if (element.variant_id.product_id.brand_id) {
+                isBrandOffer.push({
+                  brandId: element.variant_id.product_id.brand_id,
+                });
+              }
+            });
+    
+      
+            for (const element of cart.items) {
+              if (element.variant_id.product_id.offer > 0) {
+                let isProductOfferForThisProduct = await Poffer.findOne({
+                  "productOffer.productId": element.variant_id.product_id._id,
+                });
+                if(isProductOfferForThisProduct){
+                  if(element.variant_id.product_id.offer!=isProductOfferForThisProduct.productOffer[0].PofferPrice){
+                    isProductOfferForThisProduct = null
+                  }
+                }
+
+                const isBrandOfferForThisProduct = await Boffer.findOne({
+                  "brandOffer.brandId": element.variant_id.product_id.brand_id,
+                });
+                if(isBrandOfferForThisProduct){
+                  if(element.variant_id.product_id.offer!=isBrandOfferForThisProduct.brandOffer[0].BofferPrice){
+                    isBrandOfferForThisProduct = null
+                  }
+                }
+                if (isProductOfferForThisProduct || isBrandOfferForThisProduct) {
+                  console.log("this product have offer");
+                } else {
+                  console.log("this product not have offer");
+                  return res.status(400).json({
+                message: "Some items in your cart has changed the offers.",
+                outOfStockItems,
+              })
+                }
+              }
+            }
+      
 
       res.status(200).json({
         message: "All items are within stock limits. Proceeding to checkout.",
@@ -989,7 +1047,7 @@ const placeOrder = async (req, res) => {
           paymentMethod: "RZP",
           totalAmount: total,
           finalAmount: total,
-          paymentStatus: "Success",
+          paymentStatus: "Failed",
           razorpayOrderId: razorpayOrder.id,
         });
         for (const element of cart.items) {

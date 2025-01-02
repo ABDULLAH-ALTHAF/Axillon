@@ -225,6 +225,10 @@
                             </p>
                         </div>
                         <%if(doc.variant_id.product_id.offer){%>
+                            <div
+                                class="item-price-offer" style="color: rgb(101, 178, 24);" id="itemPricePffer" data-offer-price="<%= doc.variant_id.product_id.offer %>">-<%=
+                                    doc.variant_id.product_id.offer %> offer
+                            </div>
                             <div class="item-price" id="itemPrice" data-price="<%= doc.variant_id.price %>">₹<%=
                                     doc.variant_id.price-doc.variant_id.product_id.offer %>
                             </div>
@@ -324,11 +328,23 @@
                 cartItems.forEach((element) => {
 
                     let priceElement = element.querySelector('.item-price')
+                    console.log(priceElement,"uiyuhuih");
+                    
+                    let priceOfferElement = element.querySelector('.item-price-offer')
+                       
                     let quantityElement = element.querySelector('span[data-quantity]');
 
+                    let offeredAmount = priceOfferElement ? parseFloat(priceOfferElement.getAttribute('data-offer-price')) : 0;
+                    console.log(offeredAmount,"offered");
                     let price = priceElement ? parseFloat(priceElement.getAttribute('data-price')) : 0;
+                    console.log(price,"price");
                     let quantity = quantityElement ? parseInt(quantityElement.textContent, 10) : 0
+                    console.log(quantity,"quantity");
+                    if(offeredAmount>0){
+                        price = price-offeredAmount
+                    }
                     total += (price * quantity)
+                    console.log(total);
                 })
 
                 let subTotal = document.getElementById('subTotal')
@@ -336,7 +352,7 @@
                 
                 let Total = document.getElementById('total')
                 Total.textContent = '₹' + total
-                window.location.href = '/cart';
+                
 
             }
 

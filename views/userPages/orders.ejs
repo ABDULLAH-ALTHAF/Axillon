@@ -1,290 +1,303 @@
 <%-include('../userPages/partialHeadUser.ejs')%>
-    <style>
-        .order-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            margin: 16px 0;
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
+<style>
+    .order-cards-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
 
-        .order-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-        }
+    .order-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
 
-        .order-header {
-            position: relative;
-            background: #f8f9fa;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #eee;
-        }
+    .order-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
 
-        .order-image img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid #eee;
-        }
+    .order-header {
+        position: relative;
+        background: #f8f9fa;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #eee;
+    }
 
-        .order-status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            text-transform: capitalize;
-        }
+    .order-image img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #eee;
+    }
 
-        .order-status-badge.pending {
-            background: #fff3cd;
-            color: #856404;
-        }
+    .order-status-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: capitalize;
+    }
 
-        .order-status-badge.processing {
-            background: #cce5ff;
-            color: #004085;
-        }
+    .order-status-badge.pending {
+        background: #fff3cd;
+        color: #856404;
+    }
 
-        .order-status-badge.completed {
-            background: #d4edda;
-            color: #155724;
-        }
+    .order-status-badge.processing {
+        background: #cce5ff;
+        color: #004085;
+    }
 
-        .order-details {
-            padding: 24px;
-            width: 100%;
-        }
+    .order-status-badge.completed {
+        background: #d4edda;
+        color: #155724;
+    }
 
-        .order-info-list {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 24px 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-        }
+    .order-details {
+        padding: 24px;
+    }
 
-        .order-info-list li {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
+    .order-info-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 24px 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+    }
 
-        .label {
-            color: #6c757d;
-            font-size: 14px;
-            font-weight: 500;
-        }
+    .order-info-list li {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
 
-        .value {
-            color: #212529;
-            font-size: 16px;
-            font-weight: 600;
-        }
+    .label {
+        color: #6c757d;
+        font-size: 14px;
+        font-weight: 500;
+    }
 
-        .order-products-section {
-            margin-bottom: 24px;
-        }
+    .value {
+        color: #212529;
+        font-size: 16px;
+        font-weight: 600;
+    }
 
-        .order-products-section h3 {
-            color: #212529;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
+    .order-products-section {
+        margin-bottom: 24px;
+    }
 
-        .products-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+    .order-products-section h3 {
+        color: #212529;
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
 
-        .product-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 12px;
-            background: #f8f9fa;
-            border-radius: 6px;
-        }
+    .products-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
 
-        .product-name {
-            color: #212529;
-            font-weight: 500;
-        }
+    .product-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        background: #f8f9fa;
+        border-radius: 6px;
+    }
 
-        .product-quantity {
-            color: #6c757d;
-            font-weight: 500;
-        }
+    .product-name {
+        color: #212529;
+        font-weight: 500;
+    }
 
-        .details-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: #0d6efd;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
+    .product-quantity {
+        color: #6c757d;
+        font-weight: 500;
+    }
 
-        .details-button:hover {
-            background: #0b5ed7;
-        }
+    .details-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: #0d6efd;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background-color 0.2s;
+    }
 
-        @media (max-width: 768px) {
-            .order-info-list {
-                grid-template-columns: 3fr;
-                gap: 12px;
-            }
+    .details-button:hover {
+        background: #0b5ed7;
+    }
 
-            .order-header {
-                flex-direction: column;
-                gap: 16px;
-                text-align: center;
-            }
-        }
-    </style>
-    <div class="profile-container">
-        <%-include('../userPages/profilePartial.ejs')%>
-            <div class="order-details">
-                <h2>Orders</h2>
-                <ul>
-                    <% orders.forEach(order=> { %>
-                        <!-- order-card.ejs -->
-                        <div class="order-card">
-                            <div class="order-header">
-                                <div class="order-image">
-                                    <img src="<%=order.orderedItems[0].image.replace('public','')%>"
-                                        alt="Product Image">
-                                </div>
-                                <div class="order-status-badge <%= order.status.toLowerCase() %>">
-                                    <%= order.status %>
-                                </div>
-                                <div class="order-status-badge <%= order.paymentStatus.toLowerCase() %>">
-                                    <p>PAYMENT STATUS : <%= order.paymentStatus %>
-                                    </p>
-                                </div>
-                                <% if(order.paymentStatus=="failed" ){%>
-                                    <button type="button" class="btn btn-primary"
-                                        onclick="retryPayment('<%= order.orderId %>','<%= order.totalAmount%>','<%= order.razorpayOrderId%>')">
-                                        Retry Payment
-                                    </button>
-                                    <%}%>
-                            </div>
-                            <div class="order-details">
-                                <ul class="order-info-list">
-                                    <li>
-                                        <span class="label">Order ID</span>
-                                        <span class="value">
-                                            <%= order.orderId %>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <span class="label">Date</span>
-                                        <span class="value">
-                                            <%= order.createdAt.toDateString() %>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <span class="label">Amount</span>
-                                        <span class="value">₹<%= order.totalAmount %></span>
-                                    </li>
-                                </ul>
-                                <div class="order-products-section">
-                                    <h3>Ordered Products</h3>
-                                    <ul class="products-list">
-                                        <% order.orderedItems.forEach(product=> { %>
-                                            <li class="product-item">
-                                                <span class="product-name">
-                                                    <%= product.productName %>
-                                                </span>
-                                                <span class="product-quantity">×<%= product.quantity %></span>
-                                            </li>
-                                            <% }); %>
-                                    </ul>
-                                </div>
-                                <a href="/singleOrderDetails/<%=order._id%>" class="details-button">
-                                    View Details
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path d="M9 18l6-6-6-6" />
-                                    </svg>
-                                </a>
-                            </div>
-                            <script>
-                                function retryPayment(orderId, amount, order_id) {
-                                    initiateRazorpayPayment({ amount: amount, order_id: order_id })
-                                }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
 
-                                function initiateRazorpayPayment(orderData) {
-                                    let response
-                                    const options = {
-                                        key: "rzp_test_o8NbEzmS8geUeF",
-                                        amount: orderData.amount,
-                                        currency: 'INR',
-                                        order_id: orderData.order_id,
-                                        handler: function (response) {
-                                            const pay = "success"
-                                            response = response
+    .pagination-btn {
+        margin: 0 5px;
+        padding: 8px 12px;
+        text-decoration: none;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        color: #333;
+    }
 
-                                            fetch('/verifyRazorpayPayment', {
-                                                method: 'POST',
-                                                headers: {
-                                                    'Content-Type': 'application/json',
-                                                },
-                                                body: JSON.stringify({ response, pay }),
-                                            }).then(res => res.json())
-                                                .then(data => {
-                                                    if (data.success) {
-                                                        window.location = '/success';
-                                                    } else {
-                                                        alert("Payment failed at verification step!");
-                                                    }
-                                                }).catch(error => {
-                                                    console.error('Error during payment verification:', error);
-                                                    alert("Error verifying payment");
-                                                });
-                                        },
-                                        prefill: {
-                                            name: 'Customer Name',
-                                            email: 'customer@example.com',
-                                            phone: '9188057842'
-                                        },
-                                        notes: {
-                                            address: 'Address for delivery'
-                                        },
-                                        theme: {
-                                            color: '#F37424'
-                                        },
-                                        modal: {
-                                            ondismiss: function () {
-                                                // console.log(orderData.orderIdRZP,"failed");
-                                                updateFailedPayment(orderData.orderIdRZP, 'failed');
-                                            }
-                                        }
-                                    };
-                                    const rzp1 = new Razorpay(options);
-                                    rzp1.open();
-                                }
-                            </script>
+    .pagination-btn.active {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .pagination-btn:hover {
+        background-color: #f1f1f1;
+    }
+</style>
+<div class="profile-container">
+    <%-include('../userPages/profilePartial.ejs')%>
+    <div class="order-details">
+        <h2>Orders</h2>
+        <div class="order-cards-container">
+            <% orders.slice(0, 4).forEach(order => { %>
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-image">
+                            <img src="<%= order.orderedItems[0].image.replace('public', '') %>" alt="Product Image">
                         </div>
-                        <% }); %>
-                </ul>
-            </div>
+                        <div class="order-status-badge <%= order.status.toLowerCase() %>">
+                            <%= order.status %>
+                        </div>
+                        <div class="order-status-badge <%= order.paymentStatus.toLowerCase() %>">
+                            <p>PAYMENT STATUS : <%= order.paymentStatus %></p>
+                        </div>
+                        <% if (order.paymentStatus === "failed") { %>
+                            <button type="button" class="btn btn-primary" onclick="retryPayment('<%= order.orderId %>', '<%= order.totalAmount %>', '<%= order.razorpayOrderId %>')">
+                                Retry Payment
+                            </button>
+                        <% } %>
+                    </div>
+                    <div class="order-details">
+                        <ul class="order-info-list">
+                            <li>
+                                <span class="label">Order ID</span>
+                                <span class="value"><%= order.orderId %></span>
+                            </li>
+                            <li>
+                                
+                            </li>
+                            <li>
+                                <span class="label">Date</span>
+                                <span class="value"><%= order.createdAt.toDateString() %></span>
+                            </li>
+                            <li>
+                                <span class="label">Amount</span>
+                                <span class="value">₹<%= order.totalAmount %></span>
+                            </li>
+                        </ul>
+                        <div class="order-products-section">
+                            <h3>Ordered Products</h3>
+                            <ul class="products-list">
+                                <% order.orderedItems.forEach(product => { %>
+                                    <li class="product-item">
+                                        <span class="product-name"><%= product.productName %></span>
+                                        <span class="product-quantity">×<%= product.quantity %></span>
+                                    </li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                        <a href="/singleOrderDetails/<%= order._id %>" class="details-button">
+                            View Details
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 18l6-6-6-6" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+        <div class="pagination" style="padding: 10px;">
+            <% if (currentPage > 1) { %>
+                <a href="?page=<%= currentPage - 1 %>&limit=<%= 4 %>" class="pagination-btn">Previous</a>
+            <% } %>
+            <% for (let i = 1; i <= totalPages; i++) { %>
+                <a href="?page=<%= i %>&limit=<%= 4 %>" class="pagination-btn <%= currentPage === i ? 'active' : '' %>">
+                    <%= i %>
+                </a>
+            <% } %>
+            <% if (currentPage < totalPages) { %>
+                <a href="?page=<%= currentPage + 1 %>&limit=<%= 4 %>" class="pagination-btn">Next</a>
+            <% } %>
+        </div>
     </div>
-    </div>
-    <%-include('../userPages/partialFooterUser.ejs')%>
+</div>
+<%-include('../userPages/partialFooterUser.ejs')%>
+<script>
+    function retryPayment(orderId, amount, order_id) {
+        initiateRazorpayPayment({ amount: amount, order_id: order_id });
+    }
+
+    function initiateRazorpayPayment(orderData) {
+        const options = {
+            key: "rzp_test_o8NbEzmS8geUeF",
+            amount: orderData.amount,
+            currency: 'INR',
+            order_id: orderData.order_id,
+            handler: function (response) {
+                fetch('/verifyRazorpayPayment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ response, pay: "success" }),
+                }).then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location = '/success';
+                        } else {
+                            alert("Payment failed at verification step!");
+                        }
+                    }).catch(error => {
+                        console.error('Error during payment verification:', error);
+                        alert("Error verifying payment");
+                    });
+            },
+            prefill: {
+                name: 'Customer Name',
+                email: 'customer@example.com',
+                phone: '9188057842'
+            },
+            notes: {
+                address: 'Address for delivery'
+            },
+            theme: {
+                color: '#F37424'
+            },
+            modal: {
+                ondismiss: function () {
+                    updateFailedPayment(orderData.order_id, 'failed');
+                }
+            }
+        };
+        const rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+</script>

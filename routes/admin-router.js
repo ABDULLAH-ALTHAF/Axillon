@@ -52,7 +52,8 @@ const {
   editProductOffer,
   deleteProductOffer,
   generateSalesReport,
-  editCoupon
+  editCoupon,
+  shippedOrder
 
 } = require("../controllers/admin-controller");
 const multerMiddleware = require("../middlewares/multer").multerMiddleware;
@@ -94,6 +95,7 @@ router.get('/search',search)
 router.get('/orders',orders)
 router.post('/cancelOrder/:orderId', cancelOrder)
 router.post('/deliverOrder/:orderId', deliverOrder)
+router.post('/shippedOrder/:orderId', shippedOrder)
 router.post('/acceptReturn/:orderId',acceptReturn)
 router.post('/rejectReturn/:orderId',rejectReturn)
 router.get('/coupons',coupons)

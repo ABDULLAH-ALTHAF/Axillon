@@ -158,9 +158,9 @@
                             <a href="/admin/singleOrder/<%= order.orderId %>" class="btn btn-primary">
                                 view
                             </a>
-                            <% if (order.status==='Pending' ) { %>
+                            <% if (order.status==='Shipped' ) { %>
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#deliverOrderModal<%= order.orderId %>">
+                                    data-bs-target="#deliveOrderModal<%= order.orderId %>">
                                     Mark as Delivered
                                 </button>
                                 <button type="button" class="btn btn-danger" data-bs-toggle="modal"
@@ -171,7 +171,41 @@
                                     <button type="button" class="btn btn-primary" disabled>
                                         Delivered
                                     </button>
-                                    <% } %>
+                                    <% } else if(order.status==='Pending'){ %>
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                    data-bs-target="#shipOrderModal<%= order.orderId %>">
+                                    Mark as Shipped
+                                </button>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#cancelOrderModal<%= order.orderId %>">
+                                    Cancel
+                                </button>
+                                <!-- Ship Order Modal -->
+                                <div class="modal fade" id="shipOrderModal<%= order.orderId %>" tabindex="-1"
+                                    aria-labelledby="shipOrderModalLabel<%= order.orderId %>" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="shipOrderModalLabel<%= order.orderId %>">
+                                                    Confirm Shipping
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to mark this order as shipped?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <form action="/admin/shippedOrder/<%= order.orderId %>" method="post">
+                                                    <button type="submit" class="btn btn-primary">Confirm Shipping</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                        <%}%>
                                         <% if (order.status==='Cancelled' ) { %>
                                             <button type="button" class="btn btn-danger" disabled>
                                                 Cancelled
@@ -197,7 +231,7 @@
                                                             <% } %>
                                                                 <!-- Deliver Order Modal -->
                                                                 <div class="modal fade"
-                                                                    id="deliverOrderModal<%= order.orderId %>"
+                                                                    id="deliveOrderModal<%= order.orderId %>"
                                                                     tabindex="-1"
                                                                     aria-labelledby="deliverOrderModalLabel<%= order.orderId %>"
                                                                     aria-hidden="true">

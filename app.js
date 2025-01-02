@@ -31,6 +31,10 @@ app.use(passport.session());
 app.use("/", user);
 app.use("/admin", admin);
 
+app.all('*', (req, res) => {
+  res.render('userPages/404');
+});
+
 mongoose
   .connect("mongodb://127.0.0.1:27017/axillon")
   .then(() => {

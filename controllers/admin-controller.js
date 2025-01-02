@@ -174,24 +174,56 @@ const dashboard = async (req, res) => {
 
 const users = async (req, res) => {
   if (req.session.admin) {
-    const users = await User.find({ isAdmin: false });
-    res.render("adminPages/users", { users, url: req.originalUrl });
+    const currentPage = parseInt(req.query.page) || 1;
+    const itemsPerPage = 6; 
+    const searchTerm = req.query.searchFor || '';
+    const query = { isAdmin: false, username: { $regex: searchTerm, $options: 'i' } };
+
+    const totalUsers = await User.countDocuments(query);
+    const totalPages = Math.ceil(totalUsers / itemsPerPage);
+
+    const users = await User.find(query)
+      .skip((currentPage - 1) * itemsPerPage)
+      .limit(itemsPerPage);
+
+    res.render('adminPages/users', {
+      users,
+      currentPage,
+      totalPages,
+      searchFor: searchTerm,
+      url: req.originalUrl
+    });
   } else {
-    res.redirect("/admin/adminSignin");
+    res.redirect('/admin/adminSignin');
   }
 };
+
 
 const products = async (req, res) => {
   if (req.session.admin) {
     try {
+      const perPage = 6; 
+      const page = parseInt(req.query.page) || 1; 
+
       const brand = await Brands.find({ status: true });
       const type = await Types.find({ status: true });
-      const products = await Product.find().populate("brand_id");
+      
+      
+      const totalProducts = await Product.countDocuments();
+      
+      
+      const products = await Product.find()
+        .populate("brand_id")
+        .skip((page - 1) * perPage)
+        .limit(perPage);
+
       res.render("adminPages/products", {
         products,
         brand,
         type,
         url: req.originalUrl,
+        currentPage: page,
+        totalPages: Math.ceil(totalProducts / perPage),
       });
     } catch (error) {
       console.log(error);
@@ -200,6 +232,7 @@ const products = async (req, res) => {
     res.redirect("/admin/adminSignin");
   }
 };
+
 
 const postProducts = async (req, res) => {
   if (req.session.admin) {
@@ -489,6 +522,31 @@ const deliverOrder = async (req, res) => {
       res.redirect("/admin/orders");
     } catch (error) {
       console.log("error from deliverOrder", error);
+    }
+  } else {
+    res.redirect("/admin/adminSignin");
+  }
+};
+
+const shippedOrder = async (req, res) => {
+  if (req.session.admin) {
+    try {
+      const { orderId } = req.params;
+      const order = await Orders.findOne({ orderId: orderId });
+      if (!order)
+        return res
+          .status(404)
+          .json({ success: false, message: "Order not Found" });
+      if (order.status === "Cancelled"){
+        return res
+          .status(400)
+          .json({ success: false, message: "Order already Cancelled" });
+      }
+      order.status = "Shipped";
+      await order.save();
+      res.redirect("/admin/orders");
+    } catch (error) {
+      console.log("error from shippedOrder", error);
     }
   } else {
     res.redirect("/admin/adminSignin");
@@ -1257,6 +1315,7 @@ module.exports = {
   orders,
   cancelOrder,
   deliverOrder,
+  shippedOrder,
   coupons,
   postCoupon,
   acceptReturn,

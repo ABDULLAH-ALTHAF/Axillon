@@ -331,43 +331,65 @@
         <div class="filter-card">
             <h4 class="filter-title">Sort By</h4>
             <div class="filter-options sort-by-options">
-
                 <label>
-                    <input type="checkbox" name="sortCriteria" value="priceLowToHigh" />
+                    <input type="checkbox" name="sortCriteria" value="priceLowToHigh" <%= sort === 'priceLowToHigh' ? 'checked' : '' %> />
                     Price: Low to High
                 </label>
                 <label>
-                    <input type="checkbox" name="sortCriteria" value="priceHighToLow" />
+                    <input type="checkbox" name="sortCriteria" value="priceHighToLow" <%= sort === 'priceHighToLow' ? 'checked' : '' %> />
                     Price: High to Low
                 </label>
                 <label>
-                    <input type="checkbox" name="sortCriteria" value="newArrivals" />
+                    <input type="checkbox" name="sortCriteria" value="newArrivals" <%= sort === 'newArrivals' ? 'checked' : '' %> />
                     New Arrivals
                 </label>
                 <label>
-                    <input type="checkbox" name="sortCriteria" value="nameAZ" />
+                    <input type="checkbox" name="sortCriteria" value="nameAZ" <%= sort === 'nameAZ' ? 'checked' : '' %> />
                     A-Z
                 </label>
                 <label>
-                    <input type="checkbox" name="sortCriteria" value="nameZA" />
+                    <input type="checkbox" name="sortCriteria" value="nameZA" <%= sort === 'nameZA' ? 'checked' : '' %> />
                     Z-A
                 </label>
             </div>
             <div class="brand-filter-card">
                 <h4 class="filter-title">Filter by Brand</h4>
                 <div class="filter-options brand-options">
-                    <label>
-                        <input type="checkbox" name="brandFilter" value="enkei" />
-                        ENKEI
-                    </label>
-                    <label>
-                        <input type="checkbox" name="brandFilter" value="motegi" />
-                        MOTEGI
-                    </label>
-                    <label>
-                        <input type="checkbox" name="brandFilter" value="american" />
-                        AMERICAN
-                    </label>
+                    <% if(brandFilter === 'enkei') { %>
+                        <label>
+                            <input type="checkbox" name="brandFilter" value="enkei" checked />
+                            ENKEI
+                        </label>
+                    <% } else { %>
+                        <label>
+                            <input type="checkbox" name="brandFilter" value="enkei" />
+                            ENKEI
+                        </label>
+                    <% } %>
+
+                    <% if(brandFilter === 'motegi') { %>
+                        <label>
+                            <input type="checkbox" name="brandFilter" value="motegi" checked />
+                            MOTEGI
+                        </label>
+                    <% } else { %>
+                        <label>
+                            <input type="checkbox" name="brandFilter" value="motegi" />
+                            MOTEGI
+                        </label>
+                    <% } %>
+
+                    <% if(brandFilter === 'american') { %>
+                        <label>
+                            <input type="checkbox" name="brandFilter" value="american" checked />
+                            AMERICAN
+                        </label>
+                    <% } else { %>
+                        <label>
+                            <input type="checkbox" name="brandFilter" value="american" />
+                            AMERICAN
+                        </label>
+                    <% } %>
                 </div>
             </div>
             <button id="applyFilterButton" class="apply-filter-button">

@@ -771,13 +771,21 @@ const orderSummary = async (req, res) => {
   const { couponId, totalPrice, discountPrice, originalPrice } = req.body;
   const coupon = await Coupons.findOne({ _id: couponId });
   let couponDiscount = 0;
-  if (coupon) {
-    couponDiscount = totalPrice * (coupon.percentage / 100);
-    return res.status(200).json({ couponDiscount });
-  } else if (!coupon) {
+  console.log(coupon);
+  if (!coupon) {
     return res
       .status(400)
       .json({ message: "No Coupon Available / Or Not Selected" });
+  }else if (coupon) {
+    if(originalPrice<coupon.minimum){
+      couponDiscount = totalPrice 
+      return res
+      .status(400)
+      .json({ message: `THIS COUPON ONLY CAN APPLY ABOVE ${coupon.minimum} PURCHASE` });
+    }else if(originalPrice>coupon.minimum){
+      couponDiscount = totalPrice * (coupon.percentage / 100);
+      return res.status(200).json({ couponDiscount });
+    }
   }
 };
 
@@ -1342,12 +1350,30 @@ const postEditAddress = async (req, res) => {
 const orders = async (req, res) => {
   if (req.session.user) {
     const user = req.session.userDetails?._id;
-    const orders = await Order.find({ userId: user }).sort({ createdAt: -1 });
-    res.render("userPages/orders", { user, url: req.originalUrl, orders });
+    const page = parseInt(req.query.page) || 1; 
+    const limit = parseInt(req.query.limit) || 4; 
+    const skip = (page - 1) * limit;
+
+    const totalOrders = await Order.countDocuments({ userId: user });
+    const orders = await Order.find({ userId: user })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalPages = Math.ceil(totalOrders / limit);
+
+    res.render("userPages/orders", { 
+      user, 
+      url: req.originalUrl, 
+      orders, 
+      currentPage: page, 
+      totalPages 
+    });
   } else {
     res.redirect("/signin");
   }
 };
+
 
 const singleOrderDetails = async (req, res) => {
   if (req.session.user) {
@@ -1427,19 +1453,34 @@ const wishList = async (req, res) => {
   if (req.session.user) {
     const user = req.session.userDetails;
     const userId = user._id;
-    let products = await WishList.findOne({ user_id: userId }).populate({
+
+    
+    const page = parseInt(req.query.page) || 1;
+    const itemsPerPage = 8;
+
+    const wishlist = await WishList.findOne({ user_id: userId }).populate({
       path: "items.variant_id",
       populate: {
         path: "product_id",
       },
     });
-    products = products ? products : { items: [] };
 
-    res.render("userPages/wishList", { products });
+    const items = wishlist ? wishlist.items : [];
+
+    const totalItems = items.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const paginatedItems = items.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+
+    res.render("userPages/wishList", { 
+      products: { items: paginatedItems }, 
+      currentPage: page, 
+      totalPages 
+    });
   } else {
     res.redirect("/signin");
   }
 };
+
 
 const addToWishList = async (req, res) => {
   if (req.session.user) {
